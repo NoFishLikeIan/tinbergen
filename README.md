@@ -28,3 +28,9 @@ The structure should be as follows:
 ### Papers
 
 - [ ] [_Fiscal source of inflation_](https://faculty.chicagobooth.edu/john.cochrane/research/papers/decomposition.pdf) - This paper measures the fiscal roots of inflation, _This could be interesting in the scope of combining my thesis work (that focuses mostly on monetary policy and prices) to fiscal policy_
+
+## Exercises
+
+### Principles of Programming in Econometrics
+
+- [ ] [_Exercise 0_](http://personal.vu.nl/c.s.bos/ppectr17/exer/e0_elim.pdf).pdf - Python basics and syntax
