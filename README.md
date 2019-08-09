@@ -29,6 +29,8 @@ The structure should be as follows:
 
 - [ ] [_Fiscal source of inflation_](https://faculty.chicagobooth.edu/john.cochrane/research/papers/decomposition.pdf) - This paper measures the fiscal roots of inflation, _This could be interesting in the scope of combining my thesis work (that focuses mostly on monetary policy and prices) to fiscal policy_
 
+- [ ] [_The Complexity of Computing a Nash Equilibrium_](https://people.csail.mit.edu/costis/journal_ver10.pdf) - Is there a polynomial-time algorithm for computing Nash equilibria? And is this reliance on Brouwer inherent? _It is hard to compute for more than 2 players, that might be a problem for microeconomics, some hope in [gradient methods](https://arxiv.org/abs/1905.12363)_
+ 
 ## Exercises
 
 ### Principles of Programming in Econometrics
