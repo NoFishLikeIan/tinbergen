@@ -125,3 +125,4 @@ dmypy.json
 
 bin/
 lib/
+lib64/
