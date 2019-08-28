@@ -44,7 +44,7 @@ def main():
 
     x_vector = backsubstitution(matrix=a_matrix, vector=b_vector)
 
-    b_hat = x_vector @ np.linalg.inv(a_matrix)
+    b_hat = a_matrix @ x_vector
     condition = np.allclose(b_vector, b_hat)
 
     print(f'The result is{" not" if not condition else ""} correct')
