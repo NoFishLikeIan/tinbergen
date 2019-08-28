@@ -1,3 +1,6 @@
+import sys
+import getopt
+
 A_ord = ord('A')
 Z_ord = ord('Z')
 a_ord = ord('a')
@@ -8,7 +11,7 @@ def modded(frm, to, n):
     '''
     A function that increases a number modding it between a minimum and maximum
     '''
-    return ((n - frm) % (to-frm)) + frm
+    return ((n - frm) % (to - frm)) + frm
 
 
 def move_forwards(n=1):
@@ -17,10 +20,10 @@ def move_forwards(n=1):
     '''
     def shift_character(c: str) -> str:
         order = ord(c)
-        if order >= A_ord and order <= Z_ord:
+        if A_ord <= order <= Z_ord:
             return chr(modded(A_ord, Z_ord, order + n))
 
-        elif order >= a_ord and order <= z_ord:
+        elif a_ord <= order <= z_ord:
             return chr(modded(a_ord, z_ord, order + n))
 
         else:
@@ -33,8 +36,31 @@ def encode(message: str, n=3) -> str:
     return ''.join(map(move_forwards(n), message))
 
 
+def read_opt():
+    by = 3
+    message = ''
+    argv = sys.argv[1:]
+    opts, _ = getopt.getopt(argv, 'hb:m:', ['by=', 'message='])
+
+    for opt, arg in opts:
+        if opt == '-h':
+            print('python secret.py -b <n> -m <text>')
+            sys.exit()
+        elif opt in ('-b', '--by'):
+            by = int(arg)
+        elif opt in ('-m', '--message'):
+            message = arg
+
+    if len(message) == 0:
+        print('No message input')
+        sys.exit()
+
+    return by, message
+
+
 def main():
-    print('result:\n', encode('This is a secret message!', 3))
+    by, message = read_opt()
+    print('Result:\n', encode(message, by))
 
 
 if __name__ == '__main__':
