@@ -126,3 +126,9 @@ dmypy.json
 bin/
 lib/
 lib64/
+
+# Scripting
+data/
+cached/
+out/
+plots/

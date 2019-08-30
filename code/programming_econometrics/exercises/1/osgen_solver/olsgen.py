@@ -20,9 +20,10 @@ def generate_X_matrix(n, k, constant=1):
 
 def main():
     obs_size, sigma = read.read_opt()
+    k = 2
+    beta = np.linspace(1, k+1, num=k+1, endpoint=True)
 
-    X = generate_X_matrix(n=obs_size, k=2)
-    beta = np.linspace(1, X.shape[1], num=X.shape[1], endpoint=True)
+    X = generate_X_matrix(n=obs_size, k=k)
 
     y = gen_observation(X, beta, sigma)
 
