@@ -5,23 +5,44 @@ import scipy.optimize as opt
 from constants import X, betas, sigma, l
 
 from simulate.generate import gen_ys
-from min_ll import bounded_mean_ll
+from min_ll import average_ll_reg
+
+
+def transform(parameters):
+    ps = parameters.copy()
+    ps[0] = np.log(parameters[0])
+    return ps
+
+
+def invert(parameters):
+    ps = parameters.copy()
+    ps[0] = np.exp(parameters[0])
+    return ps
+
+
+def minimize(fn, init, y, X, transform, invert):
+
+    result = opt.minimize(fn, transform(init), args=(
+        y, X, invert), method='BFGS')
+
+    estimate = invert(result.x)
+
+    return estimate
 
 
 def main():
-    np.random.seed(11148705)
     y = gen_ys(X, betas, sigma, l)
 
     parameters = np.array([sigma, *betas])
 
-    # bounded_mean_ll(parameters, y, X, verbose=True)
+    paramaters_init = np.ones(parameters.shape) * 2
 
-    result = opt.minimize(bounded_mean_ll,
-                          parameters,
-                          args=(y, X, 0),
-                          method='BFGS')
+    result = minimize(average_ll_reg, paramaters_init, y, X, transform, invert)
 
-    print(result)
+    [sigma_hat, *betas_hat] = np.copy(result)
+
+    print('Actual:', sigma, betas)
+    print('Estimated:', sigma_hat, betas_hat)
 
 
 if __name__ == '__main__':

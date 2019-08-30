@@ -1,7 +1,10 @@
 import numpy as np
 
-n = 20
-k = 4
+np.random.seed(11148705)
+
+
+n = 2000
+k = 6
 sigma = 0.25
 l = 1
 

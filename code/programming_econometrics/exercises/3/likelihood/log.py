@@ -28,11 +28,11 @@ def log_ll_regression(y, X, parameters):
     Vector[number]
         Log-likelihood of every observation
     """
-    [sigma, betas] = [parameters[0], parameters[1:]]
+    [sigma, *betas] = parameters
 
     errors = error(y, X, betas) / sigma
     log_var = np.log(sigma**2)
 
-    ll_vector = -0.5 * (log2pi + log_var + errors)
+    ll_vector = -0.5 * (log2pi + log_var + np.square(errors))
 
     return ll_vector
