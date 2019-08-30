@@ -132,3 +132,4 @@ data/
 cached/
 out/
 plots/
+*.ipynb

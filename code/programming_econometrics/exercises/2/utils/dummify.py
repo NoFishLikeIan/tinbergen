@@ -5,6 +5,19 @@ from .datetime import months
 
 
 def find_index(iteree, fn):
+    """
+    Find index after evaluating a function
+
+    Parameters
+    ----------
+    iteree : list[T]
+    fn : fn(iteree: T) -> boolean
+
+    Returns
+    -------
+    number 
+        index if found else -1
+    """
     for i, elem in iteree:
         if fn(elem):
             return i
@@ -14,6 +27,15 @@ def find_index(iteree, fn):
 
 
 def dummify_for_month(datetime_vector, after_period_dummies=[]):
+    """
+    Create dummy based on month
+
+    Parameters
+    ----------
+    datetime_vector : vector[datetime]
+    after_period_dummies : list[(number, number)], optional, by default []
+
+    """
     months_vector = map(
         lambda datetime: months[datetime.month - 1], datetime_vector)
 

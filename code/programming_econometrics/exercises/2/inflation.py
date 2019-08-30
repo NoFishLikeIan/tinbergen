@@ -3,15 +3,15 @@ import pandas as pd
 
 import constants
 
-from utils.clean import save_into_vectors
+from utils.clean import csv_to_vector
 from utils.dummify import dummify_for_month
 
 
 def main():
-    datetime_vector, prices_vector = save_into_vectors(
+    datetime_vector, prices_vector = csv_to_vector(
         constants.inflation_series_path,
         cache=False,
-        index_filter=constants.start_year - 1
+        index_filter=constants.start_year
     )
 
     dummy_matrix, variables = dummify_for_month(

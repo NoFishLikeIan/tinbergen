@@ -42,7 +42,33 @@ def make_date_price_tuple(df, year, month):
     return (datetime(year=year, month=numerical_month, day=1), get_from_df(df, year, month))
 
 
-def save_into_vectors(data_path, time_column='Year', months=months, index_filter=None, cache=True, caching_file='cached/inflation_matrix.npy'):
+def csv_to_vector(data_path, time_column='Period', index_filter=None, cache=True, caching_file='cached/inflation_matrix.npy'):
+    if cache and os.path.isfile(caching_file):
+        print('Loading cached data...')
+        try:
+            mtrx = np.load(caching_file)
+            return mtrx[:, 0], mtrx[:, 1]
+        except ValueError as error:
+            print('Not able to load file', error)
+            print('Continue...')
+
+    df = pd.read_csv(data_path)
+    df[time_column] = pd.to_datetime(df[time_column], format='%Y/%M')
+    df = df.set_index(time_column)
+    filtered_df = df.loc[f'{index_filter}-01-01':]
+
+    inflation_pct = compute_percentage_difference(filtered_df['SA0'].tolist())
+    datetimes_vector = filtered_df.index.tolist()
+
+    if cache:
+        print('Saving data to cache...')
+        np.save(caching_file, np.vstack(
+            [datetimes_vector, inflation_pct]), allow_pickle=True)
+
+    return np.array(datetimes_vector), np.array(inflation_pct)
+
+
+def xlsx_to_vector(data_path, time_column='Year', months=months, index_filter=None, cache=True, caching_file='cached/inflation_matrix.npy'):
     '''
     Read inflation series and return two vectors, dates and percentage inflation
     '''
