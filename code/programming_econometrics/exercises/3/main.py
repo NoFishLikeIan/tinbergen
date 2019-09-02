@@ -5,7 +5,7 @@ import scipy.optimize as opt
 from constants import X, betas, sigma, l
 
 from simulate.generate import gen_ys
-from min_ll import average_ll_reg
+from likelihood.log import log_ll_regression
 
 
 def transform(parameters):
@@ -20,16 +20,6 @@ def invert(parameters):
     return ps
 
 
-def minimize(fn, init, y, X, transform, invert):
-
-    result = opt.minimize(fn, transform(init), args=(
-        y, X, invert), method='BFGS')
-
-    estimate = invert(result.x)
-
-    return estimate
-
-
 def main():
     y = gen_ys(X, betas, sigma, l)
 
@@ -37,9 +27,13 @@ def main():
 
     paramaters_init = np.ones(parameters.shape) * 2
 
-    result = minimize(average_ll_reg, paramaters_init, y, X, transform, invert)
+    result = opt.minimize(
+        lambda parameters: - np.mean(log_ll_regression(y, X, parameters)),
+        paramaters_init,
+        method='BFGS'
+    )
 
-    [sigma_hat, *betas_hat] = np.copy(result)
+    [sigma_hat, *betas_hat] = np.copy(result.x)
 
     print('Actual:', sigma, betas)
     print('Estimated:', sigma_hat, betas_hat)
