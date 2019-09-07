@@ -1,0 +1,242 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+
+\lhead{\hmwkAuthorName}
+\chead{\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#1}
+\newcommand{\hmwkDueDate}{September 13, 2019}
+\newcommand{\hmwkClass}{Statistics}
+\newcommand{\hmwkAuthorName}{\textbf{Titton Andrea}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 3:10pm}\\
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+% Spacing
+\newcommand{\medvspace}{\vspace{3 mm}}
+\newcommand{\smallvspace}{\vspace{5 mm}}
+\newcommand{\bigvspace}{\vspace{10 mm}}
+
+
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}[32]
+    Assume, $X \sim \Gamma(\alpha, \lambda)$. Find $\E(1/X)$.
+    \bigvspace
+    
+    \textbf{Theory}\\
+    $X \sim \Gamma \xrightarrow{} \E(X) = \int_{0}^{\infty}\frac{\lambda^{\alpha}}{\Gamma(\alpha)} x^{\alpha - 1} e^{-\lambda*x}$
+    
+    \bigvspace
+    \textbf{Solution}\\
+    \begin{equation} \label{eq1}
+        \begin{split}
+            \E(1/X) & = \int_{0}^{\infty}\frac{\lambda^{\alpha}}{\Gamma(\alpha)} x^{\alpha - 1} \frac{1}{x} e^{-\lambda x} dx\\
+            & = \int_{0}^{\infty}\frac{\lambda^{\alpha}}{\Gamma(\alpha)} x^{\alpha - 2} e^{-\lambda x} dx\\
+            & = \frac{\lambda^{\alpha}}{\Gamma(\alpha)} \int_{0}^{\infty}x^{\alpha - 2} e^{-\lambda x} dx\\
+            \text{Given } \beta = \frac{\Gamma(\alpha - 1)}{\lambda^{\alpha - 1}} \text{ multiply by } \beta \beta^{-1}\\
+            \Longrightarrow & = \frac{\lambda^{\alpha}}{\Gamma(\alpha)} \beta \int_{0}^{\infty}\beta^{-1}x^{\alpha - 2} e^{-\lambda x} dx\\
+        \end{split}
+    \end{equation}
+    Note that the third term: $$\int_{0}^{\infty}\frac{\lambda^{\alpha - 1}}{\Gamma(\alpha - 1)}x^{\alpha - 2} e^{-\lambda x} dx\\ = 1$$
+    Hence,
+    \begin{equation}
+        \begin{split}
+            \E(1/X) & = \frac{\lambda^{\alpha}}{\Gamma(\alpha)} \frac{\Gamma(\alpha - 1)}{\lambda^{\alpha - 1}}\\
+            & = \frac{\lambda^{\alpha}}{\Gamma(\alpha - 1) (\alpha - 1)} \frac{\Gamma(\alpha - 1)}{\lambda^{\alpha - 1}}\\
+            & = \lambda / (\alpha - 1)
+        \end{split}
+    \end{equation}
+    
+    
+Note that $\E(1/X)$ is well-defined only if $\alpha > 1$
+
+\end{homeworkProblem}
+\pagebreak
+
+\begin{homeworkProblem}[45]
+    \textbf{Part a.}\\
+    Show that $\E(z) = \mu$
+    
+    \begin{equation}
+        \begin{split}
+            \E(z) & = \E( \alpha x + (1-\alpha) y ) = \alpha \E x + (1-\alpha) \E y\\
+            & = \alpha \mu + (1-\alpha) \mu = \mu
+        \end{split}        
+    \end{equation}
+    
+\bigvspace
+\textbf{Part b.}
+
+Define $f \equiv Var(z)$, then: 
+
+\begin{equation}
+    \begin{split}
+        f = \Var( \alpha x + (1-\alpha) y ) + 2 \Cov(x, y)\\
+    \end{split}        
+\end{equation}
+
+By def., $X$ and $Y$ are independent $\xrightarrow{} \Cov(x, y) = 0$
+\begin{equation}
+    \begin{split}
+        f & = \alpha^{2} \Var(x) + (1-\alpha)^{2} \Var(y)\\
+        & = \alpha^{2} \sigma_{x}^{2} + (1-\alpha)^{2} \sigma_{y}^{2}
+    \end{split}
+\end{equation}
+
+$min_{\alpha}(f) \xrightarrow{} (\delta \Var / \delta \alpha = 0 \bigwedge \delta \Var / \delta^{2} \alpha > 0)$:
+\begin{equation}
+    \begin{split}
+        \delta \Var / \delta \alpha & = 0\\
+        2 \alpha \sigma_{x}^{2} - 2 (1-\alpha) \sigma_{y}^{2} & = 0 \\
+        2 \alpha (\sigma_{y}^{2} + \sigma_{x}^{2}) & = 2 \sigma_{y}^{2} \\
+        \alpha^{*} & = \sigma_{y}^{2} / (\sigma_{x}^{2} + \sigma_{y}^{2})
+    \end{split}
+\end{equation}
+and
+\begin{equation}
+\begin{split}
+        \delta \Var /  \delta^{2} \alpha & > 0\\
+        2 \sigma_{x}^{2} +  2 \sigma_{y}^{2} & > 0 \xrightarrow{} T
+\end{split}
+\end{equation}
+
+\textbf{Part c.}    
+
+Assume now that $f \equiv var(\frac{X + Y}{2})$, then:
+$$
+        f = \frac{1}{4} (\sigma_{x}^{2} + \sigma_{y}^{2})        
+$$
+
+Given $f$,
+\begin{equation}
+    \begin{split}
+        f < \sigma_{x}^{2} \Longleftrightarrow \frac{\sigma_{x}^{2}}{\sigma_{y}^{2}} > \frac{1}{3}\\
+    \end{split}
+\end{equation}
+\begin{equation}
+    \begin{split}
+        f < \sigma_{y}^{2} \Longleftrightarrow \frac{\sigma_{x}^{2}}{\sigma_{y}^{2}} < 3\\
+    \end{split}
+\end{equation}
+
+That implies that the variance of $z(1/2)$ is smaller that the variances of the two individual variables if their ratio lies between $3$ and $3^{-1}$
+
+\end{homeworkProblem}
+
+\end{document}
