@@ -1,0 +1,367 @@
+ss{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ 1}
+\newcommand{\hmwkDueDate}{September 12, 2019}
+\newcommand{\hmwkClass}{Advanced Mathematics}
+\newcommand{\hmwkAuthorName}{\textbf{Titton Andrea}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+
+Let $f: R \xrightarrow{} R$, $f_{n}(x) = \frac{nx}{1+n^{2}x^{2}}$.
+
+\subsection{Point a.}
+
+As $n \xrightarrow{} \infty$, $fn \xrightarrow{} 0 \Longrightarrow f(x) = 0$.\\ 
+To prove point-wise convergence, we need to prove that $\forall x \in R,\ \forall \ \epsilon > 0,\ \exists N > 0\ s.t.\ n > N :$ 
+\begin{equation} \label{prime_norm}
+    \begin{split}
+        \norm{f_{n}(x) - f(x)} & < \epsilon \\
+        \norm{f_{n}(x)} & < \epsilon
+    \end{split}
+\end{equation}
+
+Notice that for $x = 0$, the inequality is trivially satisfied, by $0 < \epsilon$. \\
+
+Otherwise, for $x \neq 0$, we can rewrite (\ref{prime_norm}):
+\begin{equation} \label{prime_norm_red}
+    \begin{split}
+        \abs{\frac{nx}{1+n^{2}x^{2}}} & < \epsilon
+    \end{split}    
+\end{equation}
+
+Notice that:
+\begin{equation}
+    \abs{\frac{nx}{1+n^{2}x^{2}}} < \abs{\frac{nx}{n^{2}x^{2}}} = \abs{1 / nx} 
+\end{equation}
+
+Therefore solving (\ref{prime_norm_red}) is equivalent to solving
+
+\begin{equation}
+    \begin{split}
+        \abs{1/nx} & < \epsilon\\
+        1 & < \epsilon \abs{n x}\\
+        \frac{1}{\epsilon \abs{x}} & < n \ (by \ def. \ n > 0)
+    \end{split}
+\end{equation}
+
+Hence, taking $n \geq (\epsilon \abs{x})^{-1}$ satisfies (\ref{prime_norm}) for any positive $\epsilon$ which implies that $f_{n}$ converges pointwise. 
+
+\subsection{Point b.}
+
+In order to disprove uniform convergence we need to show that there is a subset of the domain of $f_{n}$ such that:
+
+\begin{equation} \label{uniform_conv}
+        \not\exists N > 0: \ \forall n > N \ \
+        \norm{f_{n}(x) - f(x)} = \norm{f_{n}(x)} < \epsilon
+\end{equation}
+
+Take, for example, $x_{n} = 1/n$. Then, $f_{n}(x_{n}) = 1 / 2 \ \forall n$. So (\ref{uniform_conv}) is not satisfied for $\epsilon > 1/2$
+
+\subsection{Point c}
+
+We now take $f: \ R \rightarrow  R \setminus (-r, r)$ 
+
+Given that ${f_{n}(-x)} = -{f_{n}(x)} \Longleftrightarrow \ f_{n}$  is odd, without loss of generality, we will consider only $x \in R_{+}$ i.e. $x > 0$.
+
+We want to prove that
+\begin{equation}
+    \norm{f_{n}(x) - f(x)} < \epsilon
+\end{equation}
+
+By definition it is always the case that
+
+\begin{equation}
+     \norm{f_{n}(x) - f(x)} \leq \norm{f_{n}(x) - f(x)}_{\infty} \ \forall x
+\end{equation}
+
+hence,
+
+\begin{equation} \label{monotonicity_trick}
+    \norm{f_{n}(x) - f(x)}_{\infty} < \epsilon \Rightarrow \norm{f_{n}(x) - f(x)} < \epsilon \ \forall x
+\end{equation}
+
+We now take the first order derivative with respect to $x$ 
+
+\begin{equation}
+    \begin{split}
+        \frac{\delta f_{n}(x)}{\delta x} = \frac{n (1 + n^{2}x^{2}) - 2 n^{3}x^{2}}{(1 + n^{2} x^{2})^{2}} & < 0 \\
+        x & > \frac{1}{n} \ by \ x \geq 0 \land \ n > 0
+    \end{split}
+\end{equation}
+
+The function is monotone decreasing for $x > 1 / n$ and achieves its maximum, for $R_{+}$ at $x = 1 / n$.
+
+We now need to find a $N > 0: \forall \epsilon > 0, \ \forall n > N, \ \norm{f_{n}(x)}_{\infty} < \epsilon \ \forall x \in [r, \infty)$.
+
+If we take $N = 1 / r$, due to monotonicity, we can show that $f_{n}(r)$ is the supremum of the function $f_{n}$
+
+\begin{equation}
+    \norm{f_{n}(x)}_{\infty} = f_{n}(r) \  \forall n > N
+\end{equation}.
+
+By (\ref{monotonicity_trick}) we can prove that:
+\begin{equation}
+    \begin{split}
+        \frac{nr}{1+n^{2}r^{2}} & < \epsilon \\
+        for \ n > 0 \ and \ r > 0 \\
+        \frac{nr}{1+n^{2}r^{2}} < \frac{nr}{n^{2} r^{2}}& < \epsilon\\
+        \frac{1}{nr} & < \epsilon\\
+        n & > \frac{1}{r \epsilon}        
+    \end{split}
+\end{equation}
+
+Therefore by taking $N > 1 / r \epsilon$ we have uniform convergence $\forall r $. In the same way, for symmetry of the function, this is true for $x \in (-\infty, r]$.
+
+
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}
+Let $D = (x_{0}, x_{1})$ be an open interval, $f_{k}:D \rightarrow R$ and,
+\begin{equation}
+    s_{n}(x)=\sum_{k=0}^{n}f_{k}(x)
+\end{equation}
+Let there be a function $s:D \rightarrow R$ such that $s_{n} \rightarrow s$ uniformly on $D$ as $n \rightarrow \infty$.
+Assume that for every $k \in N$ the limit $f_{k} \xrightarrow{} a_{k}$ as $x \xrightarrow{} x_{0}$ exists.\\
+
+\subsection{Point a.}
+We need to show that for every $\epsilon > 0$ there is $N > 0$ such that $\abs{s_{n}(x)-s_{m}(x)} < \epsilon$ for all $n, m > N$, all $x \in D$.\\
+Since $s_{n} \rightarrow s$ uniformly $\Rightarrow$ $\forall \epsilon > 0, \exists N > 0 : \forall n \geq N$ :
+\begin{equation}
+    \norm{s_{n}(x)-s(x)} < \frac{\epsilon}{2} \ \text{as n} \rightarrow \infty
+\end{equation}
+Without loss of generality, we can consider the case with $m>n$ and find the same relation for $s_{m}$:\\ $\forall \epsilon > 0, \exists M > 0 : \forall m \geq M$
+\begin{equation}
+    \norm{s_{m}(x)-s(x)} < \frac{\epsilon}{2} \ \text{as m}  \rightarrow \infty
+\end{equation}
+
+To prove convergence we can look at:
+
+\begin{equation} \label{conv_sub}
+    \norm{s_{n}(x)-s_{m}(x)}
+\end{equation}
+
+By triangle inequality, we can write
+\begin{equation}
+    \begin{split}
+    \norm{s_{n}(x)-s_{m}(x)} & \leq \norm{s_{n}(x)-s(x)+s(x)-s_{m}(x)}\\
+    & \leq \norm{s_{n}(x)-s(x)}+\norm{s(x)-s_{m}(x)}\\
+    & \leq \frac{\epsilon}{2} + \frac{\epsilon}{2} = \epsilon, \forall \ n,m > max \{N, M\}
+    \end{split}
+\end{equation}
+
+That is, for any $\epsilon > 0$ we can pick an $n$ and $m$ such that (\ref{conv_sub}) is smaller.
+    
+\subsection{Point b.}
+We need to prove that $s_{n}^{k} = \sum_{k=0}^{n}a_{k}$ converges.
+From the previous result we know that
+\begin{equation}
+    \abs{s_{n}(x)-s_{m}(x)} < \epsilon \ \forall x \in D, \forall n,m > N
+\end{equation}
+
+By expanding $s_{n}(x)$ we have:
+\begin{equation}
+    \abs{\sum_{k=0}^{n}f_{k}(x)-\sum_{k=0}^{m}f_{k}(x)}< \epsilon \ \forall x \in D, \forall n,m > N
+\end{equation}
+
+We can take the inequality at the limit $x \rightarrow x_{0}$
+\begin{equation}
+    \begin{split}
+         \lim_{x \rightarrow x_{0}} \abs{\sum_{k=0}^{n}f_{k}(x)-\sum_{k=0}^{m}f_{k}(x)} & < \lim_{x \rightarrow x_{0}} \epsilon \\
+         \abs{\lim_{x \rightarrow x_{0}} \sum_{k=0}^{n}f_{k}(x)-\lim_{x \rightarrow x_{0}} \sum_{k=0}^{m}f_{k}(x)} & < \epsilon\\
+\text{Since the function is continuous, we can write:}\\
+         \abs{\sum_{k=0}^{n} \lim_{x \rightarrow x_{0}} f_{k}(x)- \sum_{k=0}^{m} \lim_{x \rightarrow x_{0}} f_{k}(x)} & < \epsilon \\
+    \end{split}
+\end{equation}
+
+By definition $\lim_{x \rightarrow x_{0}} f_{k}(x)= a_{k}$ therefore:
+\begin{equation}
+    \abs{\sum_{k=0}^{n} a_{k} - \sum_{k=0}^{m} a_{k}} < \epsilon 
+\end{equation}
+
+This sequence is therefore Cauchy and $\sum_{k=0}^{\infty} a_{k}$ it converges because $R$ is complete.
+
+\subsection{Point c.}
+$s_{n}(x)$ is defined as $\sum_{k=0}^{n}f_{k}(x)$
+For this point it is possible to rely on an $\frac{\epsilon}{3}$ argument. 
+
+First, as $f_k(x) \to a_k$ for $x \to x_0$, given $\frac{\epsilon}{3n} > 0$  $\exists \delta > 0$ s.t. $\forall x \in (x - \delta, x + \delta)$: 
+\begin{equation}
+   \left| f_k(x) - a_k\right| < \frac{\epsilon}{3n}
+\end{equation}
+
+This implies that
+\begin{equation}
+\left| \sum_{k=0}^{n} f_k(x) - a_k\right| = \left| \sum_{k=0}^{n} f_k(x) - \sum_{k=0}^{n}a_k\right| < \frac{\epsilon}{3}    
+\end{equation}
+
+It is also true that given $\frac{\epsilon}{3} > 0$, $\exists N > 0$ s.t. $\forall n > N$:
+\begin{equation}
+ \left| s_n(x) - s(x)\right| < \frac{\epsilon}{3} \ \forall x \in D  
+\end{equation}
+
+as $s_n(x) \to s(x)$ uniformly as $n \to \infty$. Moreover, as shown in the previous point:
+\begin{equation}
+\left| \sum_{k=0}^{n}a_k - L\right| < \frac{\epsilon}{3}    
+\end{equation}
+
+It is now possible to expand the following expression. For $\epsilon > 0$, $\exists M > 0$ s.t. $\forall n > M$:
+\begin{equation}
+    \begin{split}
+        \left| s(x) - L\right| & = \left| s(x) - s_n(x) + s_n(x) - \sum_{k=0}^{n}a_k + \sum_{k=0}^{n}a_k - L\right| \\
+        &\leq \left| s(x) - s_n(x) \right| + \left| s_n(x) - \sum_{k=0}^{n}a_k \right| + \left| \sum_{k=0}^{n}a_k - L\right| \\
+        & \leq \frac{\epsilon}{3} + \frac{\epsilon}{3} + \frac{\epsilon}{3} = \epsilon
+    \end{split}
+\end{equation}
+
+\subsection{Point d.}
+
+Given that the $\lim_{x \rightarrow x_{0}} \lim_{n \rightarrow \infty} \sum_{k=0}^{n}f_{k}(x)$ would require using $s_{n}(x)$, we can rewrite the equation as $\lim_{n \rightarrow \infty} \lim_{x \rightarrow x_{0}} \sum_{k=0}^{n}f_{k}(x) $. We then get: 
+
+\begin{equation} 
+    \begin{split}
+        \lim_{x \rightarrow x_{0}} \lim_{n \rightarrow \infty} 
+        \sum_{k=0}^{n}f_{k}(x) & = \lim_{n \rightarrow \infty} \lim_{x \rightarrow x_{0}} \sum_{k=0}^{n}f_{k}(x) \\ & = \sum_{k=0}^{\infty} f_{k}(x_{0}) \\ &= \sum_{k=0}^{\infty} a_{k}
+    \end{split}
+\end{equation}
+
+\end{homeworkProblem}
+
+
+\end{document}:
