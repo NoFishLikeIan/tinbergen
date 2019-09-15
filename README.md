@@ -33,6 +33,9 @@ The structure should be as follows:
 
 - [ ] [_The enduring link between demography and inflation_](https://ideas.repec.org/p/bis/biswps/722.html) - Are demographic shifts responsible for low inflation? _Could be, inflation pressure seems to rise as dependents share increases_
 
+- [ ] [_Chaos in foreign exchange markets: a sceptical view_](http://centaur.reading.ac.uk/35988/1/35988.pdf) - Is there a (mathematically) chaotic behaviour in foreign exchange markets?
+
 ### Collateral
 
 - [ ] [_How I'm able to take notes in mathematics lectures using LaTeX and Vim_](https://castel.dev/post/lecture-notes-1/?fbclid=IwAR21DzEX7qMutxvM8AA5e41yNgYO_V5WTXvamR10L186J9pldb1DEr-_ZTQ) - _Guide on taking notes with Vim and LaTex, I could use this potentially_
+
