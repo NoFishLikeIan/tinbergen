@@ -25,6 +25,8 @@ The structure should be as follows:
 
 - [x] [_Logic for economists_](https://www.coursera.org/learn/logic-for-economists) - _Suggested course on logical foundation for economic reasoning_
 
+- [x] [_Notes on function sequence convergence_](http://www.math.wisc.edu/~angenent/521.2017s/UniformConvergence.html) - _A series of notes to understand convergence_
+
 ### Papers
 
 - [ ] [_Fiscal source of inflation_](https://faculty.chicagobooth.edu/john.cochrane/research/papers/decomposition.pdf) - This paper measures the fiscal roots of inflation, _This could be interesting in the scope of combining my thesis work (that focuses mostly on monetary policy and prices) to fiscal policy_
