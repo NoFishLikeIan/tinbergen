@@ -1,0 +1,303 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ 3}
+\newcommand{\hmwkDueDate}{September 26, 2019}
+\newcommand{\hmwkClass}{Advanced Mathematics}
+\newcommand{\hmwkAuthorName}{\textbf{Titton Andrea}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+
+\subsection{d.}
+
+By using the definition of $e^{tA}$,
+
+\begin{equation}
+    \begin{split}
+        e^{tA} & = \sum_{k=0}^{\infty} \frac{t^k}{k!}A^k \\
+        \frac{d}{dt} e^{tA} & = \frac{d}{dt} \frac{1}{k!} A^k + \sum_{k=1}^{\infty}  \frac{d}{dt} \frac{t^k}{k!}A^k \\
+         \frac{d}{dt} e^{tA} & = \sum_{k=1}^{\infty} \frac{k t^{(k-1)}}{k (k-1)!}A^{(k-1)}A \\
+         & \text{let} \ j = k-1\\
+         \frac{d}{dt} e^{tA} & = A \sum_{j = 0}^{\infty} \frac{t^j}{j!}A^j = A e^{tA}
+    \end{split}
+\end{equation}
+
+\subsection{e.}
+
+First we need to show that $y(t) = e^{tA}$ is a solution. This is proved in section d.\\
+To prove the uniqueness of this solution, let's assume there exist another solution $x$, such that $x'(t) = A x(t)$ and $x(0) = y_0$. Let's define a function $f(x(t)) = e^{-tA} x$. \\
+We can show that
+\begin{equation}
+    \begin{split}
+        \frac{d}{dt}(f) & = -A e^{-tA} x + e^{-tA}\Dot{x} \\
+        & \text{by construction $\Dot{x} = A x$} \\
+        & = -A e^{-tA} x + A e^{-tA} x \\
+        & (A-A) f = 0
+    \end{split}
+\end{equation}
+
+Hence we can say that $f = f_0$. We also know that $x(0) = y(0) = I$. We can then rewrite
+\begin{equation}
+    x(t) = e^{At} f_0 = e^{At} = y(t)
+\end{equation}
+
+Hence the solutions coincide, i.e. $y(t)$ is unique.
+
+\subsection{f.}
+
+Proving $(e^{tA})^{-1} = e^{tA}$, is equivalent to proving,
+\begin{equation} \label{identity}
+    (e^{tA})^{-1}e^{tA} = I
+\end{equation} 
+
+We can first prove that
+\begin{equation} \label{inverse}
+    (e^{A})^{-1} = e^{-A}
+\end{equation}
+
+We know that,
+\begin{equation} \label{derivative_meth}
+    \begin{split}
+        \frac{d}{dt}(e^{tA} e^{-tA}) & = A e^{tA} e^{-tA} + e^{tA} (-A e^{-tA}) \\
+        & = (A - A)e^{tA}e^{-tA} = 0
+    \end{split}
+\end{equation}
+
+Since $\frac{d}{dt}(e^{tA} e^{-tA}) = 0$ we know that $e^{tA} e^{-tA} = C$, where $C$ is a constant matrix. \\
+If we take $t=0$, we obtain $e^{0A} e^{-0A} = I$, hence $C = I$. Extensively, 
+\begin{equation} \label{is_ident}
+    e^{tA} e^{-tA} = I
+\end{equation}
+
+If we then take $t=1$, we can show that $e^{A} e^{-A} = I \Longleftrightarrow (e^{A})^-1 = e^{-A}$ hence proving (\ref{inverse}). \\
+Combining this result with (\ref{is_ident}), proves (\ref{identity}), namely
+\begin{equation}
+     e^{tA}(e^{tA})^{-1} = e^{tA} e^{-tA} = I
+\end{equation}
+
+\subsection{Intermezzo}
+
+We can now take, in a similar fashion as (\ref{derivative_meth})
+\begin{equation}
+    \frac{d}{dt}e^{t(A+B)}e^{-tA}e^{-tB} = (A + B - (A+B)) e^{tA}e^{tB}e^{-t(A+B)} = 0
+\end{equation}
+Note that this is only valid $if \ AB = BA$
+
+As in (\ref{derivative_meth}) we can show that 
+\begin{equation} \label{exp_sum}
+    e^{A}e^{B}e^{-(A+B)} = I \Longrightarrow e^{A}e^{B} = e^{(A+B)}
+\end{equation}
+
+\subsection{g.}
+
+Let $\Phi(t, x) = e^{tA}x$. If we take
+\begin{equation}
+    \begin{split}
+        \Phi(t+s, x) & = e^{(t+s)A} \\
+        & = e^{tA + sA}x \\
+        \text{by (\ref{exp_sum})} \\
+        & = e^{tA} e^{sA} x \\
+        & = e^{tA} \Phi(s, x) = \Phi(t, \Phi(s, x))
+    \end{split}
+\end{equation}
+
+\subsection{h.}
+
+\begin{equation}
+    \begin{split}
+        e^{tA} & = e^{(t CDC^-1)} \\
+        & = \sum_{k=0}^{\infty} \frac{t^k}{k!}(CDC^-1)^k\\
+        & = C \sum_{k=0}^{\infty}(\frac{t^k}{k!}D^{k}) C^{-1}\\
+        & = C e^{tD} C^{-1}
+    \end{split}
+\end{equation}
+
+\subsection{i.}
+
+I can rewrite
+\begin{equation}
+    \begin{split}
+    A & = D + N \\
+    & \text{where} \\
+    D = \begin{pmatrix} \lambda&0\\0&\lambda \end{pmatrix} & , \ N = \begin{pmatrix} 0&1\\0&0 \end{pmatrix}
+    \end{split}
+\end{equation}
+
+Noting that $D$ and $N$ commute, we find that
+\begin{equation}
+    \begin{split}
+        e^{tA} = e^{tD + tN} = e^{tD}e^{tN}
+    \end{split}
+\end{equation}
+
+We can now compute,
+
+\begin{equation}
+\begin{split}
+    e^{tD} & = \begin{pmatrix}
+        e^{\lambda t}&0\\
+        0&e^{\lambda t}
+    \end{pmatrix} \\
+    & \text{since D is a diagonal}
+\end{split}
+\end{equation}
+
+By the definition of $e^{tA}$ we know that, 
+\begin{equation} \label{expansion}
+    e^{tA} = \sum_{k=0}^{\infty} \frac{t^k}{k!}A^k = I + tA + \frac{t^2}{2!}A^2 + ...
+\end{equation}
+
+Noting that $N^k = 0 \ \forall k \geq 2$. Therefore we can rewrite 
+\begin{equation}
+    \begin{split}
+            e^{tN} & = I +tN \\
+            & = \begin{pmatrix}
+                1&t\\
+                0&1
+            \end{pmatrix} \\
+    \end{split}
+\end{equation}
+
+Hence we can plug these into (\ref{expansion}), and we get:
+
+\begin{equation}
+    e^{tA} = \begin{pmatrix}
+                e^{\lambda t}&t e^{\lambda t}\\
+                0&e^{\lambda t}
+            \end{pmatrix} \\
+\end{equation}
+
+\end{homeworkProblem}
+
+\end{document}
