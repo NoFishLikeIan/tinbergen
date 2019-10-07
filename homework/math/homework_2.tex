@@ -1,0 +1,320 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ }
+\newcommand{\hmwkDueDate}{September 19, 2019}
+\newcommand{\hmwkClass}{Advanced Mathematics}
+\newcommand{\hmwkAuthorName}{\textbf{Titton Andrea}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem} 
+
+To prove that $T$ is a contraction over the interval $(a,b)$, we can first start with the definition of contraction. We know that, $T$ being a contraction would imply that $\exists c > 0: \norm{T(x) - T(y)} = c\norm{x - y}$. We can expand on the first term as follows, knowing that $T(x) = x_{0} + \int_{t_{0}}^{t} f(x(s))$ where $x_0$ is a constant,
+
+\begin{equation}
+    \begin{split} \label{diff}
+        \norm{T(x) - T(y)} & = \norm{x_{0} + \int_{t_{0}}^{t} f(x(s)) \ ds - x_{0} - \int_{t_{0}}^{t} f(y(s)) \ ds \ } \\
+        & =  \norm{\int_{t_{0}}^{t} f(x(s)) - f(y(s)) \ ds \ } \\
+        \text{by triangle inequality we can rewrite} \\
+        & \leq  \int_{t_{0}}^{t} \norm{f(x(s)) - f(y(s))} \ ds \\ 
+        \text{knowing that $f$ is a contraction} \\
+        & \leq L  \int_{t_{0}}^{t} \norm{x - y}  = L \norm{x - y} (t-t_{0})
+    \end{split}
+\end{equation}
+
+Knowing that the $(t_0, t) \in (a, b)$, we can rewrite
+\begin{equation}
+    \begin{split}
+        L \norm{x - y} (t-t_{0}) & \leq L \norm{x - y} \abs{t-t_{0}} \leq L \norm{x - y} (b - a)
+    \end{split}
+\end{equation}
+
+We notice then that if $(b - a) < 1 / L$, then $c = L (b-a), 0 < c < 1$, hence $T$ is a contraction. That is, we can always choose $ b = t_{0} + 1 / 2L$ and $ a = t_{0} - 1 / 2L$, to make $T$ a contraction.
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+
+We need to show that the derivative of the fixed point $x$ of $T$ exists and is itself a continuous function. Moreover, it is requested to show
+
+\begin{equation}
+    \dot{x}(t) = f(x(t)) \ \land \ x(t_0) = x_0
+\end{equation}
+
+First of all, as $x(t)$ is a fixed point of $T$, then it is true that
+
+\begin{equation}
+    T(x(t)) = x_0 + \int_{t_{0}}^{t} f(x(s)) \ ds = x(t)
+\end{equation}
+
+Then by the Fundamental Theorem of Calculus, $\forall x \in [a,b]$
+
+\begin{equation}
+    \begin{split}
+        \dot{x}(t) & = \frac{\delta T(x(t))}{\delta t} \\
+        & = \frac{\delta}{\delta t} \left[ x_0 + \int_{t_{0}}^{t} f(x(s)) \ ds \right]  \\
+        & = f(x(t))
+    \end{split}
+\end{equation}
+
+Therefore $x(t)$ is differentiable on the whole interval $[a,b]$.  
+
+We can now show that $f(x(t)) \in C[a,b]$, that is, it is continuous. We know that $f(x(t))$ is Lipshitz continuous. Then by continuity of $x(t)$, $\exists \delta = \frac{\epsilon}{L}, L>0$ s.t. $\forall x,y \in C[a,b]$
+
+$$\norm {x(t) - y(t)} < \frac{\epsilon}{L}$$
+
+At this point, by Lipshitz continuity we can conclude $\forall x,y \in C[a,b]$
+
+\begin{equation}
+        \norm{f(x(t) - f(y(t)} < L\norm {x(t) - y(t)} \leq L \frac{\epsilon}{L} \leq \epsilon
+\end{equation}
+
+Which implies continuity of $f(x(t))$.
+We can then show that
+\begin{equation}
+    x(t_0) = x_0 + \int_{t_{0}}^{t_0} f(x(s)) \ ds = x_0 
+\end{equation}
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}
+We have to show that there is an open interval around $t_0$ such that the differential equation $\dot{x}=f(x)$ with initial condition $x(t_0)=x_0$ has precisely one continuously differential solution.
+\begin{equation} \label{integral}
+    \begin{split}
+        \dot x & = f(x(t))\\
+        \int_{t_{0}}^{t} \dot x &= \int_{t_{0}}^{t} f(x(s)) ds + c\\
+        x(t)&= \int_{t_{0}}^{t}  f(x(s)) ds + c\\
+    \end{split}
+\end{equation}
+If we evaluate $x$ in $t_0$ 
+\begin{equation} \label{constant}
+    x(t_0)= \int_{t_{0}}^{t_{0}}  f(x(s)) ds + c
+    \Rightarrow x(t_0)=c
+\end{equation}
+We can plug (\ref{constant}) back into (\ref{integral}), and we obtain
+\begin{equation}
+    x(t)= \int_{t_{0}}^{t}  f(x(s)) ds + x_0
+\end{equation}
+The last expression, by definition, is equal to
+\begin{equation}
+    \int_{t_{0}}^{t}  f(x(s)) ds + x_0 = T(x(t))
+\end{equation}
+We have shown that the solution of $\dot x$ coincides with $T(x(t))$. But we know, from point 1, that $T(x(t))$ is a contraction over on open interval, $(t_0-\frac{1}{2L}, t_0 +\frac{1}{2L})$ in a Banach space and hence, by the Banach fixed point theorem, we know that it has a unique fixed point. Therefore, we can conclude that  $\dot x$ has a unique solution. Besides, from point 2 we know that $\dot x$ is continuously differentiable.
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+First, we introduce $v ( t ) = \int _ { t _ { 0 } } ^ { t } y ( s ) d s $ and $w ( t ) = e ^ { - L \left( t - t _ { 0 } \right) } v ( t )$. \\
+
+We take the derivative of $w(t)$ w.r.t. $t$ and we obtain the following equation
+
+\begin{equation}
+\label{ciao}
+    \begin{split}
+        \dot {w}(t) & = - L e ^ { - L \left( t - t _ { 0 } \right) } v ( t ) + \dot { v } ( t ) e ^ { - L \left( t - t _ { 0 } \right) }\\
+        & = - L e ^ { - L ( t - t_0 ) } \int _ { t_0 } ^ { t } y ( s ) d s + y ( t ) e ^ { - L ( t - t_0 ) }\\
+        & = e ^ { - L \left( t - t _ { 0 } \right) } \left( - L \int _ { t _ { 0 } } ^ { t } y ( s ) d s + y ( t ) \right) \leq  A \ e ^ {-L(t_0-t)}
+    \end{split}
+\end{equation}
+
+The last inequality holds because $y ( t ) \leq A + L \int _ { t _ { 0 } } ^ { t } y ( s ) \mathrm { d } s$.\\
+
+We integrate both sides from $t_0$ to $t$ and obtain
+\begin{equation}
+\label{ciao2}
+w ( t ) \leq  \frac { A } { L } \left(1 - e ^ { - L \left( t - t _ { 0 } \right)}\right) 
+\end{equation}
+
+We can now rewrite the definition of $w(t)$ as
+\begin{equation}
+\begin{split}
+\int _ { t _ { 0 } } ^ { t } y ( s ) \mathrm { d } s  & = \mathrm { e } ^ { L \left( t - t _ { 0 } \right) } w ( t )  \\
+     y ( t ) &  = L e ^ { \left( t - t _ { 0 } \right) } w ( t ) + \dot{w}  ( t ) e ^ { L \left( t - t _ { 0 } \right) } \\  & = e ^ { \left( t - t _ { 0 } \right) } ( L w ( t ) + \dot{w} ( t ) )  
+\end{split}
+\end{equation}
+
+From (\ref{ciao}) and (\ref{ciao2}) we know that
+\begin{equation}
+ y ( t ) = e ^ { \left( t - t _ { 0 } \right) } ( L w ( t ) + \dot{w} ( t ) ) \leq e ^ { \left( t - t _ { 0 } \right) } \left( A \left( 1 - e ^ { - L \left( t - t _ { 0 } \right) } \right) + A e ^ { - L \left( t - t _ { 0 } \right) } \right)= A e^ { - L ( t - t _ { 0 })} 
+\end{equation}
+That is the result we needed to prove.
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+We assume that $f(0)=0$. Let $x(t)$ be the solution of $\dot x=f(x)$. We want to show that
+\begin{equation}
+    \norm{x(t)} \leq \norm {x(t_0)} e^{L(t-t_0)}
+\end{equation}
+By definition
+\begin{equation}
+    \begin{split}
+        \norm{x(t)} & = \norm {x_0 + \int_{t_{0}}^{t} f(x(s)) \ ds }\\
+        &\leq \norm{x_0} + \int_{t_{0}}^{t} \norm{f(x(s))} ds
+    \end{split}
+\end{equation}
+By Lipschitz continuity we know that $\norm{f(x(s))} \leq L \norm {x(s)}$ since $f(0)=0$. Therefore, we can write
+\begin{equation}
+    \begin{split}
+        \norm{x(t)} \leq \norm{x_0} + L \int_{t_{0}}^{t} \norm{x(s)} \ ds
+    \end{split}
+\end{equation}
+Now, we can extend the result of point 4, letting $f(t) = \norm{x(t)}$ such that $f: R \xrightarrow{} R$ and taking $A = \norm{x_0}$, knowing that if $\norm{x(t)} \geq 0$ and $\norm{x(t)} \leq \norm{x_0} + L \int_{t_{0}}^{t} \norm{x(s)}ds$
+then $\norm{x(t)} \leq \norm {x(t_0)} e^{L(t-t_0)}$
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+
+Given the previous results it is possible to select an interval $t_0,1$, $t_0,2$ such that $(a_i, b_i) = (t_0,i - 1/2L,t_1,i - 1/ 2L): (a_1, b_1) \cup (a_2, b_2) = \emptyset$. In both intervals, as proven in section 3., we can find two functions $y(t)$ and $z(t)$ that solve the differential equation and are fixed point of $T(x(t))$. \\
+
+If we look at the distance between these two function we know that:
+\begin{equation}
+    \begin{split}
+        \norm{y(t) - z(t)} \leq \norm{y(t_0) - z(t_0)} + \norm{\int_{t_0}^t f(y(s)) - f(z(s)) ds} \leq \norm{y(t_0) - z(t_0)} + \norm{\int_{t_0}^t y(t_0) - z(t_0) ds}
+    \end{split}
+\end{equation}
+
+Given $f(0) = 0$,
+\begin{equation}
+    \begin{split}
+        \norm{y(t) - z(t)} \leq \norm{y(t_0) - z(t_0)} e^{L(t-t_0)} = \norm{x_0 - x_0} e^{L(t-t_0)} = 0
+    \end{split}
+\end{equation}
+
+we can conclude then that the solution is unique on the given interval $A = (a_1, b_1) \cup (a_2, b_2)$. We can extend this argument to any interval $A = A_1 \cup A_i$, where $A$ is constructed above. We can therefore construct an interval arbitrarily large such that the differential equation has one solution over all $t$.
+\end{homeworkProblem}
+
+\end{document}
+
