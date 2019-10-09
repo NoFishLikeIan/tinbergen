@@ -1,0 +1,216 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+\graphicspath{ {./images/} }
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ 5}
+\newcommand{\hmwkDueDate}{October 11, 2019}
+\newcommand{\hmwkClass}{Advanced Mathematics}
+\newcommand{\hmwkAuthorName}{\textbf{Titton Andrea}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+
+\subsection{a.}
+
+If $J$ is in the form $J = \int_0^T L(t, x(t), \Dot{x}(t)) \ dt$, then by definition, the Euler-Lagrange equation of $J$ takes the form
+\begin{equation}
+   L_x (t, x, \Dot{x}) - \frac{d}{dt}\left(L_{\Dot{x}} (t, x, \Dot{x})\right) = 0
+\end{equation} where $L_x$ is the partial derivative of $L$ with respect to $x$. \\
+In this case then $L(t, x(t), \Dot{x}(t)) = (- \Dot{x}^2 + x^2)$, hence the corresponding Euler-Lagrange equation is
+\begin{equation} \label{diff_eq}
+    \begin{split}
+        L_x (t, x, \Dot{x}) - \frac{d}{dt}\left(L_{\Dot{x}} (t, x, \Dot{x})\right) & = 0 \\
+        2 x - \frac{d}{dt}(- 2 \Dot{x}) & = 0 \\
+        x + \Dot{x} & = 0
+    \end{split}
+\end{equation}
+
+Note that (\ref{diff_eq}) is a second order differential equation, hence we can find the root of its characteristic equation. Let $\Bar{z}$, be the aforementioned roots, then
+\begin{equation}
+    \begin{split}
+        1 \cdot z^0 + 0 \cdot z^1 + 1 \cdot z^2 \dots& = 0 \\
+        1 + z^2 & = 0 \\
+        \Bar{z}_1 = i \ \Bar{z}_2 = -i
+    \end{split}
+\end{equation}
+
+We then know that the family of solutions of (\ref{diff_eq}) takes the form
+\begin{equation}
+    \begin{split}
+        x(t) & = C_1 e^{it} + C_2 e^{-it} \\ 
+        &\text{by Euler's formula} \\
+        x(t) &= C_1 cos(t) + C_2 sin(t)
+    \end{split}
+\end{equation}
+
+We can then use the initial and end conditions, $x(0) = 0$ and $x(T) = 0$, to narrow the solution set. \\
+$x(0) = 0$ implies 
+\begin{equation}
+    \begin{split}
+        C_1 cos(0) + C_2 sin(0) &= 0 \\
+        C_1 & = 0
+    \end{split}
+\end{equation}
+
+and $x(T) = 0$ implies 
+\begin{equation}
+    C_2 sin(T) = 0
+\end{equation}
+
+hence either $C_2 = 0$ or $T = k \pi \land k \in \mathbb{Z}$. \\
+Therefore, the solution to the Euler-Lagrange equation is $x(t) = 0$.
+
+\subsection{b.}
+
+Let the function form $x(t) = 0$, be $x_0$. It is trivial to show that $J(x_0) = 0$. \\
+
+In order to prove this is not a maximum we need to find another function form in the same domain that gives a value of $J > 0$. Consider, for example, the function form
+\begin{equation}
+    x_n(t) = sin\left( \frac{2 \pi n}{T} t \right)
+\end{equation}
+
+If we evaluate $J$ at $x_n$ we obtain
+\begin{equation} \label{bigger_j}
+    J(x_n)=\int_{0}^{T}-\frac{4\pi^2 n^2}{T^2}\cos\left(\frac{2\pi n}{T}t\right)+\sin^2\left(\frac{2\pi n}{T}t\right)=\frac{T}{2}-\frac{2\pi^2 n^2}{T}=\frac{2\pi^2}{T}\left(\frac{T^2}{4\pi^2}-n^2\right)
+\end{equation}
+
+From (\ref{bigger_j}), you can see that if $\frac{T}{2\pi} > n$, $J(x_n) > 0$, hence $x_0$ is not a maximum.
+
+\end{homeworkProblem}
+
+\end{document}
+
