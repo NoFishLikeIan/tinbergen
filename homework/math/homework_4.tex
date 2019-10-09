@@ -1,0 +1,286 @@
+ss{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+\graphicspath{ {./images/} }
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ 4}
+\newcommand{\hmwkDueDate}{October 4, 2019}
+\newcommand{\hmwkClass}{Advanced Mathematics}
+\newcommand{\hmwkAuthorName}{\textbf{Titton Andrea}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+
+\subsection{a.}
+
+Let's take a look at $V = {x: x \in R, \norm{x} = 1}$. Set $V$ is bounded by definition. It is also closed because every sequence $x_n$ would have a limit in $V$ since $\forall x \in V \norm{x} = 1$. \\
+We can than show that $f$ is continuous. Take $z, y: \norm{z - y} < \delta$, then $\forall  \ \epsilon > 0,  \ \exists \delta \ s.t$: 
+\begin{equation} \label{ineq}
+    \begin{split}
+        \norm{f(z) - f(y)} & \leq \epsilon \\
+        & \text{by using the definition of } f \\
+        \norm{x^TAx - y^T A y} & \leq \epsilon \\
+        \norm{(x^T- y^T) A (x-y)} & \leq \epsilon \\
+        & \text{by triangular inequality} \\
+        \norm{x-y} \norm{A} \norm{x-y} & \leq \epsilon \\
+        & \text{using} \norm{x-y} = \delta \\
+        \delta^2 \norm{A} \leq \epsilon
+    \end{split}
+\end{equation}
+
+Hence by taking $\delta \leq \sqrt{\frac{\epsilon}{\norm{A}}}$ we satisfy (\ref{ineq}). 
+Since $f$ is continuous on a compact space, by Weistrass' theorem, it must attain maximum and a minimum on V.
+
+\subsection{b.}
+Let $g(x) = \norm{x} - 1 = x^Tx - 1$, the critical points of $f$ must satisfy
+\begin{equation} \label{eigen_space}
+    \begin{split}
+        \nabla f(x) & = \lambda \nabla g(x)\\
+        Ax + x^T A  & = 2 \lambda x \\
+        & \text{by symmetry of} A \\
+        Ax & = \lambda x
+    \end{split}
+\end{equation}
+
+Note that the equation $Ax = \lambda x$, characterizes the set of eigenvectors of $A$, with eigenvalues $\lambda$. We can then multiply the result of ($\ref{eigen_space}$) by $x^T$ on both sides we obtain,
+\begin{equation} \label{res_eigen}
+    \begin{split}
+        Ax & = \lambda x \\
+        x^T Ax & = \lambda x^T x \\
+        f(x^*) = \lambda
+    \end{split}
+\end{equation}
+
+Therefore, $f$ will be bounded in V by $\lambda$, where $\lambda$ are the eigenvalues of $A$. Note that we can trivially find maximum and minimum of the function by just taking the maximum and minimum eigenvalue respectively.
+
+\subsection{c.}
+We need to find a value $c > 0$, such that, for any matrix $M$ and vector $x$,
+\begin{equation} \label{target}
+    \norm{Mx} \leq c \norm{x}
+\end{equation}
+
+Let $y =\frac{x}{\norm{x}}$ and, by definition of vector norm, $x = \norm{x} y$. Note also that by construction $\norm{y}=1$. We can then rewrite (\ref{target}), for any matrix $M$ and vector $x$,
+\begin{equation}
+\begin{split}
+    \norm{\norm{x}My} &\leq c \norm{\norm{x} y} \\
+    & \text{since the norm of x is a scalar} \\
+    \norm{x} \norm{My} & \leq \norm{x} c \norm{y} \\
+    \norm{My} & \leq c \norm{y}
+\end{split}
+\end{equation}
+
+Now let's expand the inequality with the definition of $\norm{v} = \sqrt{v^T v}$
+\begin{equation}
+    \begin{split}
+        \norm{My} & \leq c \norm{y} \\
+        \sqrt{(My)^T My} & \leq c \sqrt{y^T y} \\
+        y^T M^T M y & \leq c^2 y^T y
+    \end{split}
+\end{equation}
+
+Let now $A = M^T M$. This matrix is trivially squared and symmetric. \\
+
+Then we can rewrite
+\begin{equation} \label{redefined_target}
+    y^T A y = c^2 y^T y
+\end{equation}
+
+By (\ref{res_eigen}), we know that a function of the form $y^T A y = \lambda y^T y$, has a maximum in its maximum eigenvalue, if $\norm{y}=1$ and $A$ is symmetric, which is the case in (\ref{redefined_target}). Hence by taking $c \geq \sqrt{\abs{\overline{\lambda}}}$, with $\overline{\lambda} = max\{\abs{\lambda}: det(M^T M - I \lambda) = 0\}$, equation (\ref{target}) is satisfied.
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+
+Let's first transform the problem to standard coordinates. Let's define a mapping $\phi$
+\begin{equation}
+    \begin{split}
+        & \phi(x) = (g_1(a), \dots, g_k(a)) \\
+        & \phi(a) = 0
+      \end{split}
+\end{equation}
+
+Note that, by construction, $D\phi(a)$ is invertible, hence there are neighbourhoods $U$ of $a$ and $M$ of 0 s.t. $\phi: U \xrightarrow{} M$ is a diffeomorphism.
+
+Now let $\Tilde{g}_i(y) = g_i(\phi^{-1}(y)) \ \forall i$ and $\Tilde{f}(y) = f(\phi^{-1}(y))$, restricted to
+\begin{equation}
+    \Tilde{V} = M \cap \phi(V)
+\end{equation}.
+
+We can now using Taylor's expansion to rewrite $\Tilde{f}(y)$, noting that $\Tilde{f}(0) = f(a)$
+
+\begin{equation} \label{taylor}
+    \begin{split}
+        \Tilde{f}(y) &= \Tilde{f}(0) + \sum_{i=1}^m \frac{\partial \Tilde{f}}{\partial y_i}(0) y_i + r(y)
+    \end{split}
+\end{equation}
+
+Let's consider the term $ \sum_{i=1}^m \frac{\partial \Tilde{f}}{\partial y_i}(0) y_i$. \\
+First take a vector $y^{(i)}$ s.t. $y^{(i)}_i = \epsilon$ and $y^{(i)}_j = 0$ for $i \neq j$, with $\epsilon < 0$ (this should be also close to zero to formally render $r(y)$ negligible). \\
+We can now set $\lambda_i = \frac{\partial \Tilde{f}}{\partial y_i}(0)$ and by using $\nabla \Tilde{g}_i = e_i$, where $e_i$ is the $i$'th standard basis vector, we can rewrite
+\begin{equation}
+    \nabla \Tilde{f} = \begin{pmatrix} 
+        \lambda_1\\ \vdots \\ \lambda_k
+    \end{pmatrix} = \sum_{i}^k \lambda_i e_i = \sum_{i}^k \lambda_i \nabla \Tilde{g}_i(0)
+\end{equation}
+
+We can now find a relation between $\nabla f$ and $\nabla \Tilde{f}$ by taking the definition of $\Tilde{f}(\phi(x))$:
+\begin{equation}
+    \begin{split}
+        \Tilde{f}(\phi(x)) & = f(x) \\
+        Df(x) & = D\Tilde{f}(\phi(x))D\phi(x) \\
+        \nabla f(x) & = D\phi(x)^T \nabla \Tilde{f}(y)\\
+        & \text{evaluated at} \ a \\
+        \nabla f(a) & = \sum_i^{k} \lambda_i \nabla g_i(a)
+    \end{split}
+\end{equation}
+
+By assumption we know that 
+\begin{equation}
+    \lambda_i =  \frac{\partial \Tilde{f}}{\partial y_i}(0) > 0 \ \forall i
+\end{equation}
+
+By using this result in (\ref{taylor}),
+\begin{equation}
+    \begin{split}
+        \frac{\partial \Tilde{f}}{\partial y_i}(0) = \Tilde{f(x)} - \Tilde{f(0)} < 0
+    \end{split}
+\end{equation}
+
+Hence $\Tilde{f(0)}$ is a maximum, i.e. $\Tilde{f}$ takes a maximum in $0$. Then, by definition of $\Tilde{f}(y) = f(\phi^{-1}(y))$, $f$ must take a maximum in $\phi^{-1}(0) = a$
+\end{homeworkProblem}
+
+\end{document}
+
