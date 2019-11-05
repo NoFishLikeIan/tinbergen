@@ -39,6 +39,8 @@ The structure should be as follows:
 
 - [ ] [_Chaos in foreign exchange markets: a sceptical view_](http://centaur.reading.ac.uk/35988/1/35988.pdf) - Is there a (mathematically) chaotic behaviour in foreign exchange markets?
 
+- [ ] [International Pollution Control: Cooperative versus Noncooperative Strategies](https://www.sciencedirect.com/science/article/pii/S0095069683710235?via%3Dihub) - Application of optimal control in pollution issues
+
 ### Collateral
 
 - [ ] [_How I'm able to take notes in mathematics lectures using LaTeX and Vim_](https://castel.dev/post/lecture-notes-1/?fbclid=IwAR21DzEX7qMutxvM8AA5e41yNgYO_V5WTXvamR10L186J9pldb1DEr-_ZTQ) - _Guide on taking notes with Vim and LaTex, I could use this potentially_
