@@ -4,8 +4,6 @@ import numpy as np
 from utils.equilibrium_constraint import budget_constraint
 from utils.multipliers_constraints import high_constraint
 from utils.consumption import consumptions
-from utils.loss import squared_loss
-from utils.callback import callback_on_crack
 
 
 def system_factory(sigma_1, sigma_2):
