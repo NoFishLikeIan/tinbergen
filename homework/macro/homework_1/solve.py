@@ -3,7 +3,7 @@ import numpy as np
 
 from utils.equilibrium_constraint import budget_constraint
 from utils.multipliers_constraints import high_constraint
-from utils.consumption import consumptions
+from utils.fundamentals import consumptions, utility
 
 
 def system_factory(sigma_1, sigma_2):
@@ -31,7 +31,6 @@ def solver_factory(sigma_1, sigma_2):
 
 
 if __name__ == '__main__':
-    import seaborn as sns
     import pandas as pd
 
     sigma_1 = 2
@@ -49,16 +48,12 @@ if __name__ == '__main__':
 
         print('Solution, ', v_1, pH)
         low, high = consumptions(v_1, pH, sigma_1, sigma_2)
+        total_utility = utility(low, high, sigma_1)
 
-        result.append([low, high, pH, v_1])
+        result.append([low, high, pH, v_1, total_utility])
 
-    columns = ['consumption_low', 'consumption_high', 'pH', 'v_1']
+    columns = ['consumption_low', 'consumption_high', 'pH', 'v_1', 'U']
     df = pd.DataFrame(result, columns=columns)
-    df.index = sigma_space
-    list_data = [df[column] for column in columns]
-
-    ax = sns.lineplot(data=list_data)
-    fig = ax.get_figure()
-    fig.savefig('out_data/output.png')
+    df['sigma'] = sigma_space
 
     df.to_csv('out_data/results.csv')
