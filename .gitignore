@@ -131,7 +131,6 @@ lib64/
 data/
 cached/
 out/
-plots/
 lists_py/
 
 *zip
