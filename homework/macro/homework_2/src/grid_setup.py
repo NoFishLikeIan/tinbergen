@@ -1,4 +1,5 @@
 import numpy as np
+import os
 
 from .fundamentals import max_prod_function
 
@@ -17,6 +18,7 @@ def g_mapper(alpha):
 
 
 def make_grid(n, k, alpha):
+
     low, high = k
     k_axis = np.linspace(start=low, stop=high, num=n)
     axis = np.meshgrid(k_axis)
