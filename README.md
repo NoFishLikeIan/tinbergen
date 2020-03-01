@@ -39,9 +39,17 @@ The structure should be as follows:
 
 - [ ] [_Chaos in foreign exchange markets: a sceptical view_](http://centaur.reading.ac.uk/35988/1/35988.pdf) - Is there a (mathematically) chaotic behaviour in foreign exchange markets?
 
-- [ ] [International Pollution Control: Cooperative versus Noncooperative Strategies](https://www.sciencedirect.com/science/article/pii/S0095069683710235?via%3Dihub) - Application of optimal control in pollution issues
+- [ ] [_International Pollution Control: Cooperative versus Noncooperative Strategies_](https://www.sciencedirect.com/science/article/pii/S0095069683710235?via%3Dihub) - Application of optimal control in pollution issues
 
-- [ ] [The Rise and Decline of General Laws of Capitalism](https://economics.mit.edu/files/10422) - A critique by the one and only Daron Acemogluy and his mate James Robinson, to the notorious laws of capitalism by Thomas Pikkety
+- [ ] [_The Rise and Decline of General Laws of Capitalism_](https://economics.mit.edu/files/10422) - A critique by the one and only Daron Acemogluy and his mate James Robinson, to the notorious laws of capitalism by Thomas Pikkety
+
+- [x] [_Scipy 1.0_](https://www.nature.com/articles/s41592-019-0686-2) - Paper for the scipy project
+
+- [ ] [_Towards compositional game theory_](http://www.cs.ox.ac.uk/people/julian.hedges/papers/Thesis.pdf) - Julian Hedges doctorate paper on compositional game theory
+
+- [ ] [_Casual Inference: The Mixtape_](https://scunning.com/cunningham_mixtape.pdf) - Fan versione of the casual inference bible by Scott Cunningham
+
+- [ ] [_Casuality_](http://bayes.cs.ucla.edu/BOOK-2K/neuberg-review.pdf) - The paper that gave us DAGS by Leland Gerson Neuberg 
 
 ### Collateral
 
