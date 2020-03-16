@@ -1,0 +1,5 @@
+---
+title: "Homework 1, ARFIMA estimation"
+output: html_notebook
+---
+
