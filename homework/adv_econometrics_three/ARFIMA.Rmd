@@ -3,3 +3,55 @@ title: "Homework 1, ARFIMA estimation"
 output: html_notebook
 ---
 
+## Libraries
+```{r}
+library(ggplot2)
+library(xts)
+library(tseries)
+```
+
+
+## Data input
+```{r}
+filepath <- file.path(getwd(), "data", "vix_data.csv")
+
+df <- read.zoo(filepath, sep = ",", format = "%Y%m%d")
+
+X <- log(as.xts(df))
+
+dX <- na.trim(diff(X))
+
+head(dX)
+```
+
+## Exercise 1 - Plot
+We now can plot $X_t$ and the first difference $\Delta X_t$
+
+```{r}
+autoplot(X)
+autoplot(dX)
+```
+
+
+The sample autocorrelation
+
+```{r}
+acf(X)
+acf(dX)
+```
+
+It seems that the series $X_t$ is non stationary and hence we should start from $\Delta X_t$
+
+## Excerice 2
+```{r}
+adf.test(as.ts(X))
+adf.test(as.ts(dX))
+```
+
+
+## Exercise 3
+
+```{r}
+
+```
+
