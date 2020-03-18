@@ -8,6 +8,7 @@ output: html_notebook
 library(ggplot2)
 library(xts)
 library(tseries)
+library(dplyr)
 ```
 
 
@@ -33,12 +34,40 @@ autoplot(dX)
 ```
 
 
+Autcorellation function
+```{r}
+
+autocorr <- function(vector, h) {
+  n <- length(vector)
+  vec_dem <- vector-mean(vector)
+  
+  prev <- vec_dem[1:(n-abs(h))]
+  subs <- vec_dem[(1+abs(h)):n]
+  
+  rho_hat <- t(prev)%*%subs / t(vec_dem)%*%vec_dem
+  
+  
+  return(rho_hat) 
+} 
+
+sample_acf <- function(series, hs) {
+  vec <- as.vector(series)
+  
+  compute_autocorr <- function(h) autocorr(vec, h) 
+  
+  ac <- sapply(hs, compute_autocorr)
+  
+  return(ac)
+}
+```
+
 The sample autocorrelation
 
 ```{r}
 acf(X)
 acf(dX)
 ```
+
 
 It seems that the series $X_t$ is non stationary and hence we should start from $\Delta X_t$
 
@@ -51,7 +80,52 @@ adf.test(as.ts(dX))
 
 ## Exercise 3
 
-```{r}
 
+```{r}
+ones <- function (n) as.vector(replicate(n, 1))
+
+spectral_dens <- function(X, l) {
+  n <- length(X)
+  hs <- as.vector((1-n):(n-1))
+  
+  corrs <- sample_acf(X, hs)
+  weights <- 1 - abs(hs)/(l+1)
+  
+  dens = function(lambda) {
+    cosines <- cos(lambda*hs)
+    f_hat <- sum(weights*corrs*cosines)
+    return (f_hat / (2*pi))
+  }
+  
+  return (dens)
+}
 ```
+
+
+```{r}
+dens <- spectral_dens(dX, 30)
+```
+
+
+```{r}
+density_space <- seq(1, 2*pi, length.out=100)
+estimated_dens <- sapply(density_space, dens)
+
+df <- data.frame(lambda=density_space, f=estimated_dens)
+```
+
+```{r}
+ggplot(data=df, aes(lambda, f)) + geom_line() 
+```
+
+
+
+
+
+
+
+
+
+
+
 
