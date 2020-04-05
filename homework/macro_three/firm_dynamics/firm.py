@@ -1,11 +1,6 @@
 import numpy as np
 import scipy.optimize as opt
 import functools as fn
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d.axes3d import Axes3D
-
-import seaborn as sns
-sns.set()
 
 positive = ((0, None),)
 
@@ -24,54 +19,41 @@ class Firm:
             production = prod_draw*labour**(self.gamma)
             cost = wage*labour
 
-            return production - cost - self.fixed_cost
+            return production - cost
 
-        result = opt.minimize(lambda l: -pi_labour(l), 2, bounds=positive)
+        result = opt.minimize(lambda l: -pi_labour(l), 0, bounds=positive)
         payoff = -result.fun[0]
         labour = result.x[0]
 
         return payoff, labour
 
+    def thr_prod(self, wage: float, atol: float = 1e-5):
+        productivity = np.linspace(1, 100, 500)
+        for draw in productivity:
+            payoff, labour = self.pi(wage, draw)
+
+            if payoff - self.fixed_cost < atol:
+                return labour
+        else:
+            raise ValueError("No such threshold, payoff is always positive")
+
 
 if __name__ == '__main__':
+
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    sns.set(rc={'figure.figsize': (16, 12)})
+
     firm = Firm(10, .7)
 
     wages = np.linspace(1, 10, 100)
     productivity = np.linspace(1, 100, 100)
 
-    n, m = wages.shape[0], productivity.shape[0]
+    cd = [firm.thr_prod(w) for w in wages]
 
-    labour_surface = np.zeros((n, m))
-    payoff_surface = np.zeros((n, m))
+    plt.plot(wages, cd)
+    plt.xlabel("wages, w")
+    plt.ylabel("threshold producitivity, cd")
 
-    xs, ys = np.meshgrid(wages, productivity)
-
-    for i, w in enumerate(wages):
-        for j, a in enumerate(productivity):
-            payoff, labour = firm.pi(w, a)
-            payoff_surface[i, j] = payoff
-            labour_surface[i, j] = labour
-
-    print("Plotting...")
-
-    fig = plt.figure(figsize=(14, 14))
-    ax = Axes3D(fig)
-    ax.plot_surface(xs, ys, labour_surface.T)
-    ax.set_xlabel("wages, w")
-    ax.set_ylabel("productivity, a")
-    ax.set_zlabel("opt_labour, l")
-    plt.savefig("optimal_labor.png")
-    plt.close()
-
-    print("Done!")
-
-    print("Plotting...")
-
-    fig = plt.figure(figsize=(14, 14))
-    ax = Axes3D(fig)
-    ax.plot_surface(xs, ys, payoff_surface.T)
-    ax.set_xlabel("wages, w")
-    ax.set_ylabel("productivity, a")
-    ax.set_zlabel("payoff, l")
-    plt.savefig("payoff.png")
-    plt.close()
+    plt.savefig("plots/q2_cd.png")
