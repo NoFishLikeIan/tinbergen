@@ -9,16 +9,20 @@ library(ggplot2)
 library(xts)
 library(tseries)
 library(dplyr)
+library(fracdiff)
+library(forecast)
 ```
 
 
 ## Data input
 ```{r}
+set.seed(11148705)
+
 filepath <- file.path(getwd(), "data", "vix_data.csv")
 
-df <- read.zoo(filepath, sep = ",", format = "%Y%m%d")
+returns <- read.zoo(filepath, sep = ",", format = "%Y%m%d")
 
-X <- log(as.xts(df))
+X <- log(as.xts(returns)
 
 dX <- na.trim(diff(X))
 
@@ -44,7 +48,6 @@ autocorr <- function(vector, h) {
   prev <- vec_dem[1:(n-abs(h))]
   subs <- vec_dem[(1+abs(h)):n]
   
-  # X[1:h].T @ X[h:n] / X.T @ X
   rho_hat <- t(prev)%*%subs / t(vec_dem)%*%vec_dem
   
   
@@ -105,22 +108,62 @@ spectral_dens <- function(X, l) {
 
 ```{r}
 l <- 33
-dens <- spectral_dens(dX, l)
-density_space <- seq(1, 2*pi, length.out=100)
-estimated_dens <- sapply(density_space, dens)
+n <- length(dX)
+dens_fn <- spectral_dens(dX, l)
 
-df <- data.frame(lambda=density_space, f=estimated_dens)
-ggplot(data=df, aes(lambda, f)) + geom_line()
+density_space <- seq(0, 2*pi, length.out=n)
+estimated_dens <- sapply(density_space, dens_fn)
+
+df <- data.frame(lambda=density_space, f_estimated_density=estimated_dens)
+ggplot(data=df, aes(lambda, f_estimated_density)) + geom_line()
 ```
+
+
+## Exercise 4 - Geweke and Porter-Hudak
 
 ```{r}
-I_n <- estimated_dens
-estimated_dens
+fracGPH <- function(dX, l, verbose=FALSE) {
+  n <- length(dX)
+  m <- floor(sqrt(n))
+  
+  dens_fn <- spectral_dens(dX, l)
+  
+  support_upper <- 2*pi*m/n
+  density_space <- seq(0.01, support_upper, length.out=m)
+  
+
+  I <- sapply(density_space, dens_fn)
+  llambda <- log(2*sin(0.5*density_space))
+  
+  df <- data.frame(I=I, log_lambda=llambda)
+  
+  model_fit <- lm(I ~ log_lambda, data=df)
+  
+  if (verbose) {
+    print(summary(model_fit))
+    print(anova(model_fit))
+  }
+  
+  d <- -0.5*summary(model_fit)$coefficients[2]
+  
+  return(d)
+}
+
+d <- fracGPH(dX, l, verbose=FALSE)
 ```
 
 
+```{r}
+d <- fdGPH(dX)$d
+d
+```
 
+## Exercise 5
 
+```{r}
+fit_d <- arfima(as.vector(dX))
+fit_d
+```
 
 
 
