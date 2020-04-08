@@ -22,14 +22,12 @@ class BoundedParetoDensity:
             raise ValueError(
                 "The lower bound has to be smaller than the upper bound")
 
-        den_scaler = (L/H)**alpha if H is not None else 0
-
         self.alpha = alpha
-        self.L = 1 if L is None else L
-        self.H = np.inf if H is None else H
+        self.L = L
+        self.H = H
 
         self.num_factor = self.alpha * (self.L**self.alpha)
-        self.den_factor = 1 - den_scaler
+        self.den_factor = 1 - (L/H)**alpha
 
     @is_inbound
     def pdf(self, x: float):
