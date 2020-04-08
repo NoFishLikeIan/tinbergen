@@ -1,13 +1,24 @@
 
+from functools import wraps
 from scipy import integrate
 import numpy as np
 
 
-class BoundedParetoDensity:
-    def __init__(self, alpha: float = 5, L: float = None, H: float = None):
-        one_none = H is None or L is None
+def is_inbound(fn):
+    @wraps(fn)
+    def wrapper(self, *args):
+        x = args[0]
+        if x < self.L or x > self.H:
+            raise ValueError(
+                f"Argument out of bounds, requires {self.L} < {x} < {self.H}")
 
-        if not one_none and H < L:
+        return fn(self, *args)
+    return wrapper
+
+
+class BoundedParetoDensity:
+    def __init__(self, alpha: float = 5, L: float = 1, H: float = np.inf):
+        if H < L:
             raise ValueError(
                 "The lower bound has to be smaller than the upper bound")
 
@@ -20,26 +31,14 @@ class BoundedParetoDensity:
         self.num_factor = self.alpha * (self.L**self.alpha)
         self.den_factor = 1 - den_scaler
 
-    def is_inbound(self, x: float):
-        if self.L is not None and x < self.L:
-            return False
-
-        if self.H is not None and x > self.H:
-            return False
-
-        return True
-
+    @is_inbound
     def pdf(self, x: float):
-        if not self.is_inbound(x):
-            raise ValueError(f"Requires {self.L} < {x} < {self.H}")
-
         scaled = x**(-self.alpha-1)
+
         return self.num_factor*scaled/self.den_factor
 
+    @is_inbound
     def cdf(self, x: float):
-        if not self.is_inbound(x):
-            raise ValueError(f"Requires {self.L} < {x} < {self.H}")
-
         mass, _ = integrate.quad(lambda x: self.pdf(x), self.L, x)
 
         return mass
@@ -61,3 +60,17 @@ class BoundedParetoDensity:
     @property
     def E(self):
         return self.integrate(lambda x: x)
+
+
+if __name__ == '__main__':
+    d = BoundedParetoDensity(L=2)
+
+    try:
+        d.pdf(1)
+    except ValueError as e:
+        print(e)
+        print("Error caught")
+
+    print(d.cdf(100))
+    print(d.cdf(2.2))
+    print(d.pdf(2.12))
