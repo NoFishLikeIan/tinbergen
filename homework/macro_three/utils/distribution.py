@@ -14,7 +14,7 @@ class BoundedParetoDensity:
         den_scaler = (L/H)**alpha if H is not None else 0
 
         self.alpha = alpha
-        self.L = -np.inf if L is None else L
+        self.L = 1 if L is None else L
         self.H = np.inf if H is None else H
 
         self.num_factor = self.alpha * (self.L**self.alpha)
@@ -35,6 +35,14 @@ class BoundedParetoDensity:
 
         scaled = x**(-self.alpha-1)
         return self.num_factor*scaled/self.den_factor
+
+    def cdf(self, x: float):
+        if not self.is_inbound(x):
+            raise ValueError(f"Requires {self.L} < {x} < {self.H}")
+
+        mass, _ = integrate.quad(lambda x: self.pdf(x), self.L, x)
+
+        return mass
 
     def integrate(self, factor: float = None):
         fn_modifier = factor if factor is not None else lambda _: 1
