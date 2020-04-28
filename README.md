@@ -47,9 +47,13 @@ The structure should be as follows:
 
 - [ ] [_Towards compositional game theory_](http://www.cs.ox.ac.uk/people/julian.hedges/papers/Thesis.pdf) - Julian Hedges doctorate paper on compositional game theory
 
-- [ ] [_Casual Inference: The Mixtape_](https://scunning.com/cunningham_mixtape.pdf) - Fan versione of the casual inference bible by Scott Cunningham
+- [ ] [_Casual Inference: The Mixtape_](https://scunning.com/cunningham_mixtape.pdf) - Fun versione of the casual inference bible by Scott Cunningham
 
 - [ ] [_Casuality_](http://bayes.cs.ucla.edu/BOOK-2K/neuberg-review.pdf) - The paper that gave us DAGS by Leland Gerson Neuberg 
+
+- [ ] [_A Simple Planning Problem for COVID-19 Lockdown_](https://www.nber.org/papers/w26981) - Optimization problem with SIR and Linear economy
+
+- [ ] [_Macroeconomic implications of COVID-19_](https://t.co/8eqxtoYpdp?amp=1) - Simple but brilliant model looking at fiscal and monetary policy under inefficient markets. 
 
 ### Collateral
 
