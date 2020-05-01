@@ -293,3 +293,7 @@ vignettes/*.pdf
 .Renviron
 
 homework/adv_econometrics_three/others/
+code/thesis_ideas/plots
+code/thesis_ideas/networks
+
+code/thesis_ideas/.vscode
