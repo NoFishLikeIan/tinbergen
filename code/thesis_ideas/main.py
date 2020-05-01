@@ -154,3 +154,7 @@ if __name__ == '__main__':
 
     taufive = Z[~np.all(Z == 0, axis=1)]
     section_plot(taufive)
+
+    for t in range(500):
+        print(f"{t} -> {I.aggregate_prod}")
+        I.step()

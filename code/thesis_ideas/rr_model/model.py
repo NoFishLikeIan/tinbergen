@@ -83,10 +83,11 @@ class Industry:
             lambda _: self.lower_bounds, lambda _: 1
         )
         """
+        A, T = np.meshgrid(self.space, self.space)
 
-        y =
+        y = self.production(A, T)*self.mu
 
-        return y
+        return np.sum(y)
 
     def optimal_factors(self, prod, tau):
         net_prod = (self.params["gamma"] - self.params["alpha"])
