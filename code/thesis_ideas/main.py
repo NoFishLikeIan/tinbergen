@@ -14,14 +14,15 @@ from rr_model.network import Network
 sns.set(rc={'figure.figsize': (12, 8)})
 
 
-def simulate(net: Network, iters=150, verbose=True):
+def simulate(net: Network, iters=150, verbose=True, f=2):
     if verbose:
         print("Bringing to steady...")
     net.bring_to_steady(iters=iters, verbose=verbose)
     n = len(net)
 
     prev_wage = net[n-1].wage
-    next_wage = prev_wage*2
+    next_wage = prev_wage*f
+
     net[n-1].wage = next_wage
 
     if verbose:
@@ -72,29 +73,30 @@ if __name__ == '__main__':
         "beta": 0.95
     }
 
-    theta_two = 0.2
-
+    theta_two = [0.2, 0.25, 0.2]
+    firms = 3
     inds = []
 
-    for _ in range(5):
+    for _ in range(firms):
+
         i = Industry(
             fixed_overhead=overhead,
             alpha=3,
             theta_one=theta_one,
-            theta_two=theta_two,
+            theta_two=theta_two[_],
             params=params,
         )
 
         inds.append(i)
 
-    d = np.tril(np.random.randint(1, 10, size=(5, 5)), -1)
+    d = np.tril(np.random.randint(1, 10, size=(firms, firms)), -1)
 
     net = Network(inds, d)
 
-    nx.draw_networkx(net.G)
-    plt.savefig("plots/network.png")
+    # nx.draw_networkx(net.G)
+    # plt.savefig("plots/network.png")
 
-    df = simulate(net, iters=50)
+    df = simulate(net, iters=30, f=1.2)
     df.plot()
 
     plt.savefig("plots/wage_shock.png")
