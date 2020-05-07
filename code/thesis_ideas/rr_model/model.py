@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.integrate import dblquad
+from typing import NoReturn, Tuple
 
 from .pareto import MultivariatePareto
 
@@ -12,16 +13,14 @@ default_parameters = {
 }
 
 
-def index_from_float(f, l, u, space):
-    ratio = (f-l)/(u-l)
-
-    return int(ratio*space)
+def logit(x, scale=10e5):
+    m = np.exp(-x/scale)
+    return 1/(1-m)
 
 
 class Industry:
     def __init__(self,
                  wage=0.5,
-                 fixed_costs=0.5,
                  fixed_overhead=0.5,
                  M=10_000,
                  params={},
@@ -29,7 +28,6 @@ class Industry:
                  n=100,
                  **dist_params):
 
-        self.fixed_costs = fixed_costs
         self.fixed_overhead = fixed_overhead
         self.M = M
         self.params = {**default_parameters, **params}
@@ -50,6 +48,18 @@ class Industry:
         self.mus = [np.zeros((n, n))]
         self.t = 0
 
+        self.suppliers = []
+
+    @property
+    def fixed_costs(self):
+        costs = 0
+
+        for supplier, dep in self.suppliers:
+            costs += (1-logit(supplier.aggregate_prod))*dep
+
+        # print(costs)
+        return costs
+
     @property
     def discount(self):
         R = self.params["rho"] - self.params["delta"]
@@ -64,13 +74,6 @@ class Industry:
     @property
     def mu(self):
         return self.mus[self.t]
-
-    def mu_at(self, prod, tau):
-
-        a = index_from_float(prod, self.lower_bounds, 1, self.n)
-        t = index_from_float(tau, self.lower_bounds, 1, self.n)
-
-        return self.mu[a, t]
 
     @property
     def aggregate_prod(self):
@@ -89,7 +92,7 @@ class Industry:
 
         return np.sum(y)
 
-    def optimal_factors(self, prod, tau):
+    def optimal_factors(self, prod: float, tau: float) -> Tuple[float, float]:
         net_prod = (self.params["gamma"] - self.params["alpha"])
         den = 1-self.params["gamma"]
 
@@ -103,7 +106,7 @@ class Industry:
 
         return k, l
 
-    def production(self, prod, tau):
+    def production(self, prod: float, tau: float) -> float:
 
         capital, labour = self.optimal_factors(prod, tau)
 
@@ -113,7 +116,7 @@ class Industry:
 
         return capital*labour
 
-    def costs(self, prod, tau):
+    def costs(self, prod: float, tau: float) -> float:
         capital, labour = self.optimal_factors(prod, tau)
 
         costs = self.wage*labour + \
@@ -121,7 +124,7 @@ class Industry:
 
         return costs
 
-    def profit(self, prod, tau):
+    def profit(self, prod: float, tau: float) -> float:
 
         costs = self.costs(prod, tau)
 
@@ -129,12 +132,12 @@ class Industry:
 
         return production - costs
 
-    def prod_decision(self, prod, tau):
+    def prod_decision(self, prod: float, tau: float) -> np.array:
         pi = self.profit(prod, tau)*self.discount
 
         return np.where(pi > 0, 1, 0)
 
-    def step(self):
+    def step(self) -> NoReturn:
         A, T = np.meshgrid(self.space, self.space)
 
         entrants = self.prod_decision(A, T)\
@@ -148,3 +151,6 @@ class Industry:
         self.mus.append(mu)
 
         self.t += 1
+
+    def add_supplier(self, node: 'Industry', dep: float) -> NoReturn:
+        self.suppliers.append([node, dep])
