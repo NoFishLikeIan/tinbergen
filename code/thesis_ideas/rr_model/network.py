@@ -28,6 +28,9 @@ class Network:
     def __getitem__(self, item):
         return self.nodes[item]
 
+    def __len__(self):
+        return len(self.nodes)
+
     @property
     def sources_index(self) -> Iterable[int]:
 
