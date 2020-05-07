@@ -15,7 +15,7 @@ default_parameters = {
 
 def logit(x, scale=10e5):
     m = np.exp(-x/scale)
-    return 1/(1-m)
+    return 1/(1+m)
 
 
 class Industry:
@@ -55,7 +55,8 @@ class Industry:
         costs = 0
 
         for supplier, dep in self.suppliers:
-            costs += (1-logit(supplier.aggregate_prod))*dep
+
+            costs += (1-logit(supplier.aggregate_prod, scale=5e6))*dep
 
         # print(costs)
         return costs
