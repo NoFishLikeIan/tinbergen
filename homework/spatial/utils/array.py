@@ -10,8 +10,8 @@ def local_extrema(vec: np.array) -> Tuple[List[int], List[int]]:
     local maximum and minimum, including boundary points
     """
 
-    maxInd = signal.argrelextrema(vec, np.greater)[0]
-    minInd = signal.argrelextrema(vec, np.less)[0]
+    maxInd = signal.argrelmax(vec)[0]
+    minInd = signal.argrelmin(vec)[0]
 
     # TODO: Find a better way to do this because "argrelextrema" only looks for internal
     if vec[0] > vec[1]:
@@ -27,11 +27,31 @@ def local_extrema(vec: np.array) -> Tuple[List[int], List[int]]:
     return maxInd, minInd
 
 
+def stability_equil(vec: np.array,
+                    equil: np.float = 1.,
+                    extreme=True,
+                    atol=1e-3
+                    ) -> Tuple[np.array, np.array]:
+    """
+    Finds gradient of intersaction with equil axes of 1d array.
+    Returns index of intersection and gradient.
+
+    If extreme, it includes boundary point in the equilibrium.
+    """
+    equil_vec = equil*np.ones(vec.shape)
+
+    equil_points = np.where(np.isclose(vec, equil_vec, atol=atol))[0]
+
+    if extreme:
+        # TODO: Find more numpy way to do this
+        equil_points = np.concatenate([[0], equil_points, [len(vec)-1]])
+
+    equil_points = np.unique(equil_points)
+    gradients = np.gradient(vec[equil_points])
+
+    return equil_points, gradients
+
+
 if __name__ == '__main__':
-    vec = np.array([2, 1, 2, 3, 2, 1, 2], dtype=np.float)
-    mx, mn = local_extrema(vec)
-
-    vec[mx] = np.inf
-    vec[mn] = -np.inf
-
-    print(vec)
+    vec = np.array([2, 1, 2, 3, 2, 1, 0], dtype=np.float)
+    print(stability_equil(vec))
