@@ -1,5 +1,8 @@
 import numpy as np
 
+from utils.array import stability_equil
+from utils.plotting import plot_wage_transport
+
 
 class TwoRegionModel:
     """
@@ -12,7 +15,9 @@ class TwoRegionModel:
                  eps=5.,
                  L=1.,
                  phi=0.5,
-                 sigma=1e-4, max_iter=10_000, verbose=1):
+                 normalized=False,
+                 sigma=1e-4, max_iter=10_000, verbose=0):
+
         self.delta = delta
         self.eps = eps
         self.L = L
@@ -21,14 +26,18 @@ class TwoRegionModel:
 
         self.max_iter = max_iter
         self.verbose = verbose > 0
+        self.normalized = normalized
 
         self.rho = (eps-1)/eps
         self.gamma = self.delta
         self.beta = self.rho
-        self.alpha = self.gamma*self.L / self.eps
+        self.alpha = (self.gamma*self.L) / self.eps
 
     @property
     def fact_I(self):
+        if self.normalized:
+            return 1
+
         disc = self.beta / self.rho
         lab = (self.gamma*self.L)/(self.alpha*self.eps)
         exp = 1/(1-self.eps)
@@ -37,6 +46,9 @@ class TwoRegionModel:
 
     @property
     def fact_W(self):
+        if self.normalized:
+            return 1
+
         disc = self.rho/np.power(self.beta, self.rho)
         lab = self.delta / ((self.eps-1)*self.alpha)
 
@@ -111,3 +123,75 @@ class TwoRegionModel:
             if self.verbose:
                 print(
                     f'Solution did not converge with {self.max_iter} iterations')
+
+    def wage_ratio(self, T=np.linspace(1, 3.1, 150), relative=False):
+        lams = np.linspace(0, 1, 101)
+
+        @np.vectorize
+        def wage_ratio(l, t):
+
+            w1, w2 = self.solve(l, t)[-1]
+            ratio = w1 / w2
+
+            if relative and l > 0.5:
+                return 1/ratio
+
+            return ratio
+
+        l, t = np.meshgrid(lams, T)
+        wr = wage_ratio(l, t)
+
+        return wr.T
+
+    def tomahawk(self, T=np.linspace(1, 3.1, 150)):
+        """
+        Given a space for T, produce the data of the 
+
+        """
+        wr = self.wage_ratio(T=T)
+        tom = np.zeros(wr.shape)
+        n = tom.shape[1]
+
+        for col in range(n):
+
+            vec = wr[:, col]
+            equil_points, gradients = stability_equil(vec)
+
+            stable = np.where(gradients < 0)
+            unstable = np.where(gradients > 0)
+
+            tom[equil_points[stable], col] = -1
+            tom[equil_points[unstable], col] = 1
+
+        return tom
+
+
+if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+    from time import time
+
+    delta = 0.45
+    rho = 0.8
+
+    eps = 1 / (1-rho)
+
+    mod = TwoRegionModel(delta=delta, eps=eps)
+    wr = mod.wage_ratio()
+
+    start = time()
+    tom = mod.tomahawk()
+    end = time()
+
+    plot_wage_transport(mod, save="plots/cross.png")
+
+    print("Tom took, ", end-start, " seconds")
+
+    plt.imshow(wr, cmap="coolwarm")
+    plt.savefig("plots/wr.png")
+    plt.close()
+
+    plt.imshow(tom, cmap="coolwarm", extent=[1, 3.1, 0., 1.01])
+    plt.xlabel("T")
+    plt.ylabel("Lambda")
+    plt.savefig(f"plots/tom.png")
+    plt.close()
