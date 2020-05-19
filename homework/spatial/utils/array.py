@@ -38,16 +38,23 @@ def stability_equil(vec: np.array,
 
     If extreme, it includes boundary point in the equilibrium.
     """
+    n = len(vec)
+    J = np.gradient(vec)
     equil_vec = equil*np.ones(vec.shape)
 
     equil_points = np.where(np.isclose(vec, equil_vec, atol=atol))[0]
 
+    equil_points = np.unique(equil_points)
+    gradients = J[equil_points]
+
     if extreme:
         # TODO: Find more numpy way to do this
-        equil_points = np.concatenate([[0], equil_points, [len(vec)-1]])
+        equil_points = np.concatenate([[0], equil_points, [n-1]])
 
-    equil_points = np.unique(equil_points)
-    gradients = np.gradient(vec[equil_points])
+        first_grad = -1 if vec[0] < 1 else 1
+        last_grad = -1 if vec[n-1] > 1 else 1
+
+        gradients = np.concatenate([[first_grad], gradients, [last_grad]])
 
     return equil_points, gradients
 
