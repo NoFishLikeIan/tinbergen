@@ -77,7 +77,7 @@ def plt_countour(X, Y, Z, f=False,
 def triplet_plot(mod, extent=[1, 3.1, 0., 1.01], figsize=(9, 18), **kwargs):
 
     wr = mod.wage_ratio(**kwargs)
-    tom = mod.tomahawk(**kwargs)
+    tom = mod.tomahawk()
 
     fig, (lax, rax) = plt.subplots(1, 2, figsize=figsize)
 
@@ -96,3 +96,36 @@ def triplet_plot(mod, extent=[1, 3.1, 0., 1.01], figsize=(9, 18), **kwargs):
     fig.show()
 
     return wr, tom
+
+
+def sustain_break_plot(mod, T=np.linspace(1, 2.5, 150), figsize=(16, 12)):
+    g = mod.g(T)
+    f = mod.f(T)
+
+    s = mod.sustain_p
+    b = mod.break_p
+
+    df = pd.DataFrame(index=T)
+    df["g(T)"] = g
+    df["f(T)"] = f
+
+    fig, ax = plt.subplots(figsize=figsize)
+    df.plot(ax=ax, lw=2)
+
+    ax.axhline(1, linestyle='--')
+    ax.axvline(s, linestyle='--', c='k')
+    ax.axvline(b, linestyle='--', c='k')
+
+    ax.plot(s, 1, 'ko', markersize=12)
+    ax.plot(b, 1, 'ko', markersize=12)
+
+    sus_label = f'Sustain point, T={s:.3}'
+    break_label = f'Break point, T={b:.3}'
+
+    ax.text(s - 0.05, 1.05, sus_label, horizontalalignment='right')
+    ax.text(b + 0.05, 1.05, break_label)
+
+    ax.set_xlim(T[0], T[-1])
+    ax.set_xlabel("Transport costs, T")
+
+    return fig, ax
