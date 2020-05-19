@@ -1,7 +1,8 @@
 import numpy as np
+import scipy.optimize as opt
 
 from utils.array import stability_equil
-from utils.plotting import plot_wage_transport
+from utils import plotting
 
 
 class TwoRegionModel:
@@ -143,7 +144,7 @@ class TwoRegionModel:
 
         return wr.T
 
-    def tomahawk(self, T=np.linspace(1, 3.1, 150)):
+    def tomahawk(self, T=np.linspace(1, 3.1, 200)):
         """
         Given a space for T, produce the data of the 
 
@@ -165,10 +166,43 @@ class TwoRegionModel:
 
         return tom
 
+    def f(self, T):
+        Y1 = (1+self.delta)/2
+        Y2 = (1-self.delta)/2
+
+        first = Y1*np.power(T, -(self.rho + self.delta) * self.eps)
+        second = Y2*np.power(T, (self.rho - self.delta) * self.eps)
+
+        return first + second
+
+    def g(self, T):
+        scaled_T = np.power(T, 1 - self.eps)
+        first = (1 - scaled_T)/(1 + scaled_T)
+
+        sq_delta = np.power(self.delta, 2)
+
+        second = self.delta*(1+self.rho)/(sq_delta + self.rho)
+
+        return first + 1 - second
+
+    @property
+    def sustain_p(self):
+        sol = opt.root(lambda T: self.g(T) - 1, 1.5)
+
+        return sol.x[-1]
+
+    @property
+    def break_p(self):
+        sol = opt.root(lambda T: self.f(T) - 1, 1.5)
+
+        return sol.x[-1]
+
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
     from time import time
+
+    tom_plot = False
 
     delta = 0.45
     rho = 0.8
@@ -176,22 +210,28 @@ if __name__ == "__main__":
     eps = 1 / (1-rho)
 
     mod = TwoRegionModel(delta=delta, eps=eps)
-    wr = mod.wage_ratio()
 
-    start = time()
-    tom = mod.tomahawk()
-    end = time()
+    if tom_plot == True:
+        wr = mod.wage_ratio()
 
-    plot_wage_transport(mod, save="plots/cross.png")
+        start = time()
+        tom = mod.tomahawk()
+        end = time()
 
-    print("Tom took, ", end-start, " seconds")
+        plotting.plot_wage_transport(mod, save="plots/cross.png")
 
-    plt.imshow(wr, cmap="coolwarm")
-    plt.savefig("plots/wr.png")
-    plt.close()
+        print("Tom took, ", end-start, " seconds")
 
-    plt.imshow(tom, cmap="coolwarm", extent=[1, 3.1, 0., 1.01])
-    plt.xlabel("T")
-    plt.ylabel("Lambda")
-    plt.savefig(f"plots/tom.png")
-    plt.close()
+        plt.imshow(wr, cmap="coolwarm")
+        plt.savefig("plots/wr.png")
+        plt.close()
+
+        plt.imshow(tom, cmap="coolwarm", extent=[1, 3.1, 0., 1.01])
+        plt.xlabel("T")
+        plt.ylabel("Lambda")
+        plt.savefig(f"plots/tom.png")
+        plt.close()
+
+    fig, ax = plotting.sustain_break_plot(mod)
+
+    fig.savefig("plots/sb_plot.png")
