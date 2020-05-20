@@ -139,10 +139,110 @@ def sustain_break_plot(mod, T=np.linspace(1, 2.5, 150), figsize=(16, 12)):
     sus_label = f'Sustain point, T={s:.3}'
     break_label = f'Break point, T={b:.3}'
 
-    ax.text(s - 0.05, 1.05, sus_label, horizontalalignment='right')
-    ax.text(b + 0.05, 1.05, break_label)
+    ax.text(s - 0.05, 1.05, "A", fontsize=16)
+    ax.text(b + 0.05, 1.05, "B", fontsize=16)
+    ax.text(s - 0.05, 0.3, sus_label, horizontalalignment='right')
+    ax.text(b + 0.05, 0.3, break_label)
 
     ax.set_xlim(T[0], T[-1])
     ax.set_xlabel("Transport costs, T")
 
     return fig, ax
+
+
+def welfare_plot(model, n=100):
+    lams = np.linspace (0.01,1,n)
+
+    y = np.zeros(n)
+    z = np.zeros(n)
+    w = np.zeros(n)
+
+    # real income
+    u1m = np.zeros(n)
+    u1a = np.zeros(n)
+    u2m = np.zeros(n)
+    u2a = np.zeros(n)
+
+    # real wages
+    v1m = np.zeros(n)
+    v1a = np.zeros(n)
+    v2m = np.zeros(n)
+    v2a = np.zeros(n)
+
+    i = 0
+    for lam in np.nditer(lams):
+        result = model.welfare(lam, T)
+        y[i] = result[0]
+        z[i] = result[1][0]
+        w[i] = result[1][1]
+        u1m[i] = result[2][0]
+        u1a[i] = result[2][1]
+        u2m[i] = result[2][2]
+        u2a[i] = result[2][3]
+        v1m[i] = result[3][0]
+        v1a[i] = result[3][1]
+        v2m[i] = result[3][2]
+        v2a[i] = result[3][3]
+
+        i += 1
+        
+    fig = plt.figure()
+    title = 'Welfare changes as a function of $\u03BB$, $\u03C6$ = '+ str(phi)
+    fig.suptitle(title)
+
+    fig1 = fig.add_subplot(131)
+    fig1.plot(lams,y)
+    fig1.set_title('Total welfare changes')
+    fig1.set_xlabel('$\u03BB$')
+    fig1.set_ylabel('Total real income')
+
+    fig2 = fig.add_subplot(132)
+    labels = [
+        'Real income region 1',
+        'Real income region 2'
+    ]
+    Y = np.vstack([z,w])
+    fig2.stackplot(lams,Y, labels = labels)
+    fig2.set_title('Regional welfare composition')
+    fig2.set_xlabel('$\u03BB$')
+    fig2.set_ylabel('Real income')
+    fig2.legend()
+
+    fig3 = fig.add_subplot(133)
+    labels = [
+        'Region 1 - manufacturing',
+        'Region 1 - agriculture',
+        'Region 2 - manufacturing',
+        'Region 2 - agriculture'
+    ]
+    Y = np.vstack([u1m,u1a,u2m,u2a])
+    fig3.stackplot(lams,Y, labels = labels)
+    fig3.set_title('Sectoral welfare composition')
+    fig3.set_xlabel('$\u03BB$')
+    fig3.set_ylabel('Real income')
+    fig3.legend()
+    plt.savefig('welfare1.png')
+
+    g = plt.figure()
+    g1 = g.add_subplot(121)
+
+    g1.plot(lams, u1m, label="Region 1 - manufacturing")
+    g1.plot(lams, u2m, label="Region 2 - manufacturing")
+    g1.plot(lams, u1a,"--", label='Region 1 - agriculture')
+    g1.plot(lams, u2a,"--", label='Region 2 - agriculture')
+    g1.set_title('Welfare changes')
+    g1.set_xlabel('$\u03BB$')
+    g1.set_ylabel('Real income')
+    g1.legend()
+
+    g2 = g.add_subplot(122)
+
+    g2.plot(lams, v1m, label="Region 1 - manufacturing")
+    g2.plot(lams, v2m, label="Region 2 - manufacturing")
+    g2.plot(lams, v1a,"--", label='Region 1 - agriculture')
+    g2.plot(lams, v2a,"--", label='Region 2 - agriculture')
+    g2.set_title('Welfare changes')
+    g2.set_xlabel('$\u03BB$')
+    g2.set_ylabel('Real wages')
+    g2.legend()
+    g.savefig('welfare2.png')
