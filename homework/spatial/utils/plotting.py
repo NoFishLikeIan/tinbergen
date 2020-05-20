@@ -98,6 +98,23 @@ def triplet_plot(mod, extent=[1, 3.1, 0., 1.01], figsize=(9, 18), **kwargs):
     return wr, tom
 
 
+def pitchfork(mod, extent=[1, 3.1, 0., 1.01], figsize=(9, 18), **kwargs):
+    wr = mod.wage_ratio(**kwargs)
+    tom = mod.tomahawk()
+
+    fig, ax = plt.subplots(figsize=figsize)
+
+    ax.imshow(tom, cmap="coolwarm", extent=extent)
+    ax.set_xlabel("T")
+    ax.set_ylabel("Lambda")
+    ax.set_title("Pitchfork bifurcation")
+    ax.grid(None)
+
+    fig.show()
+
+    return wr, tom
+
+
 def sustain_break_plot(mod, T=np.linspace(1, 2.5, 150), figsize=(16, 12)):
     g = mod.g(T)
     f = mod.f(T)
