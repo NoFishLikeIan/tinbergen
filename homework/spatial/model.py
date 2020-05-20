@@ -17,6 +17,7 @@ class TwoRegionModel:
                  L=1.,
                  phi=0.5,
                  normalized=False,
+                 gamma=None,
                  sigma=1e-4, max_iter=10_000, verbose=0):
 
         self.delta = delta
@@ -30,7 +31,7 @@ class TwoRegionModel:
         self.normalized = normalized
 
         self.rho = (eps-1)/eps
-        self.gamma = self.delta
+        self.gamma = self.delta if gamma is None else gamma
         self.beta = self.rho
         self.alpha = (self.gamma*self.L) / self.eps
 
