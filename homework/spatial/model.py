@@ -198,6 +198,25 @@ class TwoRegionModel:
 
         return sol.x[-1]
 
+    def welfare(self, lam, T):
+
+        _, Ys, Is, Ws = self.solve(lam, T)
+        y_r1, y_r2 = [y/np.power(i, self.delta) for y, i in zip(Ys, Is)]
+
+        U = y_r1 + y_r2
+
+        y_r0m = gamma*lam*w1/np.power(i1, self.delta)
+        y_r0a = (1-gamma)*self.phi/np.power(i1, self.delta)
+        y_r1m = gamma*(1-lam)*w2/np.power(i2, self.delta)
+        y_r1a = (1-gamma)*(1-self.phi)/np.power(i2, self.delta)
+        
+        w_r0m = rw1
+        w_r0a = 1/np.power(i1, self.delta)
+        w_r1m = rw2
+        w_r1a = 1/np.power(i2, self.delta)
+        
+        return U, (U0, U1), (y_r0m, y_r0a, y_r1m, y_r1a), (w_r0m, w_r0a, w_r1m, w_r1a)
+
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
