@@ -55,6 +55,8 @@ The structure should be as follows:
 
 - [ ] [_Macroeconomic implications of COVID-19_](https://t.co/8eqxtoYpdp?amp=1) - Simple but brilliant model looking at fiscal and monetary policy under inefficient markets. 
 
+- [ ] [_The Trouble With Macroeconomics_](https://paulromer.net/trouble-with-macroeconomics-update/WP-Trouble.pdf) - Amazing paper by Romer on the shaky grounds of RBC and DSGE models.
+
 ### Collateral
 
 - [ ] [_How I'm able to take notes in mathematics lectures using LaTeX and Vim_](https://castel.dev/post/lecture-notes-1/?fbclid=IwAR21DzEX7qMutxvM8AA5e41yNgYO_V5WTXvamR10L186J9pldb1DEr-_ZTQ) - _Guide on taking notes with Vim and LaTex, I could use this potentially_
