@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 import networkx as nx
 
+from networkx.algorithms.centrality import trophic
+
 from mpl_toolkits import mplot3d
 from matplotlib import animation
 

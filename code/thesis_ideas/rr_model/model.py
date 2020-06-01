@@ -1,5 +1,7 @@
 import numpy as np
 from scipy.integrate import dblquad
+from networkx.algorithms.centrality import trophic
+
 from typing import NoReturn, Tuple
 
 from .pareto import MultivariatePareto
@@ -92,6 +94,10 @@ class Industry:
         y = self.production(A, T)*self.mu
 
         return np.sum(y)
+
+    @property
+    def trophic_inc(self):
+        return trophic.trophic_incoherence_parameter(self.G)
 
     def optimal_factors(self, prod: float, tau: float) -> Tuple[float, float]:
         net_prod = (self.params["gamma"] - self.params["alpha"])
