@@ -8,7 +8,7 @@ This is my reading list for stuff I am gonna read, mostly related to math and ec
 You might say:
 
 > Use twitter like everybody you idiot - Random stranger
-
+v
 And I'd say, no. So let's get going.
 
 ## Structure
@@ -47,7 +47,7 @@ The structure should be as follows:
 
 - [ ] [_Towards compositional game theory_](http://www.cs.ox.ac.uk/people/julian.hedges/papers/Thesis.pdf) - Julian Hedges doctorate paper on compositional game theory
 
-- [ ] [_Casual Inference: The Mixtape_](https://scunning.com/cunningham_mixtape.pdf) - Fun versione of the casual inference bible by Scott Cunningham
+- [ ] [_Casual Inference: The Mixtape_](https://scunning.com/cunningham_mixtape.pdf) - Fun version of the casual inference bible by Scott Cunningham
 
 - [ ] [_Casuality_](http://bayes.cs.ucla.edu/BOOK-2K/neuberg-review.pdf) - The paper that gave us DAGS by Leland Gerson Neuberg 
 
