@@ -8,7 +8,7 @@ This is my reading list for stuff I am gonna read, mostly related to math and ec
 You might say:
 
 > Use twitter like everybody you idiot - Random stranger
-
+v
 And I'd say, no. So let's get going.
 
 ## Structure
@@ -47,7 +47,7 @@ The structure should be as follows:
 
 - [ ] [_Towards compositional game theory_](http://www.cs.ox.ac.uk/people/julian.hedges/papers/Thesis.pdf) - Julian Hedges doctorate paper on compositional game theory
 
-- [ ] [_Casual Inference: The Mixtape_](https://scunning.com/cunningham_mixtape.pdf) - Fun versione of the casual inference bible by Scott Cunningham
+- [ ] [_Casual Inference: The Mixtape_](https://scunning.com/cunningham_mixtape.pdf) - Fun version of the casual inference bible by Scott Cunningham
 
 - [ ] [_Casuality_](http://bayes.cs.ucla.edu/BOOK-2K/neuberg-review.pdf) - The paper that gave us DAGS by Leland Gerson Neuberg 
 
@@ -57,7 +57,16 @@ The structure should be as follows:
 
 - [ ] [_The Trouble With Macroeconomics_](https://paulromer.net/trouble-with-macroeconomics-update/WP-Trouble.pdf) - Amazing paper by Romer on the shaky grounds of RBC and DSGE models.
 
+### Thesis
+
+- [ ]  [_Supply Network Formation and Fragility_](http://bengolub.net/papers/SNFF.pdf) 
+
+- [ ] [_Dynamics in the European Air Transport Network, 2003–9: An Explanatory Framework Drawing on Stochastic Actor-Based Modeling_](https://link.springer.com/article/10.1007/s11067-015-9292-8) 
+
+- [ ] [_DebtRank: Too Central to Fail? Financial Networks, the FED and Systemic Risk_](https://www.nature.com/articles/srep00541)
+
+
 ### Collateral
 
-- [ ] [_How I'm able to take notes in mathematics lectures using LaTeX and Vim_](https://castel.dev/post/lecture-notes-1/?fbclid=IwAR21DzEX7qMutxvM8AA5e41yNgYO_V5WTXvamR10L186J9pldb1DEr-_ZTQ) - _Guide on taking notes with Vim and LaTex, I could use this potentially_
+- [ ] [_How I'm able to take notes in mathematics lectures using LaTeX and Vim_](https://castel.dev/post/lecture-notes-1/?fbclid=IwAR21DzEX7qMutxvM8AA5e41yNgYO_V5WTXvamR10L186J9pldb1DEr-_ZTQ) - Guide on taking notes with Vim and LaTex, I could use this potentially
 
