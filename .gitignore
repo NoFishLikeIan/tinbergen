@@ -300,3 +300,5 @@ code/thesis_ideas/.vscode
 
 quick_dirty/
 homework/spatial/plot_all.py
+
+*.csv
