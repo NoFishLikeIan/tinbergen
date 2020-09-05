@@ -7,7 +7,7 @@ from statsmodels.tsa.vector_ar import var_model
 
 sns.set()
 
-def import_cee(name):
+def import_cee(name, start_period = None):
     df = pd.read_csv(name).dropna(axis = 1).rename(columns={"Unnamed: 0": "t"})
 
     qs = df["t"].apply(
@@ -16,7 +16,9 @@ def import_cee(name):
 
     df["t"] = pd.PeriodIndex(qs.values, freq = "Q")
 
-    return df.set_index("t")
+    s = start_period or str(df["t"][0])
+
+    return df.set_index("t")[s:]
 
 
 def var(df, lags = -1, mode = 'aic'):
@@ -29,9 +31,15 @@ def var(df, lags = -1, mode = 'aic'):
         
     else:
         print("Finding optimum lag order...")
-        results = model.fit(trend="c", maxlags = 15, ic = mode, verbose=True) 
+        results = model.fit(trend="c", maxlags = 8, ic = mode, verbose=True) 
 
     return results
+
+def plot_ts(df, var="FF"):
+    plt.figure()
+    df.plot()
+
+    plt.savefig(f"plots/ts")
 
 
 def plot_var(results, var="FF", folder=""):
@@ -50,7 +58,9 @@ def plot_var(results, var="FF", folder=""):
      
 
 if __name__ == "__main__":
-    df = import_cee("cee.csv")
+    df = import_cee("cee.csv", start_period="1965Q3")
+
+    # plot_ts(df)
 
     standard_res = var(df, lags = 4)
     plot_var(standard_res, folder="ex-lag")
