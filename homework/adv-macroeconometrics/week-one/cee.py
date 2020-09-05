@@ -20,25 +20,41 @@ def import_cee(name):
 
 
 def var(df, lags = -1, mode = 'aic'):
-    model = var_model.VAR(df)
 
-    results = model.fit(maxlags = 15, ic = mode) if lags < 1 else model.fit(lags)
-    
+    model = var_model.VAR(df, dates=df.index, freq="Q")
+
+    if lags > 0:
+        print(f"Using given lag order ({lags})...")
+        results = model.fit(lags, trend="c", verbose=True)
+        
+    else:
+        print("Finding optimum lag order...")
+        results = model.fit(trend="c", maxlags = 15, ic = mode, verbose=True) 
+
     return results
 
-def irf_plot(results, var = "FF"):
+
+def plot_var(results, var="FF", folder=""):
+
     irf = results.irf(10)
 
     plt.figure()
-    irf.plot(impulse=var, orth=False)
-    plt.savefig(f"plots/irf-{var}.png")
+    irf.plot(impulse=var, stderr_type="mc", figsize=(8, 16))
+    plt.savefig(f"plots/{folder}/irf.png")
 
-        
+    fevd = results.fevd(10)
+
+    plt.figure()
+    fevd.plot()
+    plt.savefig(f"plots/{folder}/fevd.png")
      
 
 if __name__ == "__main__":
     df = import_cee("cee.csv")
 
+    standard_res = var(df, lags = 4)
+    plot_var(standard_res, folder="ex-lag")
 
-    r = var(df, lags = 4)
-    irf_plot(r)
+    standard_res = var(df)
+    plot_var(standard_res, folder="aic-lag")
+
