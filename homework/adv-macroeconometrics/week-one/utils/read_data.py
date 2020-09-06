@@ -1,6 +1,6 @@
 import pandas as pd
 
-def read_data(name):
+def read_data(name, f = ""):
 
     if 'csv' in name:
         df = pd.read_csv(name)
@@ -18,4 +18,6 @@ def read_data(name):
 
     df["t"] = pd.PeriodIndex(qs.values, freq = "Q")
 
-    return df.set_index("t")
+    f = f if len(f) > 0 else df["t"][0]
+
+    return df.set_index("t")[f:]
