@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -8,6 +10,9 @@ sns.set()
 def plot_var(results, var="FF", folder="", periods = 15):
 
     path = f"plots/{folder}"
+
+    if not os.path.exists(path):
+        os.makedirs(path)
 
     irf = results.irf(periods)
 
