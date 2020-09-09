@@ -16,7 +16,7 @@ def var(df, lags = -1, **kwargs):
 
     return results
 
-def svar(df, A = None, B = None, lags = -1, **kwargs):
+def svar(df, A = None, B = None, **kwargs):
 
     if B is None:
         svar_type = "A"
@@ -31,12 +31,10 @@ def svar(df, A = None, B = None, lags = -1, **kwargs):
         A=A, B=B, svar_type=svar_type
     )
 
-    if lags > 0:
-        print(f"Using given lag order ({lags})...")
-        results = model.fit(lags, verbose=True, **kwargs)
-        
-    else:
-        print("Finding optimum lag order...")
-        results = model.fit(verbose=True, **kwargs) 
+    print("Finding optimum lag order...")
+    results = model.fit(verbose=False, 
+        maxiter=1_000_000,
+        **kwargs
+    ) 
 
     return results
