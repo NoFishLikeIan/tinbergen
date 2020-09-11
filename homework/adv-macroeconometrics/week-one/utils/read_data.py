@@ -1,6 +1,16 @@
 import pandas as pd
 
+def format_dates(series):
+    qs = series.apply(
+        lambda q: "-Q".join([str(int(n)) for n in str(q).split(":")])
+    )
+    
+    return pd.PeriodIndex(qs.values, freq="Q")
+
+
+
 def read_data(name, f = ""):
+
 
     if 'csv' in name:
         df = pd.read_csv(name)
@@ -12,11 +22,7 @@ def read_data(name, f = ""):
 
     df = df.dropna(axis = 1).rename(columns={"Unnamed: 0": "t"})
 
-    qs = df["t"].apply(
-        lambda q: "-Q".join([str(int(n)) for n in q.split(":")])
-    )
-
-    df["t"] = pd.PeriodIndex(qs.values, freq = "Q")
+    df["t"] = format_dates(df["t"])
 
     f = f if len(f) > 0 else df["t"][0]
 

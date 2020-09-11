@@ -1,13 +1,14 @@
 import os
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 sns.set()
 
 
-def plot_var(results, var="FF", folder="", periods = 15):
+def plot_var(results, var="FF", folder="", periods = 15, fevd=True):
 
     path = f"plots/{folder}"
 
@@ -21,14 +22,18 @@ def plot_var(results, var="FF", folder="", periods = 15):
     plt.savefig(f"{path}/irf.png")
     plt.close()
 
-    fevd = results.fevd(periods - 10)
+    if fevd:
+        fevd = results.fevd(periods - 10)
 
-    plt.figure()
-    fevd.plot()
-    plt.savefig(f"{path}/fevd.png")
-    plt.close()
+        plt.figure()
+        fevd.plot()
+        plt.savefig(f"{path}/fevd.png")
+        plt.close()
 
     res, corr = results.resid, results.resid_corr
+
+    if type(res) != pd.DataFrame:
+        res = pd.DataFrame(res, columns = results.names)
 
     np.fill_diagonal(corr, 0.)
 
