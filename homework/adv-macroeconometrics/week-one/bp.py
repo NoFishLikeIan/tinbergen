@@ -91,4 +91,5 @@ if __name__ == "__main__":
         results = svar(
             scaled_df, A=A_restr, B=B, trend="ctt")
 
-        plot_var(results, var="G", folder=f"A_{case}")
+
+        plot_var(results, var="G", folder=f"matrix_A_{case}", fevd=False)
