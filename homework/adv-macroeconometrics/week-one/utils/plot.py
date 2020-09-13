@@ -8,7 +8,7 @@ import seaborn as sns
 sns.set()
 
 
-def plot_var(results, var="FF", folder="", periods = 15, fevd=True):
+def plot_var(results, impulse, folder="", periods = 15, fevd=True, plot_stderr=True):
 
     path = f"plots/{folder}"
 
@@ -16,9 +16,22 @@ def plot_var(results, var="FF", folder="", periods = 15, fevd=True):
         os.makedirs(path)
 
     irf = results.irf(periods)
+    
+    plot_args = {
+        "impulse": impulse,
+        "plot_stderr": plot_stderr,
+        "figsize": (8, 16),
+        "stderr_type": "mc",
+        "repl": 15_000
+
+    }
 
     plt.figure()
-    irf.plot(impulse=var, stderr_type="mc", figsize=(8, 16))
+    try:
+        irf.plot(**plot_args, orth=True)
+    except ValueError:
+        irf.plot(**plot_args, orth=False)
+
     plt.savefig(f"{path}/irf.png")
     plt.close()
 
