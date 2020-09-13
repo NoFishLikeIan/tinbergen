@@ -117,6 +117,6 @@ if __name__ == "__main__":
 
         A_restr = make_A_matrix(case, A)
 
-        print(f"{case}: A = {A_restr}")
+        print(f"Case {case}: A = {A_restr}")
         results = svar(scaled_df, A=A_restr, B=B, trend="ctt", maxiter=5_000, verbose=True)
         plot_var(results, impulse="G", folder=f"bp/A-{case}", fevd=False, plot_stderr=True)

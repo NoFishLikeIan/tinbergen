@@ -5,6 +5,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import warnings
+
+from statsmodels.tools.sm_exceptions import ConvergenceWarning
+warnings.simplefilter('ignore', ConvergenceWarning)
+
 sns.set()
 
 
@@ -22,7 +27,7 @@ def plot_var(results, impulse, folder="", periods = 15, fevd=True, plot_stderr=T
         "plot_stderr": plot_stderr,
         "figsize": (8, 16),
         "stderr_type": "mc",
-        "repl": 15_000
+        "repl": 1_000
 
     }
 
