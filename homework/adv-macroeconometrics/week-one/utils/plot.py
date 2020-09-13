@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import statsmodels.api as sm
 
 import warnings
 
@@ -12,33 +13,52 @@ warnings.simplefilter('ignore', ConvergenceWarning)
 
 sns.set()
 
+def grid(n):
+    columns = np.ceil(np.sqrt(n))
+    rows = np.ceil(n / columns)
+    return int(rows), int(columns)
 
-def plot_var(results, impulse, folder="", periods = 15, fevd=True, plot_stderr=True):
+
+def plot_var(results, impulse, response=[], folder="", periods = 15, fevd=True, plot_stderr=True, autocorr=False):
 
     path = f"plots/{folder}"
 
     if not os.path.exists(path):
         os.makedirs(path)
 
+    res, corr = results.resid, results.resid_corr
+
+    if type(res) != pd.DataFrame:
+        res = pd.DataFrame(res, columns = results.names)
+
+    
+    variables = list(res.columns)
+
     irf = results.irf(periods)
     
     plot_args = {
         "impulse": impulse,
         "plot_stderr": plot_stderr,
-        "figsize": (8, 16),
         "stderr_type": "mc",
         "repl": 1_000
 
     }
 
-    plt.figure()
-    try:
-        irf.plot(**plot_args, orth=True)
-    except ValueError:
-        irf.plot(**plot_args, orth=False)
+    if len(response) == 0:
+        response = variables
 
-    plt.savefig(f"{path}/irf.png")
-    plt.close()
+    for var in response:
+        try:
+            fig = irf.plot(response=var, **plot_args, orth=True)
+        except ValueError:
+            fig = irf.plot(response=var, **plot_args, orth=False)
+
+        fig.savefig(f"{path}/irf-{var}.png")
+
+    if autocorr:
+        for var in variables:
+            fig = sm.graphics.tsa.plot_acf(res[var])
+            fig.savefig(f"{path}/autocorr-{var}")
 
     if fevd:
         fevd = results.fevd(periods - 10)
@@ -48,14 +68,10 @@ def plot_var(results, impulse, folder="", periods = 15, fevd=True, plot_stderr=T
         plt.savefig(f"{path}/fevd.png")
         plt.close()
 
-    res, corr = results.resid, results.resid_corr
-
-    if type(res) != pd.DataFrame:
-        res = pd.DataFrame(res, columns = results.names)
 
     np.fill_diagonal(corr, 0.)
 
-    if "D" in res.columns:
+    if "D" in variables:
         res = res.drop("D", axis = 1)
 
     fig, (ax_plot, ax_cor) = plt.subplots(nrows=1, ncols=2, figsize=(16, 10))
