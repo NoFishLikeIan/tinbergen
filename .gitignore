@@ -300,6 +300,7 @@ code/thesis_ideas/.vscode
 
 quick_dirty/
 homework/spatial/plot_all.py
+homework/adv-macroeconometrics/week-one/plots/
 
 *.csv
 rename.sh
