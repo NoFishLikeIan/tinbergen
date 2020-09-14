@@ -18,6 +18,26 @@ def grid(n):
     rows = np.ceil(n / columns)
     return int(rows), int(columns)
 
+def plot_series(df, folder = ""):
+    path = f"plots/{folder}"
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    variables = df.columns
+    rows, columns = grid(len(variables))
+
+    fig, axes = plt.subplots(rows, columns, figsize=(15, 15))
+
+    for i, var in enumerate(variables):
+        c = int(i/rows)
+        r = i % rows 
+        ax = axes[c, r]
+        ax.set_title(f"{var}")
+
+        df[var].plot(ax = ax)
+    
+    fig.savefig(f"{path}/ts")
 
 def plot_var(results, impulse, response=[], folder="", periods = 15, fevd=True, plot_stderr=True, autocorr=False):
 
@@ -61,10 +81,10 @@ def plot_var(results, impulse, response=[], folder="", periods = 15, fevd=True, 
             fig.savefig(f"{path}/autocorr-{var}")
 
     if fevd:
-        fevd = results.fevd(periods - 10)
+        fevd = results.fevd()
 
         plt.figure()
-        fevd.plot()
+        fevd.plot(figsize=(20, 20))
         plt.savefig(f"{path}/fevd.png")
         plt.close()
 
@@ -78,9 +98,13 @@ def plot_var(results, impulse, response=[], folder="", periods = 15, fevd=True, 
     res.plot(ax = ax_plot)
     ax_plot.set_title("Residuals time series")
 
+    print("corr:", corr)
     ax_cor.matshow(
         corr, cmap="coolwarm", clim=(-1, 1)
     )
+
+    ax_cor.set_xticklabels(['']+variables)
+    ax_cor.set_yticklabels(['']+variables)
 
     ax_cor.set_title("Residuals correlation matrix")
 
