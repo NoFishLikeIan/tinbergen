@@ -15,7 +15,7 @@ def format_dates(series):
 
 
 
-def read_data(name, f = ""):
+def read_data(name, f = "", time_name = "Unnamed: 0"):
 
 
     if 'csv' in name:
@@ -26,7 +26,7 @@ def read_data(name, f = ""):
     else:
         raise ValueError("File type not understood")
 
-    df = df.dropna(how="all", axis = 1).rename(columns={"Unnamed: 0": "t"})
+    df = df.dropna(how="all", axis = 1).rename(columns={time_name: "t"})
 
     df["t"] = format_dates(df["t"])
 
