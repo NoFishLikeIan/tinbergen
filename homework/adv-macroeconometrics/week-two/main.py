@@ -1,14 +1,15 @@
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+from utils import plotting, transform, ingest
 
-from utils.transform import transform_data
-from utils.ingest import import_fred
+cols = ["HOUST", "PERMIT"]
+regions = ["NE", "MW", "S", "W"]
 
-sns.set(rc={"figure.figsize": (16, 12)})
+regional_hst = [f"HOUST{r}" for r in regions]
 
 if __name__ == '__main__':
-    raw_df = import_fred()
 
-    parsed_df = transform_data(raw_df)
+    raw_df = ingest.import_fred()
+
+    parsed_df = transform.standard(raw_df)
+
+    plotting.plot_subdf(parsed_df, cols, figname="national", mul_axis=True)
+    plotting.plot_subdf(parsed_df, regional_hst, figname="regional-houst", mul_axis=False)
