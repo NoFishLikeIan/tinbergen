@@ -29,7 +29,7 @@ cases: Dict[int, Transformer] = {
     7: lambda s: diff(1)(s.pct_change())
 }
 
-def transform_data(raw_df: pd.DataFrame):
+def standard(raw_df: pd.DataFrame) -> pd.DataFrame:
     """
     Function to transform data, loosly based on prepare_missing.m
 

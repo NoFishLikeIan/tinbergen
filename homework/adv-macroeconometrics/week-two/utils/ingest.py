@@ -3,7 +3,7 @@ import pandas as pd
 
 def_url = "https://s3.amazonaws.com/files.fred.stlouisfed.org/fred-md/monthly/current.csv"
 
-def import_fred(url = def_url):
+def import_fred(url = def_url) -> pd.DataFrame:
     cur_dir = os.getcwd()
     
     data_dir = f"{cur_dir}/data"
