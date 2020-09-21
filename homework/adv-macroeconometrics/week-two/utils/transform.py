@@ -5,12 +5,25 @@ from typing import Callable, Dict, NewType
 
 Transformer = NewType('Transformer', Callable[[pd.Series], pd.Series])
 
+def diff(series: pd.Series) -> pd.Series:
+    return series.diff(1)
 
-def diff(order: int) -> Transformer:
-    def apply(series: pd.Series) -> pd.Series:
-        return series.diff(order)
+def diff_second(series: pd.Series) -> pd.Series:
+    N = len(series)
+    X = series.to_numpy()
 
-    return apply
+    X_out = np.empty(len(series))
+    X_out[:] = np.nan
+
+    zero_X = X[2:]
+    one_X = X[1:N-1]
+    two_X = X[:N-2]
+
+    second_diff = zero_X - 2*one_X + two_X
+
+    X_out[2:] = second_diff
+
+    return pd.Series(X_out, index = series.index)
 
 def cond_log(series: pd.Series) -> pd.Series:
     if np.min(series) < 1e-6:
@@ -21,12 +34,12 @@ def cond_log(series: pd.Series) -> pd.Series:
 
 cases: Dict[int, Transformer] = {
     1: lambda s: s,
-    2: diff(1),
-    3: diff(2),
+    2: diff,
+    3: diff_second,
     4: cond_log,
-    5: lambda s: diff(1)(cond_log(s)),
-    6: lambda s: diff(2)(cond_log(s)),
-    7: lambda s: diff(1)(s.pct_change())
+    5: lambda s: diff(cond_log(s)),
+    6: lambda s: diff_second(cond_log(s)),
+    7: lambda s: diff(s.pct_change())
 }
 
 def standard(raw_df: pd.DataFrame) -> pd.DataFrame:
@@ -53,6 +66,7 @@ def standard(raw_df: pd.DataFrame) -> pd.DataFrame:
     transf_df = pd.DataFrame(columns = variables, index = dates)
 
     for variable, code in zip(variables, codes):
+        
         transf_fn = cases[code]
 
         raw_series = core_data[variable]
