@@ -12,18 +12,25 @@ from typing import List
 
 sns.set(rc={"figure.figsize": (16, 12)})
 
+CUR_DIR = os.getcwd()
+MATRIX_DIR =  f"{CUR_DIR}/data/matrix"
+PLOT_DIR =  f"{CUR_DIR}/plots"
 
-def safe_savefig(fig: Figure, figname: str):
-    cur_dir = os.getcwd()
+def __safe_savenp(matrix: np.ndarray, filename: str):
 
-    plot_dir =  f"{cur_dir}/plots"
+    if not os.path.exists(MATRIX_DIR):
+        os.makedirs(MATRIX_DIR)
 
-    if not os.path.exists(plot_dir):
-        os.makedirs(plot_dir)
+    np.savetxt(f"{MATRIX_DIR}/{filename}", matrix)
 
-    fig.savefig(f"{plot_dir}/{figname}")
+def __safe_savefig(fig: Figure, figname: str):
 
-def make_n_colors(n: int):
+    if not os.path.exists(PLOT_DIR):
+        os.makedirs(PLOT_DIR)
+
+    fig.savefig(f"{PLOT_DIR}/{figname}")
+
+def __make_n_colors(n: int):
     
     tab = cm.get_cmap("tab10")
     cmap = []
@@ -63,7 +70,7 @@ def plot_subdf(df: DataFrame, cols: List[str] = [], figname: str = None, mul_axi
     fig, ax = plt.subplots()
 
     if mul_axis:
-        colors = make_n_colors(N)
+        colors = __make_n_colors(N)
         # First axis
         df.loc[:, cols[0]].plot(label=cols[0], color=colors[0], ax = ax, **kwargs)
         ax.set_ylabel(ylabel=cols[0])
@@ -86,4 +93,29 @@ def plot_subdf(df: DataFrame, cols: List[str] = [], figname: str = None, mul_axi
     else:
         df[cols].plot(ax = ax)
     
-    safe_savefig(fig, figname)
+    __safe_savefig(fig, figname)
+
+
+def plot_covariance(cov: np.ndarray, var_names: List[str], save_data = False, name: str = None):
+
+    app = "-".join(var_names)
+    figname = f"{name}.png" if name else f"cov-{app}.png"
+    filename = f"{name}.txt" if name else f"cov-{app}.txt"
+
+
+    df = DataFrame(cov, index=var_names, columns=var_names)
+
+    fig, ax = plt.subplots()
+
+    extr = np.max(np.abs(cov))
+
+    sns.heatmap(df,
+        xticklabels=var_names, yticklabels=var_names, ax = ax, 
+        cmap="coolwarm", vmin=-extr, vmax=extr, 
+        annot=True)
+
+    __safe_savefig(fig, figname)
+
+    if save_data:
+        __safe_savenp(cov, filename)
+
