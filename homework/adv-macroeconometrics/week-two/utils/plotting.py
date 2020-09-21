@@ -1,14 +1,16 @@
+import os
 import seaborn as sns
 import numpy as np
-import os
-
 import matplotlib.pyplot as plt
 
 from matplotlib import colors, cm
+from statsmodels.graphics import tsaplots
 
 from pandas import DataFrame, Series
 from matplotlib.figure import Figure
-from typing import List
+from typing import List, Dict
+
+from .latex import np_to_pmatrix
 
 sns.set(rc={"figure.figsize": (16, 12)})
 
@@ -21,7 +23,12 @@ def __safe_savenp(matrix: np.ndarray, filename: str):
     if not os.path.exists(MATRIX_DIR):
         os.makedirs(MATRIX_DIR)
 
-    np.savetxt(f"{MATRIX_DIR}/{filename}", matrix)
+    latex_matrix = np_to_pmatrix(matrix)
+
+    filedir = f"{MATRIX_DIR}/{filename}"
+
+    with open(filedir, "w") as file:
+        file.write(latex_matrix)
 
 def __safe_savefig(fig: Figure, figname: str):
 
@@ -29,6 +36,7 @@ def __safe_savefig(fig: Figure, figname: str):
         os.makedirs(PLOT_DIR)
 
     fig.savefig(f"{PLOT_DIR}/{figname}")
+    fig.clf()
 
 def __make_n_colors(n: int):
     
@@ -96,7 +104,7 @@ def plot_subdf(df: DataFrame, cols: List[str] = [], figname: str = None, mul_axi
     __safe_savefig(fig, figname)
 
 
-def plot_covariance(cov: np.ndarray, var_names: List[str], save_data = False, name: str = None):
+def plot_covariance(cov: np.ndarray, var_names: List[str], save_data = False, name: str = None, **sns_kwargs):
 
     app = "-".join(var_names)
     figname = f"{name}.png" if name else f"cov-{app}.png"
@@ -112,10 +120,29 @@ def plot_covariance(cov: np.ndarray, var_names: List[str], save_data = False, na
     sns.heatmap(df,
         xticklabels=var_names, yticklabels=var_names, ax = ax, 
         cmap="coolwarm", vmin=-extr, vmax=extr, 
-        annot=True)
+        **sns_kwargs)
 
     __safe_savefig(fig, figname)
 
     if save_data:
         __safe_savenp(cov, filename)
 
+
+def plot_acf(df: DataFrame, figname: str = None):
+    
+    var_names = df.columns.tolist()
+
+    app = "-".join(var_names)
+    figname = f"{figname}.png" if figname else f"cov-{app}.png"
+
+    fig, axes = plt.subplots(nrows=len(var_names))
+    fig.tight_layout()
+
+    for i, col in enumerate(var_names):
+        ax = axes[i]
+        tsaplots.plot_acf(df[col], 
+            ax = ax, alpha = .05, lags = 40,
+            use_vlines=True, title=f"{col} acf"
+        )
+
+    __safe_savefig(fig, figname)

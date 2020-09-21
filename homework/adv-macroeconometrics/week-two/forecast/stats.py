@@ -1,7 +1,9 @@
 import numpy as np
 import pandas as pd
 
-from typing import Union, NewType, Tuple, List
+from statsmodels.tsa import stattools
+
+from typing import Union, NewType, Tuple, List, Dict
 
 Data = NewType("Data", Union[pd.DataFrame, np.ndarray])
 
@@ -32,3 +34,17 @@ def sample_covariance(df: Data) -> Tuple[np.ndarray, List[str]]:
     cov = (X_dem.T@X_dem) * 1/T
 
     return cov, var_names
+
+def acf(df: Data) -> Dict[str, np.ndarray]:
+
+    X, var_names = df_to_data(df)
+
+    acfs = {}
+
+    for i, series in enumerate(X):
+        acf, conf = stattools.acf(series, nlags=15, fft=True, alpha=.05)
+        acf_mat = np.concatenate((acf.reshape(-1, 1), conf), axis = 1)
+
+        acfs[var_names[i]] = acf_mat
+
+    return acfs
