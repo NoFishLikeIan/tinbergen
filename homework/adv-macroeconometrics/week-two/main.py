@@ -6,7 +6,7 @@ regions = ["NE", "MW", "S", "W"]
 
 regional_hst = [f"HOUST{r}" for r in regions]
 
-plot = False
+plot = True
 
 if __name__ == '__main__':
 
@@ -16,12 +16,14 @@ if __name__ == '__main__':
 
     houst_reg = parsed_df[regional_hst]
 
-    cov, var_names = stats.sample_covariance(houst_reg)
-
-    plotting.plot_covariance(cov, var_names, save_data=True, name="regional-cov")
-
     # -----------------
 
     if plot:
-        plotting.plot_subdf(parsed_df, cols, figname="national", mul_axis=True)
+        plotting.plot_subdf(parsed_df, cols, figname="national", mul_axis=False)
         plotting.plot_subdf(parsed_df, regional_hst, figname="regional-houst", mul_axis=False)
+
+        cov, var_names = stats.sample_covariance(houst_reg)
+        plotting.plot_covariance(cov, var_names, save_data=True, name="regional-cov", annot=True)
+
+
+        plotting.plot_acf(houst_reg, figname="regional-acf")
