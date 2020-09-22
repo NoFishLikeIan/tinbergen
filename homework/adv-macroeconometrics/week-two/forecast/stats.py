@@ -3,7 +3,7 @@ import pandas as pd
 
 from statsmodels.tsa import stattools
 
-from typing import Union, NewType, Tuple, List, Dict
+from typing import Union, NewType, Tuple, List, Dict, Callable
 
 Data = NewType("Data", Union[pd.DataFrame, np.ndarray])
 
@@ -48,3 +48,44 @@ def acf(df: Data) -> Dict[str, np.ndarray]:
         acfs[var_names[i]] = acf_mat
 
     return acfs
+
+def spectral_density(X: pd.Series, l: float = None) -> Callable[[float], float]:
+    """
+    Function that estimates the spectral density based on Bartlett kernel
+
+    Parameters
+    ----------
+    X : pd.Series
+    l : float, optional, by default None
+
+    Returns
+    -------
+    Callable[[float], float]
+    """
+    N = len(X)
+    hs = np.arange(1-N, N-1)
+
+    acf = stattools.acf(X, fft=True, nlags = N)
+
+    @np.vectorize
+    def gamma(h):
+        return acf[np.abs(h)]
+
+    @np.vectorize
+    def w_bar_filter(h):
+        if np.abs(h) < l: 
+            return 0
+
+        return 1 - np.abs(h)/(l + 1)
+
+    weights = w_bar_filter(hs) if l is not None else np.ones(len(hs))
+
+    def dens(freq: float) -> float:
+
+        cosines = np.cos(freq*hs)
+        f_hat = np.sum(weights*gamma(hs)*cosines)
+
+
+        return f_hat / (2 * np.pi)
+
+    return dens

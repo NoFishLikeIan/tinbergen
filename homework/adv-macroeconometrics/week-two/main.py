@@ -16,6 +16,8 @@ if __name__ == '__main__':
 
     houst_reg = parsed_df[regional_hst]
 
+    stats.spectral_density(houst_reg["HOUSTNE"])
+
     # -----------------
 
     if plot:
