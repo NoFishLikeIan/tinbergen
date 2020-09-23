@@ -62,10 +62,15 @@ def spectral_density(X: pd.Series, l: float = None) -> Callable[[float], float]:
     -------
     Callable[[float], float]
     """
+    
     N = len(X)
     hs = np.arange(1-N, N-1)
 
+    density_space = np.linspace(0, 2*np.pi, num=N)
+
     acf = stattools.acf(X, fft=True, nlags = N)
+
+    l = min(l, N) if l is not None else N
 
     @np.vectorize
     def gamma(h):
@@ -73,19 +78,25 @@ def spectral_density(X: pd.Series, l: float = None) -> Callable[[float], float]:
 
     @np.vectorize
     def w_bar_filter(h):
-        if np.abs(h) < l: 
+        if np.abs(h) > l: 
             return 0
 
         return 1 - np.abs(h)/(l + 1)
 
-    weights = w_bar_filter(hs) if l is not None else np.ones(len(hs))
+    weights = w_bar_filter(hs)
+    we_gamma = weights*gamma(hs)
 
-    def dens(freq: float) -> float:
+    @np.vectorize
+    def apply_to_dens(freq: float):
 
         cosines = np.cos(freq*hs)
-        f_hat = np.sum(weights*gamma(hs)*cosines)
+        f_hat = np.sum(we_gamma*cosines)
+
+        dens = f_hat / (2 * np.pi)
 
 
-        return f_hat / (2 * np.pi)
+        return dens
 
-    return dens
+    densities = apply_to_dens(density_space)
+
+    return densities
