@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     houst_reg = parsed_df[regional_hst]
 
-    stats.spectral_density(houst_reg["HOUSTNE"])
+    plotting.plot_density(houst_reg, stats.spectral_density, figname="regional-spectr", save=True)
 
     # -----------------
 
@@ -29,3 +29,5 @@ if __name__ == '__main__':
 
 
         plotting.plot_acf(houst_reg, figname="regional-acf")
+
+        
