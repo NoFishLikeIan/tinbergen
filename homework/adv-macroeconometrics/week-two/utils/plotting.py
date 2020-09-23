@@ -1,14 +1,19 @@
+# ---- Main imports
+
 import os
 import seaborn as sns
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+# ---- Typing imports
 
 from matplotlib import colors, cm
 from statsmodels.graphics import tsaplots
 
 from pandas import DataFrame, Series
 from matplotlib.figure import Figure
-from typing import List, Dict
+from typing import List, Dict, Callable, Tuple, NewType
 
 from .latex import np_to_pmatrix
 
@@ -49,7 +54,7 @@ def __make_n_colors(n: int):
 
     return cmap
 
-def plot_subdf(df: DataFrame, cols: List[str] = [], figname: str = None, mul_axis = False, **kwargs):
+def plot_subdf(df: DataFrame, cols: List[str] = [], figname: str = None, mul_axis = False, save = False, **kwargs) -> Figure:
     """
     Plot multiple columns with different y-axis.
     Thanks to https://stackoverflow.com/a/50655786
@@ -101,10 +106,13 @@ def plot_subdf(df: DataFrame, cols: List[str] = [], figname: str = None, mul_axi
     else:
         df[cols].plot(ax = ax)
     
-    __safe_savefig(fig, figname)
+    if save:
+        __safe_savefig(fig, figname)
+
+    return fig
 
 
-def plot_covariance(cov: np.ndarray, var_names: List[str], save_data = False, name: str = None, **sns_kwargs):
+def plot_covariance(cov: np.ndarray, var_names: List[str], save_data = False, name: str = None, save = False, **sns_kwargs) -> Figure:
 
     app = "-".join(var_names)
     figname = f"{name}.png" if name else f"cov-{app}.png"
@@ -122,13 +130,17 @@ def plot_covariance(cov: np.ndarray, var_names: List[str], save_data = False, na
         cmap="coolwarm", vmin=-extr, vmax=extr, 
         **sns_kwargs)
 
-    __safe_savefig(fig, figname)
+    if save:
+        __safe_savefig(fig, figname)
 
     if save_data:
         __safe_savenp(cov, filename)
 
+    return fig
 
-def plot_acf(df: DataFrame, figname: str = None):
+    
+# TODO: Abstract the plotting logic
+def plot_acf(df: DataFrame, figname: str = None, save = False) -> Figure:
     
     var_names = df.columns.tolist()
 
@@ -145,4 +157,40 @@ def plot_acf(df: DataFrame, figname: str = None):
             use_vlines=True, title=f"{col} acf"
         )
 
-    __safe_savefig(fig, figname)
+    if save:
+        __safe_savefig(fig, figname)
+
+    return fig
+
+
+def plot_density(df: DataFrame, density_fn: Callable[[np.ndarray, float], np.ndarray], l: float = None, figname: str = None, save = False) -> Figure:
+
+    var_names = df.columns.tolist()
+
+    app = "-".join(var_names)
+    figname = f"{figname}.png" if figname else f"cov-{app}.png"
+
+    fig, ax = plt.subplots()
+    fig.tight_layout()
+
+    plot_data = pd.DataFrame()
+
+    for col in var_names:
+
+        densities = density_fn(df[col], l=l)
+
+        col_name = f"{col} density"
+        plot_data[col_name] = densities
+
+    density_space = np.linspace(0, 2*np.pi, num=len(plot_data))
+    plot_data["Frequency"] = density_space
+    plot_data = plot_data.set_index("Frequency")
+
+    sns.lineplot(data = plot_data, ax=ax)
+
+    
+    if save:
+        __safe_savefig(fig, figname)
+
+    return fig
+
