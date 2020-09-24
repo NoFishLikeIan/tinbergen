@@ -1,5 +1,5 @@
 from utils import plotting, transform, ingest
-from forecast import stats
+from forecast import stats, univariate
 
 cols = ["HOUST", "PERMIT"]
 regions = ["NE", "MW", "S", "W"]
@@ -16,7 +16,12 @@ if __name__ == '__main__':
 
     houst_reg = parsed_df[regional_hst]
 
-    plotting.plot_density(houst_reg, stats.spectral_density, figname="regional-spectr", save=True)
+    national_houst = parsed_df["HOUST"]
+
+    train = national_houst[:"2008-01-01"]
+    test = national_houst["2008-01-01":]
+
+    univariate.rf_forecast(train, verbose = 2)
 
     # -----------------
 
@@ -29,5 +34,7 @@ if __name__ == '__main__':
 
 
         plotting.plot_acf(houst_reg, figname="regional-acf")
+
+        plotting.plot_density(houst_reg, stats.spectral_density, figname="regional-spectr", save=True)
 
         
