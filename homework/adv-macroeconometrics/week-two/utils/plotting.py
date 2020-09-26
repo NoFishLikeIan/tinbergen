@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from collections.abc import Iterable
+
 # ---- Typing imports
 
 from matplotlib import colors, cm
@@ -194,3 +196,52 @@ def plot_density(df: DataFrame, density_fn: Callable[[np.ndarray, float], np.nda
 
     return fig
 
+
+
+def plot_var(df_forecast, train, test, variables = [], save = False, figname=None):
+    """
+    Plots the output of forecast.run.iterative_forecast
+    """
+
+    var_names = df_forecast.columns.tolist()
+
+    app = "-".join(var_names)
+    figname = f"{figname}.png" if figname else f"cov-{app}.png"
+
+    
+    pre_sample = train.iloc[-10:]
+    post_sample = test.iloc[:len(df_forecast)]
+
+    N = len(variables)
+    
+    rows = int(np.floor(np.sqrt(N)))
+    columns = int(np.ceil(N/rows))
+
+    fig, axes = plt.subplots(rows, columns)
+    
+    
+    iter_axes = axes.reshape(-1) if isinstance(axes, Iterable) else [axes]
+
+    for i, ax in enumerate(iter_axes):
+                
+        var_name = variables[i]
+        
+        sns.lineplot(data=pre_sample, y=var_name, x=pre_sample.index,ax = ax, color ="r", marker = "o")
+        sns.lineplot(data=post_sample, y=var_name, x=post_sample.index, ax = ax, color="r", marker = "o")
+
+        plt.axvline(test.index[0], linestyle="--")
+
+        sns.lineplot(data=df_forecast[f"{var_name}_mean"], ax = ax, color="g", linestyle="--", marker = "o")
+        sns.lineplot(data=df_forecast[f"{var_name}_lower_bound"], ax = ax, color="b", alpha = 0.5)
+        sns.lineplot(data=df_forecast[f"{var_name}_upper_bound"], ax = ax, color="b", alpha = 0.5)
+
+        ax.fill_between(df_forecast.index, df_forecast[f"{var_name}_lower_bound"], df_forecast[f"{var_name}_upper_bound"], alpha=0.2)
+        
+        ax.set_title(f"Forecast {var_name}")
+        
+    fig.tight_layout()
+
+    if save:
+        __safe_savefig(fig, figname)
+
+    return fig
