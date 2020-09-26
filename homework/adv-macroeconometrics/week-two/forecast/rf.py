@@ -95,9 +95,7 @@ def make_forecaster(
 
     model = clf.best_estimator_   
 
-    def forecaster(X: np.ndarray, exog_outsample: np.ndarray = None) -> np.ndarray: 
-
-        add_exog = exog_outsample is not None and exog_df is not None
+    def forecaster(X: np.ndarray) -> np.ndarray: 
 
         X = X.reshape(1, -1)
 
