@@ -99,8 +99,6 @@ def make_forecaster(
 
         add_exog = exog_outsample is not None and exog_df is not None
 
-        breakpoint()
-
         X = X.reshape(1, -1)
 
         y_hat = {}
