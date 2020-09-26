@@ -229,7 +229,7 @@ def plot_var(df_forecast, train, test, variables = [], save = False, figname=Non
         sns.lineplot(data=pre_sample, y=var_name, x=pre_sample.index,ax = ax, color ="r", marker = "o")
         sns.lineplot(data=post_sample, y=var_name, x=post_sample.index, ax = ax, color="r", marker = "o")
 
-        plt.axvline(test.index[0], linestyle="--")
+        ax.axvline(test.index[0], linestyle="--")
 
         sns.lineplot(data=df_forecast[f"{var_name}_mean"], ax = ax, color="g", linestyle="--", marker = "o")
         sns.lineplot(data=df_forecast[f"{var_name}_lower_bound"], ax = ax, color="b", alpha = 0.5)
