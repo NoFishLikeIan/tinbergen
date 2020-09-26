@@ -1,5 +1,5 @@
 from utils import plotting, transform, ingest
-from forecast import stats, univariate
+from forecast import stats, rf
 
 cols = ["HOUST", "PERMIT"]
 regions = ["NE", "MW", "S", "W"]
@@ -18,10 +18,10 @@ if __name__ == '__main__':
 
     national_houst = parsed_df["HOUST"]
 
-    train = national_houst[:"2008-01-01"]
-    test = national_houst["2008-01-01":]
+    train = houst_reg[:"2008-01-01"]
+    test = houst_reg["2008-01-01":]
 
-    univariate.rf_forecast(train, verbose = 2)
+    rf.make_forecaster(train, verbose = 0)
 
     # -----------------
 
