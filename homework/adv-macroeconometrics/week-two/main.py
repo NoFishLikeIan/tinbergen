@@ -5,23 +5,33 @@ cols = ["HOUST", "PERMIT"]
 regions = ["NE", "MW", "S", "W"]
 
 regional_hst = [f"HOUST{r}" for r in regions]
+regional_permits = [f"PERMIT{r}" for r in regions]
 
-plot = True
+plot = False
+
+init_year = "1960-01-01"
 
 if __name__ == '__main__':
+
 
     raw_df = ingest.import_fred()
 
     parsed_df = transform.standard(raw_df)
 
-    houst_reg = parsed_df[regional_hst]
-
     national_houst = parsed_df["HOUST"]
 
-    train = houst_reg[:"2008-01-01"]
-    test = houst_reg["2008-01-01":]
+    houst_reg = parsed_df[regional_hst]
+    permits_reg = parsed_df[regional_permits]
 
-    rf.make_forecaster(train, verbose = 0)
+
+    train = houst_reg[init_year:"2008-01-01"]
+    exog = permits_reg[init_year:"2008-01-01"]
+
+    test = houst_reg["2008-01-01":]
+    exog_test = permits_reg["2008-01-01":]
+
+    forecaster = rf.make_forecaster(train, exog_df=exog, verbose = 0)
+
 
     # -----------------
 
