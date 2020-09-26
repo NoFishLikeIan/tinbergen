@@ -10,6 +10,7 @@ regional_permits = [f"PERMIT{r}" for r in regions]
 plot = False
 
 init_year = "1960-01-01"
+end_train = "2008-12-01"
 
 if __name__ == '__main__':
 
@@ -24,11 +25,11 @@ if __name__ == '__main__':
     permits_reg = parsed_df[regional_permits]
 
 
-    train = houst_reg[init_year:"2008-01-01"]
-    exog = permits_reg[init_year:"2008-01-01"]
+    train = houst_reg[init_year:end_train]
+    exog = permits_reg[init_year:end_train]
 
-    test = houst_reg["2008-01-01":]
-    exog_test = permits_reg["2008-01-01":]
+    test = houst_reg[end_train:]
+    exog_test = permits_reg[end_train:]
 
     forecaster = rf.make_forecaster(train, exog_df=exog, verbose = 0)
 
