@@ -198,7 +198,7 @@ def plot_density(df: DataFrame, density_fn: Callable[[np.ndarray, float], np.nda
 
 
 
-def plot_var(df_forecast, train, test, variables = [], save = False, figname=None):
+def plot_var(df_forecast, train, test, variables = [], save = False, figname=None, pre_periods = 10):
     """
     Plots the output of forecast.run.iterative_forecast
     """
@@ -209,7 +209,7 @@ def plot_var(df_forecast, train, test, variables = [], save = False, figname=Non
     figname = f"{figname}.png" if figname else f"cov-{app}.png"
 
     
-    pre_sample = train.iloc[-10:]
+    pre_sample = train.iloc[-pre_periods:]
     post_sample = test.iloc[:len(df_forecast)]
 
     N = len(variables)
