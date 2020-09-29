@@ -19,7 +19,11 @@ grid_search_over = {
     'n_estimators': [100, 200, 300]
 }
 
-def construct_rf_chunks(df: pd.DataFrame, lags: int, exog_df: pd.DataFrame = None) -> Tuple[np.ndarray, np.ndarray]:
+def construct_rf_chunks(
+        df: pd.DataFrame, 
+        lags: int, 
+        exog_df: pd.DataFrame = None,
+    ) -> Tuple[np.ndarray, np.ndarray]:
 
     if isinstance(df, pd.Series):
         df = df.to_frame()

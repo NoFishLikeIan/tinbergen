@@ -14,7 +14,7 @@ def import_fred(url = def_url) -> pd.DataFrame:
     file_path = f"{data_dir}/fred_data.csv"
 
     if os.path.isfile(file_path):
-        print(f"Using cached data at data/fred_data.csv")
+        print(f"Using cached data at {file_path}...")
 
         return pd.read_csv(file_path)
     
