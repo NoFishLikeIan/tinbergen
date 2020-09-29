@@ -1,5 +1,11 @@
+import os
+import pandas as pd
+
 from utils import plotting, transform, ingest
-from forecast import stats, rf
+from forecast import stats, rf, run
+
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 cols = ["HOUST", "PERMIT"]
 regions = ["NE", "MW", "S", "W"]
@@ -8,31 +14,48 @@ regional_hst = [f"HOUST{r}" for r in regions]
 regional_permits = [f"PERMIT{r}" for r in regions]
 
 plot = False
+cached_model_path = "data/cache_model.sav"
 
 init_year = "1960-01-01"
 end_train = "2008-12-01"
 
+lags = 12
+
 if __name__ == '__main__':
 
+    if os.path.isfile("data/sample.csv"):
 
-    raw_df = ingest.import_fred()
+        df = pd.read_csv("data/sample.csv").rename(columns = {"Unnamed: 0": "date"}).set_index("date")
+        df.index = pd.to_datetime(df.index)
 
-    parsed_df = transform.standard(raw_df)
+    else:
+        raw_df = ingest.import_fred()
 
-    national_houst = parsed_df["HOUST"]
+        parsed_df = transform.standard(raw_df)
 
-    houst_reg = parsed_df[regional_hst]
-    permits_reg = parsed_df[regional_permits]
+        national_houst = parsed_df["HOUST"]
+
+        houst_reg = parsed_df[regional_hst]
+        permits_reg = parsed_df[regional_permits]
 
 
-    train = houst_reg[init_year:end_train]
-    exog = permits_reg[init_year:end_train]
+        train = houst_reg[init_year:end_train]
+        exog = permits_reg[init_year:end_train]
 
-    test = houst_reg[end_train:]
-    exog_test = permits_reg[end_train:]
+        test = houst_reg[end_train:]
 
-    forecaster = rf.make_forecaster(train, exog_df=exog, verbose = 0)
+        forecaster = rf.make_forecaster(train, lags=lags, exog_df=exog, verbose = 0)
 
+
+
+        df = run.iterative_forecast(
+            forecaster, train,
+            lags=lags, exog=permits_reg, periods=12, against_baseline=True
+        )
+
+        df.to_csv("data/sample.csv", index=True)
+    
+    
 
     # -----------------
 
