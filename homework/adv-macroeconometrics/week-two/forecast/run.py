@@ -3,9 +3,16 @@ import pandas as pd
 
 from dateutil.relativedelta import relativedelta
 
+from .baseline import AR1
+
+
+# --- Typings
+
 from typing import NewType, Callable
 
 Predictor = NewType("Predictor", Callable[[np.ndarray], np.ndarray])
+
+# ---
 
 def fit_into_row(first: np.ndarray, second: np.ndarray)-> np.ndarray:
     first_row = first.reshape(-1, 1)
@@ -16,10 +23,11 @@ def fit_into_row(first: np.ndarray, second: np.ndarray)-> np.ndarray:
 
 def iterative_forecast(
         predictor: Predictor,
-        train: np.ndarray,
+        train: pd.DataFrame,
         lags: int,
-        exog: np.ndarray = None,
-        periods: int = 1
+        exog: pd.DataFrame = None,
+        periods: int = 1,
+        against_baseline = False
     ):
 
     """
@@ -63,8 +71,8 @@ def iterative_forecast(
         y_hat.append(forecast)
 
     
-    end_date = last_day + relativedelta(months=periods)    
-    index = pd.date_range(start=last_day, end=end_date, freq="M")
+    end_date = last_day + relativedelta(months=periods - 1)    
+    index = pd.date_range(start=last_day, end=end_date, freq="MS")
     compact_forecast = pd.DataFrame(y_hat, index = index)
     
     df = pd.DataFrame(index = index)
@@ -76,6 +84,12 @@ def iterative_forecast(
         expanded_column = expanded_column.rename(columns = lambda i: f"{variables[i]}_{column}")
         
         df = pd.concat([df[:], expanded_column[:]], axis=1)
-        
+
+    if against_baseline:
+        baseline_model = AR1(train)
+        baseline_forecast = baseline_model(periods - 1)
+
+        df = pd.concat((df, baseline_forecast), axis = 1)
+
             
     return df
