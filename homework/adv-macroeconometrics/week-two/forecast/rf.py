@@ -11,7 +11,7 @@ from typing import Tuple
 
 
 one_month = relativedelta(months=1)
-tscv = TimeSeriesSplit(n_splits=5)
+tscv = TimeSeriesSplit(n_splits=15)
 
 grid_search_over = {
     'max_depth': [10, 20, 30],
