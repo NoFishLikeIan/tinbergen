@@ -13,40 +13,42 @@ regions = ["NE", "MW", "S", "W"]
 regional_hst = [f"HOUST{r}" for r in regions]
 regional_permits = [f"PERMIT{r}" for r in regions]
 
-plot = False
+plot = True
+cache = True
 cached_model_path = "data/cache_model.sav"
 
 init_year = "1960-01-01"
-end_train = "2008-12-01"
+end_train = "2008-01-01"
 
-lags = 12
+lags = 24
 
 if __name__ == '__main__':
 
-    if os.path.isfile("data/sample.csv"):
+    raw_df = ingest.import_fred()
+
+    parsed_df = transform.standard(raw_df)
+
+    national_houst = parsed_df["HOUST"]
+
+    houst_reg = parsed_df[regional_hst]
+    permits_reg = parsed_df[regional_permits]
+
+
+    train = houst_reg[init_year:end_train]
+    exog = permits_reg[init_year:end_train]
+
+    test = houst_reg[end_train:]
+
+    if os.path.isfile("data/sample.csv") and cache:
+
+        print("Using cached forecast, careful. This might be wrong given the training dataset.")
 
         df = pd.read_csv("data/sample.csv").rename(columns = {"Unnamed: 0": "date"}).set_index("date")
         df.index = pd.to_datetime(df.index)
 
     else:
-        raw_df = ingest.import_fred()
-
-        parsed_df = transform.standard(raw_df)
-
-        national_houst = parsed_df["HOUST"]
-
-        houst_reg = parsed_df[regional_hst]
-        permits_reg = parsed_df[regional_permits]
-
-
-        train = houst_reg[init_year:end_train]
-        exog = permits_reg[init_year:end_train]
-
-        test = houst_reg[end_train:]
 
         forecaster = rf.make_forecaster(train, lags=lags, exog_df=exog, verbose = 0)
-
-
 
         df = run.iterative_forecast(
             forecaster, train,
@@ -60,8 +62,10 @@ if __name__ == '__main__':
     # -----------------
 
     if plot:
-        plotting.plot_subdf(parsed_df, cols, figname="national", mul_axis=False)
-        plotting.plot_subdf(parsed_df, regional_hst, figname="regional-houst", mul_axis=False)
+        plotting.plot_subdf(parsed_df, cols, figname="national", mul_axis=False, save=True)
+        plotting.plot_subdf(parsed_df, regional_hst, figname="regional-houst", mul_axis=False, save=True)
+
+        plotting.plot_subdf(raw_df, regional_hst, figname="regional-houst-raw", mul_axis=False, save=True)
 
         cov, var_names = stats.sample_covariance(houst_reg)
         plotting.plot_covariance(cov, var_names, save_data=True, name="regional-cov", annot=True)
@@ -70,5 +74,12 @@ if __name__ == '__main__':
         plotting.plot_acf(houst_reg, figname="regional-acf")
 
         plotting.plot_density(houst_reg, stats.spectral_density, figname="regional-spectr", save=True)
+
+            
+        plotting.plot_var(
+            df, train, test, 
+            variables=regional_hst, pre_periods = 20,
+            save = True, figname="regional-forecast"
+        )
 
         

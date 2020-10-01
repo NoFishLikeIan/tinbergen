@@ -19,7 +19,10 @@ from typing import List, Dict, Callable, Tuple, NewType
 
 from .latex import np_to_pmatrix
 
-sns.set(rc={"figure.figsize": (16, 12)})
+w, h = (11.69, 8.27)
+scale = 1.8
+
+sns.set(rc={"figure.figsize": (w*scale, h*scale)})
 
 CUR_DIR = os.getcwd()
 MATRIX_DIR =  f"{CUR_DIR}/data/matrix"
@@ -227,16 +230,22 @@ def plot_var(df_forecast, train, test, variables = [], save = False, figname=Non
         var_name = variables[i]
         
         sns.lineplot(data=pre_sample, y=var_name, x=pre_sample.index,ax = ax, color ="r", marker = "o")
-        sns.lineplot(data=post_sample, y=var_name, x=post_sample.index, ax = ax, color="r", marker = "o")
+        sns.lineplot(data=post_sample, y=var_name, x=post_sample.index, ax = ax, color="r", marker = "o", label="Factual")
 
         ax.axvline(test.index[0], linestyle="--")
 
-        sns.lineplot(data=df_forecast[f"{var_name}_mean"], ax = ax, color="g", linestyle="--", marker = "o")
+        sns.lineplot(data=df_forecast[f"{var_name}_mean"], ax = ax, color="g", linestyle="--", marker = "o", label="Forecast")
         sns.lineplot(data=df_forecast[f"{var_name}_lower_bound"], ax = ax, color="b", alpha = 0.5)
         sns.lineplot(data=df_forecast[f"{var_name}_upper_bound"], ax = ax, color="b", alpha = 0.5)
 
+        if f"baseline_{var_name}" in var_names:
+            sns.lineplot(
+                data=df_forecast[f"baseline_{var_name}"], ax = ax, label="AR(1) baseline",
+                color="k", alpha=0.75, marker = "o", linestyle="--"
+            )
+
         ax.fill_between(df_forecast.index, df_forecast[f"{var_name}_lower_bound"], df_forecast[f"{var_name}_upper_bound"], alpha=0.2)
-        
+        ax.legend()
         ax.set_title(f"Forecast {var_name}")
         
     fig.tight_layout()
