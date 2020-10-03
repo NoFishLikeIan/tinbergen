@@ -155,8 +155,11 @@ def plot_acf(df: DataFrame, figname: str = None, save = False) -> Figure:
     fig, axes = plt.subplots(nrows=len(var_names))
     fig.tight_layout()
 
+    iter_axes = axes.reshape(-1) if isinstance(axes, Iterable) else [axes]
+
+
     for i, col in enumerate(var_names):
-        ax = axes[i]
+        ax = iter_axes[i]
         tsaplots.plot_acf(df[col], 
             ax = ax, alpha = .05, lags = 40,
             use_vlines=True, title=f"{col} acf"

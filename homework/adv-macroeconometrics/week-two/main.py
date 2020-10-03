@@ -56,9 +56,6 @@ if __name__ == '__main__':
         )
 
         df.to_csv("data/sample.csv", index=True)
-    
-    
-
     # -----------------
 
     if plot:
