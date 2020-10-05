@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 from utils import plotting, transform, ingest
-from forecast import stats, rf, run
+from forecast import stats, rf, run, tests
 
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -13,8 +13,8 @@ regions = ["NE", "MW", "S", "W"]
 regional_hst = [f"HOUST{r}" for r in regions]
 regional_permits = [f"PERMIT{r}" for r in regions]
 
-plot = True
-cache = True
+plot = False
+cache = False
 cached_model_path = "data/cache_model.sav"
 
 init_year = "1960-01-01"
@@ -48,14 +48,17 @@ if __name__ == '__main__':
 
     else:
 
-        forecaster = rf.make_forecaster(train, lags=lags, exog_df=exog, verbose = 0)
+        forecaster = rf.make_forecaster(train, lags=lags, n_jobs=4, verbose = 1)
 
         df = run.iterative_forecast(
             forecaster, train,
-            lags=lags, exog=permits_reg, periods=12, against_baseline=True
+            lags=lags, periods=12, against_baseline=True
         )
 
         df.to_csv("data/sample.csv", index=True)
+
+    ps, ts = tests.db(test.iloc[:len(df)], df, train, save_tabular = True)
+
     # -----------------
 
     if plot:
