@@ -3,11 +3,11 @@ import pandas as pd
 
 from sklearn.model_selection import TimeSeriesSplit, GridSearchCV
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import make_scorer
-
 from dateutil.relativedelta import relativedelta
 
 from typing import Tuple
+
+from .loss import make_quad_loss
 
 
 one_month = relativedelta(months=1)
@@ -51,7 +51,6 @@ def construct_rf_chunks(
         prev_date = date - delta_lags
         lagged_values = df.loc[prev_date:date - one_month]
 
-        
         regressors[0, :M*lags] = lagged_values.to_numpy().reshape(1, -1)[0]
 
         if add_exog:
@@ -62,19 +61,7 @@ def construct_rf_chunks(
 
     return X, y
 
-def make_quad_loss(alpha: float):
-    @make_scorer
-    def p_quad_loss(y_hat: np.ndarray, y: np.ndarray) -> np.float:
-        e = y_hat - y
-        sqr = np.square(e)
 
-        return -np.sum(np.where(e < 0, (1-alpha)*sqr, alpha*sqr))
-
-    return p_quad_loss
-
-
-
-# TODO: make lag grid searchable
 def make_forecaster(
         df: pd.DataFrame,
         exog_df: pd.DataFrame = None,
@@ -91,7 +78,7 @@ def make_forecaster(
 
     clf = GridSearchCV(
         rf, search_params,
-        scoring=make_quad_loss(alpha=0.5), 
+        scoring=make_quad_loss(alpha=0.5, scorer=True), 
         **cv_kwargs
     )
 
