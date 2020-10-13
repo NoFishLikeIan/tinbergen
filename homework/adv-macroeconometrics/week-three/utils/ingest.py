@@ -25,6 +25,8 @@ def construct_series(core: pd.DataFrame, country_codes: Codes):
 
     df = pd.concat(frames, axis=0, keys=variables)
 
+    df.index.set_names(["variable", "date"], inplace = True)
+
     return df
 
         
