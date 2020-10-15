@@ -2,9 +2,13 @@ import pandas as pd
 
 pd.options.display.float_format = lambda num: f'{num:.6f}'
 
-def pprint(beta, standard_error, regressors, durbin_watson):
-    print(f"""
-\033[1mWithin regression\033[0m:  
+def pprint(
+    beta, standard_error, regressors, 
+    durbin_watson = None, title = "Withing regression"
+    ):
+
+    table = f"""
+\033[1m{title}\033[0m:  
 
 --- β: 
 
@@ -14,9 +18,14 @@ def pprint(beta, standard_error, regressors, durbin_watson):
 --- Standard errors:
 
 {pd.DataFrame(standard_error, index=regressors, columns=regressors)}
+        """
 
---- DW-statistics:
+    if durbin_watson is not None:
+        table += f"""
+--- Durbin-Watson
 
 d = {durbin_watson:.4f}
 
-        """)
+        """
+
+    print(table)
