@@ -16,7 +16,7 @@ def within_group(data: pd.DataFrame, dependent: str,
     ):
     
     if len(regressors) == 0:
-        regressors = data.index.get_level_values(0).unique().tolist()
+        regressors = data.index.get_level_values(0).tolist()
         
     if lags > 0:
         
