@@ -5,6 +5,7 @@ from typing import Tuple, NewType
 Dim = NewType("Dim", Tuple[int, int])
 
 def white_var(X: np.ndarray, e: np.ndarray, dimensions: Dim) -> np.ndarray:
+
     inverse = np.linalg.inv(X.T@X)
     
     # construct diagonal array
@@ -19,7 +20,6 @@ def nw_corrected(X: np.ndarray, e: np.ndarray, dimensions: Dim) -> np.ndarray:
     inverse = np.linalg.inv(X.T@X)
 
     N, T = dimensions
-    residuals = e.reshape(T, N)
     res_X = X.reshape(T, N, -1)
 
     contemp = (X.T@e)@(X.T@e).T
@@ -35,7 +35,7 @@ def nw_corrected(X: np.ndarray, e: np.ndarray, dimensions: Dim) -> np.ndarray:
 
         for i in range(N):
             for t in range(past_lag+1, T):
-                sqrd_res = residuals[t, i]*residuals[t - past_lag, i]
+                sqrd_res = e[t, i]*e[t - past_lag, i]
                 coproduct = res_X[t, i].T@res_X[t - past_lag, i]
 
                 gamma_l += sqrd_res*coproduct

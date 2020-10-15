@@ -23,7 +23,6 @@ def within_group(data: pd.DataFrame, dependent: str,
         data, lagged_names = transform.make_multi_lagged(data, dependent, lags=lags)
 
         regressors += lagged_names
-
     
     # stack the Y variable
     Y, _, _ = matrix.stack_to_columns(data, dependent)
@@ -34,22 +33,23 @@ def within_group(data: pd.DataFrame, dependent: str,
     X_dem = Q@X
     Y_dem = Q@Y
         
-    beta = np.linalg.inv(X.T@X_dem)@(X.T@Y_dem)
+    beta = np.linalg.inv(X_dem.T@X_dem)@(X_dem.T@Y_dem)
     resid = Y - X@beta
-    
-    fixed_effects = resid.reshape(T, N).mean(axis = 0)
+
+    resid_by_n = resid.reshape(T, N, order="F")
+    fixed_effects = resid_by_n.mean(axis = 0)
 
     cov_fn = nw_corrected if het_robust else white_var
-    
+
     cov = cov_fn(X_dem, resid, (N, T))
     
-    durbin_watson = panel_dw(resid, N, T) 
+    durbin_watson = panel_dw(resid_by_n, N, T) 
     
     if verbose:
         # Print as a table
         printing.pprint(beta, cov, regressors, durbin_watson)
         
-    return beta, fixed_effects, resid, cov, durbin_watson
+    return beta, fixed_effects, resid_by_n, cov, durbin_watson
     
 
 if __name__ == '__main__':
@@ -57,5 +57,8 @@ if __name__ == '__main__':
 
     data = read_data("data/hw3.xls")
 
+    # partial = data.loc[(slice(None), slice("1981-01-01")), ["Australia", "Belgium"]] # test with few data points
+
     regs = ["d(lnY)", "INF"]
-    within_group(data, "S/Y", regs, lags = 1, het_robust=True)
+
+    beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(data, "S/Y", regs, lags = 1, het_robust=False)
