@@ -1,6 +1,6 @@
 import pandas as pd
 
-pd.options.display.float_format = lambda num: f'{num:.3f}'
+pd.options.display.float_format = lambda num: f'{num:.6f}'
 
 def pprint(beta, standard_error, regressors, durbin_watson):
     print(f"""
