@@ -12,7 +12,7 @@ from typing import List
 
 def within_group(data: pd.DataFrame, dependent: str, 
         regressors: List[str] = [], lags = 0, het_robust = False,
-        verbose = 1
+        verbose = 1, **print_kwargs
     ):
     
     if len(regressors) == 0:
@@ -47,7 +47,7 @@ def within_group(data: pd.DataFrame, dependent: str,
     
     if verbose:
         # Print as a table
-        printing.pprint(beta, cov, regressors, durbin_watson)
+        printing.pprint(beta, cov, regressors, durbin_watson, **print_kwargs)
         
     return beta, fixed_effects, resid_by_n, cov, durbin_watson
     
