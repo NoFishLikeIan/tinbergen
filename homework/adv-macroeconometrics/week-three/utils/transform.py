@@ -23,18 +23,23 @@ def make_lagged_data(data, variable, var_name = None):
     
     return data_with_lag
 
-def make_multi_lagged(data, variable, lags = 1):
+def make_multi_lagged(data, variables, lags = 1):
     
     lagged_var_names = []
-    variable_to_lag = variable
-    
-    for l in range(lags):
-        var_name = f"lag_{l+1}_{variable}"
-        data = make_lagged_data(data, variable_to_lag, var_name=var_name)
+
+    if isinstance(variables, str):
+        variables = [variables]
+
+    for null_var in variables:
+        variable_to_lag = null_var
         
-        variable_to_lag = var_name
-        
-        lagged_var_names.append(var_name)
+        for l in range(lags):
+            var_name = f"lag_{l+1}_{null_var}"
+            data = make_lagged_data(data, variable_to_lag, var_name=var_name)
+            
+            variable_to_lag = var_name
+            
+            lagged_var_names.append(var_name)
         
     return data, lagged_var_names
         
