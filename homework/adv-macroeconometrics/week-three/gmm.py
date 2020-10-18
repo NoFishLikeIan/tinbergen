@@ -3,7 +3,7 @@ import pandas as pd
 
 from numpy.linalg import inv
 
-from utils import transform, matrix, printing
+from utils import transform, matrix, printing, instruments
 
 from cov_est import white_var, nw_corrected, white_var_2sls
 from tests import panel_dw
@@ -15,41 +15,12 @@ from typing import List, NewType, Union, Tuple
 # TODO: Instruments can be passed as a dataframe or as a number of lags of the regressors
 Instruments = NewType("Instruments", Union[pd.DataFrame, int])
 
-GmmVariables = NewType(
-    "GmmVariables", Tuple[np.ndarray, np.ndarray, np.ndarray, int, int]
-)
-
-
-def extract_regs(data: pd.DataFrame, dependent: str, regressors: List[str], lag_instruments: int) -> GmmVariables:
-    """
-    Constructs the de-meaned Z, W, Y matrices. Returns the three matrices and the original size N, T
-    """
-    data, instruments = transform.make_multi_lagged(
-        data, regressors, lags=lag_instruments)
-
-    # add the lagged dependent to the regression
-    data, lagged_names = transform.make_multi_lagged(data, dependent, lags=1)
-    regressors += lagged_names
-
-    Z_unmean, _, _ = matrix.stack_to_columns(data, instruments)
-
-    Y_unmean, _, _ = matrix.stack_to_columns(data, dependent)
-    W_unmean, N, T = matrix.stack_to_columns(data, regressors)
-
-    Q = np.kron(np.identity(N), matrix.make_Q(T))
-
-    W = Q@W_unmean
-    Y = Q@Y_unmean
-    Z = Q@Z_unmean
-
-    return Z, W, Y, N, T
-
 
 def lagged_gmm(
     data: pd.DataFrame, dependent: str,
     lag_inst=1,
     regressors: List[str] = [],
-    het_robust=False, iv=False,
+    het_robust=False, gmm=False,
     verbose=1
 ):
 
@@ -59,12 +30,8 @@ def lagged_gmm(
     if lag_inst < 1:
         raise ValueError("Specify a number for lag_inst")
 
-    Z, W, Y, N, T = extract_regs(data, dependent, regressors, lag_inst)
-
-    if iv:
-        Pi = Z.T@Z
-    else:
-        Pi = np.identity
+    Z, W, Y, N, T = instruments.extract_regs(
+        data, dependent, regressors, lag_inst)
 
     W_f = Z@inv(Z.T@Z)@Z.T@W
 
@@ -72,15 +39,29 @@ def lagged_gmm(
 
     resid = Y - W@beta
 
-    cov = white_var_2sls(W, W_f, resid)
+    if gmm:
+
+        # Generalize the IV for Hansen, 1982
+
+        omega = np.diag(np.diag(resid@resid.T))
+
+        Pi = inv(Z.T@omega@Z)
+
+        beta = inv(W.T@Z@Pi@Z.T@W)@W.T@Z@Pi@Z.T@Y
+
+        resid = Y - W@beta
+
+    # FIXME: How to compute this?!
+    cov = np.zeros((3, 3)) if gmm else white_var_2sls(W, W_f, resid)
 
     resid_by_n = resid.reshape(T, N, order="F")
-
     durbin_watson = panel_dw(resid_by_n, N, T)
 
     if verbose > 0:
-        printing.pprint(beta, cov, regressors,
-                        durbin_watson, title="IV Estimation")
+        printing.pprint(
+            beta, cov, regressors, durbin_watson,
+            title="GMM Estimation" if gmm else "IV Estimation"
+        )
 
     return beta, resid_by_n, cov, durbin_watson
 
@@ -90,9 +71,13 @@ if __name__ == '__main__':
 
     data = read_data("data/hw3.xls")
 
-    regs = ["d(lnY)", "INF"]
+    lagged_gmm(
+        data, "S/Y",
+        regressors=["d(lnY)", "INF"], lag_inst=1
+    )
 
     lagged_gmm(
         data, "S/Y",
-        regressors=regs, lag_inst=1
+        regressors=["d(lnY)", "INF"], lag_inst=1,
+        gmm=True
     )
