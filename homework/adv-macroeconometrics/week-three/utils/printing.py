@@ -1,16 +1,23 @@
+import numpy as np
 import pandas as pd
+
+from typing import Dict, Tuple, NewType, List
 
 pd.options.display.float_format = lambda num: f'{num:.6f}'
 
+TestResults = NewType("TestResults", Dict[str, Tuple[np.float, np.float]])
+
+
 def pprint(
-    beta, standard_error, regressors, 
-    durbin_watson = None, title = "Withing regression"
-    ):
+    beta: np.ndarray, standard_error: np.ndarray, regressors: List[str],
+    tests: TestResults = {},
+    title="Withing regression"
+):
 
     table = f"""
 \033[1m{title}\033[0m:  
 
---- β: 
+--- β:
 
 {pd.Series(beta.reshape(-1,), index=regressors).to_string()}, 
 
@@ -20,12 +27,13 @@ def pprint(
 {pd.DataFrame(standard_error, index=regressors, columns=regressors)}
         """
 
-    if durbin_watson is not None:
+    for test, values in tests.items():
+
+        t, p = values
+
         table += f"""
---- Durbin-Watson
-
-d = {durbin_watson:.4f}
-
-        """
+--- {test}
+{t:.4f}  {f"p={p:.4f}" if p is not None else ""}
+"""
 
     print(table)

@@ -26,6 +26,6 @@ def overident_restr(
     scale = Z.T@resid
     var = inv(Z.T@omega@Z)
 
-    statistic = scale.T@var@scale
+    statistic = (scale.T@var@scale)[0][0]
 
     return statistic, chi2.cdf(statistic, df=L-K)
