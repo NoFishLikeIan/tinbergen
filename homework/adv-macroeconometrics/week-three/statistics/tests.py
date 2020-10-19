@@ -3,7 +3,9 @@ import numpy as np
 from numpy.linalg import inv
 from scipy.stats import chi2
 
-from typing import Tuple
+from typing import Tuple, NewType
+
+TestResult = NewType("TestResult", Tuple[np.float, np.float])
 
 
 def panel_dw(resid: np.ndarray, N: int, T: int) -> np.float:
@@ -21,7 +23,7 @@ def panel_dw(resid: np.ndarray, N: int, T: int) -> np.float:
 def overident_restr(
     Z: np.ndarray, resid: np.ndarray, omega: np.ndarray,
     L: int, K: int
-) -> Tuple[np.float, np.float]:
+) -> TestResult:
 
     scale = Z.T@resid
     var = inv(Z.T@omega@Z)
@@ -29,3 +31,11 @@ def overident_restr(
     statistic = (scale.T@var@scale)[0][0]
 
     return statistic, chi2.cdf(statistic, df=L-K)
+
+
+def cross_sec_dep(
+
+
+) -> TestResult:
+
+    return

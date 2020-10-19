@@ -5,8 +5,8 @@ from numpy.linalg import inv
 
 from utils import transform, matrix, printing, instruments
 
-from cov_est import white_var, nw_corrected, white_var_2sls
-from tests import panel_dw, overident_restr
+from statistics.cov_est import white_var, nw_corrected, white_var_2sls
+from statistics.tests import panel_dw, overident_restr
 
 # --- Typings
 
