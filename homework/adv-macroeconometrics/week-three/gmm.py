@@ -17,12 +17,11 @@ Instruments = NewType("Instruments", Union[pd.DataFrame, int])
 
 
 def lagged_gmm(
-    data: pd.DataFrame, dependent: str,
-    lag_inst=1,
-    regressors: List[str] = [],
-    het_robust=False, gmm=False,
-    verbose=1
-):
+        data: pd.DataFrame, dependent: str,
+        lag_inst=1,
+        regressors: List[str] = [],
+        het_robust=False, gmm=False,
+        verbose=1):
     tests = {}
 
     if len(regressors) == 0:
