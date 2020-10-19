@@ -68,6 +68,9 @@ if __name__ == '__main__':
     regs = ["d(lnY)", "INF"]
 
     beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
-        data, "S/Y", regs, lags=1, het_robust=False)
+        data, "S/Y", regs, lags=0, title="Within estimator")
 
-    resid_by_n.tofile("data/resid.dat")
+    beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
+        data, "S/Y", regs, lags=1, title="Within estimator, with lag dependent")
+
+    np.save("data/resid.npy", resid_by_n)
