@@ -66,7 +66,7 @@ def lagged_gmm(
     cov = np.zeros((3, 3)) if gmm else white_var_2sls(W, W_f, resid)
 
     resid_by_n = resid.reshape(T, N, order="F")
-    durbin_watson = panel_dw(resid_by_n, N, T)
+    durbin_watson = panel_dw(resid_by_n)
 
     tests["Durbin-Watson"] = [durbin_watson, None]
 
