@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import os
 
-from utils.time_series import autocorrelation
+from utils.residual_transf import autocorrelation
 
 if __name__ == '__main__':
 
