@@ -10,6 +10,7 @@ from utils.residual_transformation import cross_correlation
 
 # --- Typings
 
+from data_types import EstimationResults
 from typing import List
 
 
@@ -32,8 +33,7 @@ tests_fns = {
 def within_group(data: pd.DataFrame, dependent: str,
                  regressors: List[str] = [], lags=0,
                  het_robust=False, cross_sec=False,
-                 verbose=1, **print_kwargs
-                 ):
+                 verbose=1, **print_kwargs) -> EstimationResults:
 
     if len(regressors) == 0:
         regressors = data.index.get_level_values(0).tolist()
@@ -68,6 +68,17 @@ def within_group(data: pd.DataFrame, dependent: str,
         test_name: fn(resid_by_n) for (test_name, fn) in tests_fns.items()
     }
 
+    _, pesaran_p_value = tests["Pesaran"]
+
+    if cross_sec and pesaran_p_value < .05:
+        # TODO: Not clear how to this. Should one stack t-times or only once?
+
+        # Add dummy for cross-sectionally dependent data
+
+        transform.add_dummy(data, regressors)
+
+        return
+
     if verbose:
         # Print as a table
         printing.pprint(beta, cov, regressors, tests, **print_kwargs)
@@ -82,12 +93,13 @@ if __name__ == '__main__':
 
     # partial = data.loc[(slice(None), slice("1981-01-01")), ["Australia", "Belgium"]] # test with few data points
 
-    regs = ["d(lnY)", "INF"]
+    beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
+        data, "S/Y", ["d(lnY)", "INF"], lags=0, title="Within estimator")
 
     beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
-        data, "S/Y", regs, lags=0, title="Within estimator")
+        data, "S/Y", ["d(lnY)", "INF"], lags=1, title="Within estimator, with lag dependent")
 
     beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
-        data, "S/Y", regs, lags=1, title="Within estimator, with lag dependent")
+        data, "S/Y", ["d(lnY)", "INF"], cross_sec=True, title="Within estimator, with lag dependent")
 
     np.save("data/resid.npy", resid_by_n)
