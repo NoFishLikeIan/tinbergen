@@ -11,6 +11,7 @@ from statistics.tests import panel_dw, overident_restr
 # --- Typings
 
 from typing import List, NewType, Union, Tuple
+from types import EstimationResults
 
 # TODO: Instruments can be passed as a dataframe or as a number of lags of the regressors
 Instruments = NewType("Instruments", Union[pd.DataFrame, int])
@@ -21,7 +22,7 @@ def lagged_gmm(
         lag_inst=1,
         regressors: List[str] = [],
         het_robust=False, gmm=False,
-        verbose=1):
+        verbose=1) -> EstimationResults:
     tests = {}
 
     if len(regressors) == 0:
