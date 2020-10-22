@@ -4,15 +4,34 @@ import pandas as pd
 from utils import transform, matrix, printing
 
 from statistics.cov_est import white_var, nw_corrected
-from statistics.tests import panel_dw
+from statistics.tests import panel_dw, pesaran_cd, TestResult
+
+from utils.residual_transformation import cross_correlation
 
 # --- Typings
 
 from typing import List
 
 
+def pesaran_pipe(resid: np.ndarray) -> TestResult:
+
+    N, T = resid.shape
+
+    rho = cross_correlation(resid)
+    results = pesaran_cd(rho, N, T)
+
+    return results
+
+
+tests_fns = {
+    "Durbin-Watson": panel_dw,
+    "Pesaran": pesaran_pipe
+}
+
+
 def within_group(data: pd.DataFrame, dependent: str,
-                 regressors: List[str] = [], lags=0, het_robust=False,
+                 regressors: List[str] = [], lags=0,
+                 het_robust=False, cross_sec=False,
                  verbose=1, **print_kwargs
                  ):
 
@@ -45,10 +64,8 @@ def within_group(data: pd.DataFrame, dependent: str,
 
     cov = cov_fn(X_dem, resid, (N, T))
 
-    durbin_watson = panel_dw(resid_by_n, N, T)
-
     tests = {
-        "Durbin-Watson": [durbin_watson, None]
+        test_name: fn(resid_by_n) for (test_name, fn) in tests_fns.items()
     }
 
     if verbose:
