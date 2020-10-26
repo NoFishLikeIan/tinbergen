@@ -55,6 +55,7 @@ def add_dummy(data: pd.DataFrame, variables: List[str]) -> pd.DataFrame:
 
     dummy_df = data.loc[variables].copy()
 
-    raise NotImplementedError("Not done")
+    for var in variables:
+        cs_mean = dummy_df.loc[var].mean()
 
-    return
+    raise NotImplementedError("CS mean done yet!")
