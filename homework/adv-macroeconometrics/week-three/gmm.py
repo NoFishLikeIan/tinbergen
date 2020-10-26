@@ -11,7 +11,7 @@ from statistics.tests import panel_dw, overident_restr
 # --- Typings
 
 from typing import List, NewType, Union, Tuple
-from types import EstimationResults
+from data_types import EstimationResults
 
 # TODO: Instruments can be passed as a dataframe or as a number of lags of the regressors
 Instruments = NewType("Instruments", Union[pd.DataFrame, int])
