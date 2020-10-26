@@ -29,31 +29,43 @@ def white_var_2sls(W: np.ndarray, W_f: np.ndarray, e: np.ndarray, *var_args) -> 
     return inverse@W_f.T@omega@W_f@inverse
 
 
-def nw_corrected(X: np.ndarray, e: np.ndarray, dimensions: Dim) -> np.ndarray:
-    inverse = inv(X.T@X)
+def k(l, m):
+    """
+    K weighting filter
+    """
+
+    return 1 - l/(m+1)
+
+
+def nw_corrected(stacked_X: np.ndarray, e: np.ndarray, dimensions: Dim) -> np.ndarray:
 
     N, T = dimensions
-    res_X = X.reshape(T, N, -1)
+    X = stacked_X.reshape(T, N, -1, order="F")
+    residuals = e.reshape(T, N, order="F")
 
-    contemp = (X.T@e)@(X.T@e).T
+    inverse = inv(stacked_X.T@stacked_X)
 
-    lagged = 0
+    gamma_zero = (stacked_X.T@e)@(stacked_X.T@e).T
+
     M = T - 1
 
-    # TODO: Broadcast in linear algebra
-    for past_lag in range(M):
-        weight = 1 - past_lag/T
+    cov = gamma_zero.copy()
 
-        gamma_l = 0
+    # TODO: Broadcast in linear algebra
+    for lag in range(M):
+        weight = k(lag, M)
+
+        gamma_lag = np.zeros(cov.shape)
 
         for i in range(N):
-            for t in range(past_lag+1, T):
-                sqrd_res = e[t, i]*e[t - past_lag, i]
-                coproduct = res_X[t, i].T@res_X[t - past_lag, i]
+            for t in range(T):
+                lagged_t = t - lag
+                lagged_X = X[lagged_t, i].reshape(1, -1)
 
-                gamma_l += sqrd_res*coproduct
+                squared_resid = residuals[t, i]*residuals[lagged_t, i]
+                scale_reg = X[t, i].reshape(-1, 1)@lagged_X
+                gamma_lag += squared_resid*scale_reg
 
-        lagged += weight * (gamma_l + gamma_l.T)
+        cov += gamma_lag*weight
 
-    breakpoint()
-    return
+    return inverse@cov@inverse

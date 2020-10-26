@@ -91,13 +91,17 @@ if __name__ == '__main__':
 
     data = read_data("data/hw3.xls")
 
-    # partial = data.loc[(slice(None), slice("1981-01-01")), ["Australia", "Belgium"]] # test with few data points
+    partial = data.loc[(slice(None), slice("1981-01-01")),
+                       ["Australia", "Belgium"]]  # test with few data points
 
     beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
         data, "S/Y", ["d(lnY)", "INF"], lags=0, title="Within estimator")
 
     beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
         data, "S/Y", ["d(lnY)", "INF"], lags=1, title="Within estimator, with lag dependent")
+
+    beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
+        data, "S/Y", ["d(lnY)", "INF"], lags=1, het_robust=True, title="Within estimator, with lag dependent and het robust")
 
     beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
         data, "S/Y", ["d(lnY)", "INF"], cross_sec=True, title="Within estimator, with lag dependent")
