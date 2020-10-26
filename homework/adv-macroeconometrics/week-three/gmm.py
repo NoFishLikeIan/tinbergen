@@ -22,6 +22,7 @@ def lagged_gmm(
         lag_inst=1,
         regressors: List[str] = [],
         het_robust=False, gmm=False,
+        is_lagged_instrumented=False,
         verbose=1, **print_kwargs) -> EstimationResults:
 
     tests = {}
@@ -33,7 +34,13 @@ def lagged_gmm(
         raise ValueError("Specify a number for lag_inst")
 
     Z, W, Y, N, T = instruments.extract_regs(
-        data, dependent, regressors, lag_inst)
+        data,
+        dependent,
+        regressors,
+        lag_inst,
+        is_lagged_instrumented,
+        verbose
+    )
 
     L, K = Z.shape[1], W.shape[1]
 
@@ -109,5 +116,6 @@ if __name__ == '__main__':
     lagged_gmm(
         data, "S/Y",
         regressors=["SG/Y"], lag_inst=2, title="GMM estimation of SG/Y -> S/Y",
-        gmm=True
+        gmm=True,
+        is_lagged_instrumented=True
     )

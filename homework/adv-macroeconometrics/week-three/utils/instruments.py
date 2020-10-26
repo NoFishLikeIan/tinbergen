@@ -11,18 +11,32 @@ GmmVariables = NewType(
 )
 
 
-def extract_regs(data: pd.DataFrame, dependent: str, regressors: List[str], lag_instruments: int) -> GmmVariables:
+def extract_regs(
+        data: pd.DataFrame,
+        dependent: str,
+        regressors: List[str],
+        lag_instruments: int,
+        is_lagged_instrumented=False,
+        verbose=0) -> GmmVariables:
     """
     Constructs the de-meaned Z, W, Y matrices. Returns the three matrices and the original size N, T
     """
 
-    # FIXME: Dereference original df in a more elegant way
-    data, instruments = make_multi_lagged(
-        data, regressors, lags=lag_instruments)
+    if is_lagged_instrumented:
+        # Note that the order here is swapped so that instruments are generated for y(t - 1)
+        # add the lagged dependent to the regression
+        data, lagged_names = make_multi_lagged(data, dependent, lags=1)
+        regressors += lagged_names
 
-    # add the lagged dependent to the regression
-    data, lagged_names = make_multi_lagged(data, dependent, lags=1)
-    regressors += lagged_names
+        data, instruments = make_multi_lagged(
+            data, regressors, lags=lag_instruments)
+
+    else:
+        data, instruments = make_multi_lagged(
+            data, regressors, lags=lag_instruments)
+
+        data, lagged_names = make_multi_lagged(data, dependent, lags=1)
+        regressors += lagged_names
 
     Z_unmean, _, _ = stack_to_columns(data, instruments)
 

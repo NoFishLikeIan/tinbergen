@@ -27,6 +27,9 @@ def overident_restr(
         Z: np.ndarray, resid: np.ndarray, omega: np.ndarray,
         L: int, K: int) -> TestResult:
 
+    if L < K + 1:
+        raise ValueError(f"Model is not overidentified L={L} < K={K} + 1")
+
     scale = Z.T@resid
     var = inv(Z.T@omega@Z)
 
