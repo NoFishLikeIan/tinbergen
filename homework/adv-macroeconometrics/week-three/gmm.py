@@ -22,7 +22,8 @@ def lagged_gmm(
         lag_inst=1,
         regressors: List[str] = [],
         het_robust=False, gmm=False,
-        verbose=1) -> EstimationResults:
+        verbose=1, **print_kwargs) -> EstimationResults:
+
     tests = {}
 
     if len(regressors) == 0:
@@ -63,19 +64,18 @@ def lagged_gmm(
 
         tests["Overidentifying Restrictions"] = [stat, p_value]
 
-    # FIXME: How to compute this?!
-    cov = np.zeros((3, 3)) if gmm else white_var_2sls(W, W_f, resid)
+    cov = white_var_2sls(W, W_f, resid)
 
     resid_by_n = resid.reshape(T, N, order="F")
     durbin_watson = panel_dw(resid_by_n)
 
-    tests["Durbin-Watson"] = [durbin_watson, None]
+    tests["Durbin-Watson"] = durbin_watson
 
     if verbose > 0:
 
         printing.pprint(
             beta, cov, regressors, tests,
-            title="GMM Estimation" if gmm else "IV Estimation"
+            **print_kwargs
         )
 
     return beta, resid_by_n, cov, durbin_watson
@@ -88,13 +88,26 @@ if __name__ == '__main__':
 
     lags = 2
 
-    lagged_gmm(
-        data, "S/Y",
-        regressors=["d(lnY)", "INF"], lag_inst=lags
-    )
+    if False:
+
+        lagged_gmm(
+            data, "S/Y",
+            regressors=["d(lnY)", "INF"], lag_inst=lags
+        )
+
+        lagged_gmm(
+            data, "S/Y",
+            regressors=["d(lnY)", "INF"], lag_inst=lags,
+            gmm=True
+        )
+
+        lagged_gmm(
+            data, "S/Y",
+            regressors=["SG/Y"], lag_inst=2, title="IV estimation of SG/Y -> S/Y"
+        )
 
     lagged_gmm(
         data, "S/Y",
-        regressors=["d(lnY)", "INF"], lag_inst=lags,
+        regressors=["SG/Y"], lag_inst=2, title="GMM estimation of SG/Y -> S/Y",
         gmm=True
     )
