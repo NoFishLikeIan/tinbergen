@@ -30,6 +30,13 @@ tests_fns = {
 }
 
 
+def ols_estimate(X, Y, N, T):
+
+    beta = np.linalg.inv(X.T@X)@(X.T@Y)
+    resid = Y - X@beta
+    
+    return beta, resid
+
 def within_group(data: pd.DataFrame, dependent: str,
                  regressors: List[str] = [], lags=0,
                  het_robust=False, cross_sec=False,
@@ -54,30 +61,32 @@ def within_group(data: pd.DataFrame, dependent: str,
     X_dem = Q@X
     Y_dem = Q@Y
 
-    beta = np.linalg.inv(X_dem.T@X_dem)@(X_dem.T@Y_dem)
-    resid = Y - X@beta
-
+    beta, resid = ols_estimate(X_dem, Y_dem, N, T)
     resid_by_n = resid.reshape(T, N, order="F")
-    fixed_effects = resid_by_n.mean(axis=0)
-
-    cov_fn = nw_corrected if het_robust else white_var
-
-    cov = cov_fn(X_dem, resid, (N, T))
 
     tests = {
         test_name: fn(resid_by_n) for (test_name, fn) in tests_fns.items()
     }
 
-    _, pesaran_p_value = tests["Pesaran"]
 
-    if cross_sec and pesaran_p_value < .05:
-        # TODO: Not clear how to this. Should one stack t-times or only once?
-
+    if cross_sec:
         # Add dummy for cross-sectionally dependent data
+        dummy_matrix = transform.make_dummy(data, regressors, N, T)
+        X_with_dummy = np.hstack((X_dem, dummy_matrix))
+        # breakpoint()
 
-        transform.add_dummy(data, regressors)
+        dummy_beta, resid = ols_estimate(X_with_dummy, Y, N, T)
+        beta = dummy_beta[:len(regressors)]
 
-        return
+        resid_by_n = resid.reshape(T, N, order="F")
+        # FIXME: This gives same estimate, not right.
+    
+        
+    fixed_effects = resid_by_n.mean(axis=0)
+
+    cov_fn = nw_corrected if het_robust else white_var
+
+    cov = cov_fn(X_dem, resid, (N, T))
 
     if verbose:
         # Print as a table
@@ -97,13 +106,17 @@ if __name__ == '__main__':
     beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
         data, "S/Y", ["d(lnY)", "INF"], lags=0, title="Within estimator")
 
-    beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
-        data, "S/Y", ["d(lnY)", "INF"], lags=1, title="Within estimator, with lag dependent")
+    if False:
+
+
+        beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
+            data, "S/Y", ["d(lnY)", "INF"], lags=1, het_robust=True, title="Within estimator, with lag dependent and het robust")
+
+        beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
+                data, "S/Y", ["d(lnY)", "INF"], lags=1, title="Within estimator, with lag dependent")
+
 
     beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
-        data, "S/Y", ["d(lnY)", "INF"], lags=1, het_robust=True, title="Within estimator, with lag dependent and het robust")
-
-    beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
-        data, "S/Y", ["d(lnY)", "INF"], cross_sec=True, title="Within estimator, with lag dependent")
+        data, "S/Y", ["d(lnY)", "INF"], cross_sec=True, title="Within estimator, cross sec correction")
 
     np.save("data/resid.npy", resid_by_n)

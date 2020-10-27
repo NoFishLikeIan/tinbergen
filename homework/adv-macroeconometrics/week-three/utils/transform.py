@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 from typing import List
 
@@ -47,15 +48,19 @@ def make_multi_lagged(data: pd.DataFrame, variables: List[str], lags=1) -> pd.Da
     return data, lagged_var_names
 
 
-def add_dummy(data: pd.DataFrame, variables: List[str]) -> pd.DataFrame:
+def make_dummy(data: pd.DataFrame, variables: List[str], N: int, T: int) -> pd.DataFrame:
     """
     Add data for dummy regression. This is implemented adding 
     the mean of the regression variable.
     """
 
-    dummy_df = data.loc[variables].copy()
+    K = len(variables)
+    dummy_matrix = np.zeros((N*T, K))
 
-    for var in variables:
-        cs_mean = dummy_df.loc[var].mean()
+    for i, var in enumerate(variables):
+        cs_mean = data.loc[var].mean()
+        
+        dummy_matrix[:, i] = np.repeat(cs_mean, T)
 
-    raise NotImplementedError("CS mean done yet!")
+
+    return dummy_matrix
