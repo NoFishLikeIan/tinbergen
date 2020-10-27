@@ -69,4 +69,7 @@ if __name__ == '__main__':
     data = read_data("data/hw3.xls")
 
     beta, resid_by_n, cov = ccep(
-        data, "S/Y", ["d(lnY)", "INF"],  title="CCEP estimator")
+        data, "S/Y",
+        ["d(lnY)", "INF"],  
+        title="CCEP estimator"
+    )
