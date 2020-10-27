@@ -31,14 +31,16 @@ def make_M(data: pd.DataFrame, dependent: str, regressors: List[str], N: int, T:
 
 def ccep(data: pd.DataFrame, dependent: str,
          regressors: List[str] = [],
+         lags = 1, 
          verbose=1, **print_kwargs):
 
     if len(regressors) == 0:
         regressors = data.index.get_level_values(0).tolist()
 
-    data, lagged_names = transform.make_multi_lagged(data, dependent, lags=1)
+    if lags > 0:
+        data, lagged_names = transform.make_multi_lagged(data, dependent, lags=lags)
 
-    regressors += lagged_names
+        regressors += lagged_names
 
     # stack the Y variable
     Y, _, _ = matrix.stack_to_columns(data, dependent)

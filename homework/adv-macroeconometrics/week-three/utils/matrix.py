@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+from .checks import is_uniq
+
 from typing import List, NewType, Tuple
 
 StackingResult = Tuple[np.ndarray, int, int]
@@ -14,6 +16,9 @@ def stack_to_columns(data: pd.DataFrame, variables: List[str]) -> StackingResult
 
     if isinstance(variables, str):
         variables = [variables]
+
+    if not is_uniq(variables):
+        raise Warning("Careful, the variables you passed to stack columns are non unique!")
 
     # Assumes that the panel has fixed size
     T, N = data.loc[data.index[0][0]].shape
