@@ -6,7 +6,7 @@ from numpy.linalg import inv
 from utils import transform, matrix, printing, instruments
 
 from statistics.cov_est import white_var, nw_corrected, white_var_2sls
-from statistics.tests import panel_dw, overident_restr
+from statistics.tests import panel_dw, overident_restr, hausman_test
 
 # --- Typings
 
@@ -53,25 +53,35 @@ def lagged_gmm(
 
     resid = Y - W@beta
 
+    cov, S_hat = white_var_2sls(W, Z, resid)
+
     if gmm:
         L = Z.shape[1]
         K = W.shape[1]
 
-        # Generalize the IV for Hansen, 1982
+        # --- Generalize the IV for Hansen, 1982
 
-        omega = np.diag(np.diag(resid@resid.T))
-
-        Pi = inv(Z.T@omega@Z)
-
-        beta = inv(W.T@Z@Pi@Z.T@W)@W.T@Z@Pi@Z.T@Y
+        inv_S = np.linalg.inv(S_hat)
+        beta = np.linalg.inv(W.T@Z@inv_S@Z.T@W)@(W.T@Z@inv_S@Z.T)@Y
 
         resid = Y - W@beta
 
-        stat, p_value = overident_restr(Z, resid, omega, L, K)
+        cov = (N*T)*np.linalg.inv(W.T@Z@inv_S@Z.T@W)
 
+        # --- OIR Test
+
+        stat, p_value = overident_restr(Z, resid, inv_S, L, K)
         tests["Overidentifying Restrictions"] = [stat, p_value]
 
-    cov = white_var_2sls(W, W_f, resid)
+        # --- Hausman test
+
+        within_beta = np.linalg.inv(W.T@W)@W.T@Y
+        within_e = Y - W@within_beta
+        within_var = white_var(W, within_e)
+
+        stat, p_value = hausman_test(within_beta, beta, within_var, cov)
+        tests["Hausman"] = [stat, p_value]
+
 
     resid_by_n = resid.reshape(T, N, order="F")
     durbin_watson = panel_dw(resid_by_n)
@@ -93,29 +103,18 @@ if __name__ == '__main__':
 
     data = read_data("data/hw3.xls")
 
+
     lags = 2
 
-    if False:
-
-        lagged_gmm(
-            data, "S/Y",
-            regressors=["d(lnY)", "INF"], lag_inst=lags
-        )
-
-        lagged_gmm(
-            data, "S/Y",
-            regressors=["d(lnY)", "INF"], lag_inst=lags,
-            gmm=True
-        )
-
-        lagged_gmm(
-            data, "S/Y",
-            regressors=["SG/Y"], lag_inst=2, title="IV estimation of SG/Y -> S/Y"
-        )
 
     lagged_gmm(
         data, "S/Y",
-        regressors=["SG/Y"], lag_inst=2, title="GMM estimation of SG/Y -> S/Y",
+        regressors=["SG/Y"], lag_inst=lags, title="IV estimation of SG/Y -> S/Y"
+    )
+
+    lagged_gmm(
+        data, "S/Y",
+        regressors=["SG/Y"], lag_inst=lags, title="GMM estimation of SG/Y -> S/Y",
         gmm=True,
         is_lagged_instrumented=True
     )

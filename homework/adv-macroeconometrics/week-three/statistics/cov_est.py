@@ -20,13 +20,19 @@ def white_var(X: np.ndarray, e: np.ndarray, *var_args) -> np.ndarray:
 
 # TODO: The two white can be abstracted
 
+def white_var_2sls(W: np.ndarray, Z: np.ndarray, e: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
 
-def white_var_2sls(W: np.ndarray, W_f: np.ndarray, e: np.ndarray, *var_args) -> np.ndarray:
+    N_T, K = W.shape
 
-    inverse = inv(W.T@W_f)
     omega = np.diag(np.diag(e@e.T))
+    S_hat = (Z.T@omega@Z) / N_T
 
-    return inverse@W_f.T@omega@W_f@inverse
+    inv_Z = inv(Z.T@Z)
+
+    inverse = inv(W.T@Z@inv_Z@Z.T@W)
+    central = W.T@Z@inv_Z@S_hat@inv_Z@Z.T@W
+    
+    return N_T*(inverse@central@inverse), S_hat
 
 
 def k(l, m):
