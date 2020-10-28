@@ -106,15 +106,29 @@ if __name__ == '__main__':
 
     lags = 2
 
+    if True:
 
-    lagged_gmm(
-        data, "S/Y",
-        regressors=["SG/Y"], lag_inst=lags, title="IV estimation of SG/Y -> S/Y"
-    )
+        lagged_gmm(
+            data, "S/Y",
+            regressors=["d(lnY)", "INF"], lag_inst=lags, is_lagged_instrumented=True, title="IV estimation of SG/Y -> S/Y"
+        )
 
-    lagged_gmm(
-        data, "S/Y",
-        regressors=["SG/Y"], lag_inst=lags, title="GMM estimation of SG/Y -> S/Y",
-        gmm=True,
-        is_lagged_instrumented=True
-    )
+
+        lagged_gmm(
+            data, "S/Y",
+            regressors=["d(lnY)", "INF"], lag_inst=lags, is_lagged_instrumented=True, title="IV estimation of SG/Y -> S/Y"
+        )
+
+    if False:
+
+        lagged_gmm(
+            data, "S/Y",
+            regressors=["SG/Y"], lag_inst=lags, title="IV estimation of SG/Y -> S/Y"
+        )
+
+        lagged_gmm(
+            data, "S/Y",
+            regressors=["SG/Y"], lag_inst=lags, title="GMM estimation of SG/Y -> S/Y",
+            gmm=True,
+            is_lagged_instrumented=True
+        )

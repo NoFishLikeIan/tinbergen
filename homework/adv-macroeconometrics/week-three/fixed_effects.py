@@ -103,20 +103,22 @@ if __name__ == '__main__':
     # partial = data.loc[(slice(None), slice("1981-01-01")),
     #                    ["Australia", "Belgium"]]  # test with few data points
 
+
     beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
-        data, "S/Y", ["d(lnY)", "INF"], lags=0, title="Within estimator")
+        data, "S/Y", ["d(lnY)", "INF"], lags=1, het_robust=True, title="Within estimator, with lag dependent and het robust")
 
     if False:
 
-
+            
         beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
-            data, "S/Y", ["d(lnY)", "INF"], lags=1, het_robust=True, title="Within estimator, with lag dependent and het robust")
+            data, "S/Y", ["d(lnY)", "INF"], lags=0, title="Within estimator")
+
 
         beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
                 data, "S/Y", ["d(lnY)", "INF"], lags=1, title="Within estimator, with lag dependent")
 
 
-    beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
-        data, "S/Y", ["d(lnY)", "INF"], cross_sec=True, title="Within estimator, cross sec correction")
+        beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
+            data, "S/Y", ["d(lnY)", "INF"], cross_sec=True, title="Within estimator, cross sec correction")
 
     np.save("data/resid.npy", resid_by_n)
