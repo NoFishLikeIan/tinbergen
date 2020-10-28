@@ -75,3 +75,13 @@ if __name__ == '__main__':
         ["d(lnY)", "INF"],  
         title="CCEP estimator"
     )
+
+    with open("data/beta.tex", "w") as file:
+        file.write(printing.np_to_pmatrix(beta, prec=5))
+
+    
+    with open("data/cov.tex", "w") as file:
+        file.write(printing.np_to_pmatrix(
+            np.diag(cov).reshape(-1, 1), prec=5
+        ))
+

@@ -16,7 +16,7 @@ from typing import List
 
 def pesaran_pipe(resid: np.ndarray) -> TestResult:
 
-    N, T = resid.shape
+    T, N = resid.shape
 
     rho = cross_correlation(resid)
     results = pesaran_cd(rho, N, T)
@@ -73,7 +73,6 @@ def within_group(data: pd.DataFrame, dependent: str,
         # Add dummy for cross-sectionally dependent data
         dummy_matrix = transform.make_dummy(data, regressors, N, T)
         X_with_dummy = np.hstack((X_dem, dummy_matrix))
-        # breakpoint()
 
         dummy_beta, resid = ols_estimate(X_with_dummy, Y, N, T)
         beta = dummy_beta[:len(regressors)]
@@ -100,25 +99,23 @@ if __name__ == '__main__':
 
     data = read_data("data/hw3.xls")
 
-    # partial = data.loc[(slice(None), slice("1981-01-01")),
+    # data = data.loc[(slice(None), slice("1981-01-01")),
     #                    ["Australia", "Belgium"]]  # test with few data points
 
 
     beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
-        data, "S/Y", ["d(lnY)", "INF"], lags=1, het_robust=True, title="Within estimator, with lag dependent and het robust")
+        data, "S/Y", ["d(lnY)", "INF"], lags=1, title="Within estimator, with lag dependent and het robust")
 
-    if False:
-
-            
-        beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
-            data, "S/Y", ["d(lnY)", "INF"], lags=0, title="Within estimator")
-
-
-        beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
-                data, "S/Y", ["d(lnY)", "INF"], lags=1, title="Within estimator, with lag dependent")
-
-
-        beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
-            data, "S/Y", ["d(lnY)", "INF"], cross_sec=True, title="Within estimator, cross sec correction")
+        
+    # beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
+    #     data, "S/Y", ["d(lnY)", "INF"], lags=0, title="Within estimator")
+# 
+# 
+    # beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
+    #         data, "S/Y", ["d(lnY)", "INF"], lags=1, title="Within estimator, with lag dependent")
+# 
+# 
+    # beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
+    #     data, "S/Y", ["d(lnY)", "INF"], cross_sec=True, title="Within estimator, cross sec correction")
 
     np.save("data/resid.npy", resid_by_n)

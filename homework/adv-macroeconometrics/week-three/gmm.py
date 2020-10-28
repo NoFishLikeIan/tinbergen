@@ -52,8 +52,11 @@ def lagged_gmm(
     beta = inv(W_f.T@W_f)@W_f.T@Y
 
     resid = Y - W@beta
-
+    
     cov, S_hat = white_var_2sls(W, Z, resid)
+
+    if het_robust:
+        cov = nw_corrected(W, resid, (N, T))
 
     if gmm:
         L = Z.shape[1]
@@ -103,12 +106,16 @@ def lagged_gmm(
 if __name__ == '__main__':
     from utils.ingest import read_data
 
+    def save_as(vec, name):
+        with open(f"data/{name}.tex", "w") as file:
+            file.write(printing.np_to_pmatrix(vec, prec=5))
+
     data = read_data("data/hw3.xls")
 
 
     lags = 2
 
-    if True:
+    if False:
 
         lagged_gmm(
             data, "S/Y",
@@ -122,16 +129,35 @@ if __name__ == '__main__':
             gmm=True
         )
 
-    if False:
-
-        lagged_gmm(
+        _, _, cov, _ = lagged_gmm(
             data, "S/Y",
-            regressors=["SG/Y"], lag_inst=lags, 
+            regressors=["d(lnY)", "INF"], lag_inst=lags, is_lagged_instrumented=True, 
+            het_robust=True
         )
 
-        lagged_gmm(
+        with open("data/cov.tex", "w") as file:
+            file.write(printing.np_to_pmatrix(np.diag(cov).reshape(-1, 1), prec=6))
+        
+
+    if True:
+
+        beta, _, cov, _ = lagged_gmm(
+            data, "S/Y",
+            regressors=["SG/Y"], lag_inst=lags, 
+            is_lagged_instrumented=True
+        )
+
+        save_as(beta, "q5-IV-beta")
+        save_as(np.diag(cov).reshape(-1, 1), "q5-IV-cov")
+
+
+        beta, _, cov, _ = lagged_gmm(
             data, "S/Y",
             regressors=["SG/Y"], lag_inst=lags, 
             gmm=True,
             is_lagged_instrumented=True
         )
+
+        save_as(beta, "q5-gmm-beta")
+        save_as(np.diag(cov).reshape(-1, 1), "q5-gmm-cov")
+
