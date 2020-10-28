@@ -61,12 +61,12 @@ def lagged_gmm(
 
         # --- Generalize the IV for Hansen, 1982
 
-        inv_S = np.linalg.inv(S_hat)
-        beta = np.linalg.inv(W.T@Z@inv_S@Z.T@W)@(W.T@Z@inv_S@Z.T)@Y
+        inv_S = inv(S_hat)
+        beta = inv(W.T@Z@inv_S@Z.T@W)@(W.T@Z@inv_S@Z.T)@Y
 
         resid = Y - W@beta
 
-        cov = (N*T)*np.linalg.inv(W.T@Z@inv_S@Z.T@W)
+        cov = (N*T)*inv(W.T@Z@inv_S@Z.T@W)
 
         # --- OIR Test
 
@@ -75,7 +75,7 @@ def lagged_gmm(
 
         # --- Hausman test
 
-        within_beta = np.linalg.inv(W.T@W)@W.T@Y
+        within_beta = inv(W.T@W)@W.T@Y
         within_e = Y - W@within_beta
         within_var = white_var(W, within_e)
 
@@ -89,11 +89,13 @@ def lagged_gmm(
     tests["Durbin-Watson"] = durbin_watson
 
     if verbose > 0:
+        
+        estimator = "GMM" if gmm else "IV"
+        def_title = f"{estimator} estimation of ({', '.join(regressors)}) -> {dependent} "
 
-        printing.pprint(
-            beta, cov, regressors, tests,
-            **print_kwargs
-        )
+        title = print_kwargs.get("title", def_title)
+
+        printing.pprint(beta, cov, regressors, tests, title=title)
 
     return beta, resid_by_n, cov, durbin_watson
 
@@ -110,25 +112,26 @@ if __name__ == '__main__':
 
         lagged_gmm(
             data, "S/Y",
-            regressors=["d(lnY)", "INF"], lag_inst=lags, is_lagged_instrumented=True, title="IV estimation of SG/Y -> S/Y"
+            regressors=["d(lnY)", "INF"], lag_inst=lags, is_lagged_instrumented=True, 
         )
 
 
         lagged_gmm(
             data, "S/Y",
-            regressors=["d(lnY)", "INF"], lag_inst=lags, is_lagged_instrumented=True, title="IV estimation of SG/Y -> S/Y"
+            regressors=["d(lnY)", "INF"], lag_inst=lags, is_lagged_instrumented=True, 
+            gmm=True
         )
 
     if False:
 
         lagged_gmm(
             data, "S/Y",
-            regressors=["SG/Y"], lag_inst=lags, title="IV estimation of SG/Y -> S/Y"
+            regressors=["SG/Y"], lag_inst=lags, 
         )
 
         lagged_gmm(
             data, "S/Y",
-            regressors=["SG/Y"], lag_inst=lags, title="GMM estimation of SG/Y -> S/Y",
+            regressors=["SG/Y"], lag_inst=lags, 
             gmm=True,
             is_lagged_instrumented=True
         )

@@ -25,7 +25,7 @@ def pprint(
 
 --- Standard errors:
 
-{pd.DataFrame(standard_error, index=regressors, columns=regressors)}
+{pd.Series(np.sqrt(np.diag(standard_error)), index=regressors)}
         """
 
     for test, values in tests.items():
