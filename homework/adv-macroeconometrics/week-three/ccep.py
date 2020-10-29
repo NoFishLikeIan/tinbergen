@@ -73,15 +73,16 @@ if __name__ == '__main__':
     beta, resid_by_n, cov = ccep(
         data, "S/Y",
         ["d(lnY)", "INF"],  
+        lags = 1,
         title="CCEP estimator"
     )
 
-    with open("data/beta.tex", "w") as file:
+    with open("data/ccep_beta.tex", "w") as file:
         file.write(printing.np_to_pmatrix(beta, prec=5))
 
     
-    with open("data/cov.tex", "w") as file:
+    with open("data/ccep_cov.tex", "w") as file:
         file.write(printing.np_to_pmatrix(
-            np.diag(cov).reshape(-1, 1), prec=5
+            np.diag(np.sqrt(cov)).reshape(-1, 1), prec=5
         ))
 

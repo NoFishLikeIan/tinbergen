@@ -12,7 +12,7 @@ TestResults = NewType("TestResults", Dict[str, Tuple[np.float, np.float]])
 def pprint(
     beta: np.ndarray, standard_error: np.ndarray, regressors: List[str],
     tests: TestResults = {},
-    title="Withing regression"
+    title="Within regression"
 ):
 
     table = f"""
@@ -55,3 +55,8 @@ def np_to_pmatrix(matrix: np.ndarray, prec=2) -> str:
     latex_matrix += r"\end{pmatrix}"
 
     return latex_matrix
+
+
+def save_as(vec: np.ndarray, name: str):
+    with open(f"data/{name}.tex", "w") as file:
+        file.write(np_to_pmatrix(vec, prec=5))

@@ -106,10 +106,6 @@ def lagged_gmm(
 if __name__ == '__main__':
     from utils.ingest import read_data
 
-    def save_as(vec, name):
-        with open(f"data/{name}.tex", "w") as file:
-            file.write(printing.np_to_pmatrix(vec, prec=5))
-
     data = read_data("data/hw3.xls")
 
 
@@ -147,8 +143,8 @@ if __name__ == '__main__':
             is_lagged_instrumented=True
         )
 
-        save_as(beta, "q5-IV-beta")
-        save_as(np.diag(cov).reshape(-1, 1), "q5-IV-cov")
+        printing.save_as(beta, "q5-IV-beta")
+        printing.save_as(np.sqrt(np.diag(cov)).reshape(-1, 1), "q5-IV-cov")
 
 
         beta, _, cov, _ = lagged_gmm(
@@ -158,6 +154,6 @@ if __name__ == '__main__':
             is_lagged_instrumented=True
         )
 
-        save_as(beta, "q5-gmm-beta")
-        save_as(np.diag(cov).reshape(-1, 1), "q5-gmm-cov")
+        printing.save_as(beta, "q5-gmm-beta")
+        printing.save_as(np.sqrt(np.diag(cov)).reshape(-1, 1), "q5-gmm-cov")
 

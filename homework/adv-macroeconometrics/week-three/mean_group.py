@@ -105,5 +105,14 @@ if __name__ == '__main__':
 
     data = read_data("data/hw3.xls")
 
-    mean_group(data, "S/Y", ["U"], lags=1, title="MG Estimator", verbose=1)
-    mean_group(data, "S/Y", ["U"], lags=1, title="CCEMG Estimator", cc=True, verbose=1)
+    delta, long_run_lambda, var = mean_group(data, "S/Y", ["U"], lags=1, title="MG Estimator", verbose=1)
+
+    printing.save_as(
+        delta.reshape(-1, 1), "q7-mg-delta"
+    )
+
+    printing.save_as(
+        np.sqrt(np.diag(var)).reshape(-1, 1), "q7-mg-var"
+    )
+
+    delta, long_run_lambda, var = mean_group(data, "S/Y", ["U"], lags=1, title="CCEMG Estimator", cc=True, verbose=1)
