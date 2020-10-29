@@ -39,7 +39,7 @@ def ols_estimate(X, Y, N, T):
 
 def within_group(data: pd.DataFrame, dependent: str,
                  regressors: List[str] = [], lags=0,
-                 het_robust=False, cross_sec=False,
+                 het_robust=False, 
                  verbose=1, **print_kwargs) -> EstimationResults:
 
     if len(regressors) == 0:
@@ -56,6 +56,7 @@ def within_group(data: pd.DataFrame, dependent: str,
     Y, _, _ = matrix.stack_to_columns(data, dependent)
     X, N, T = matrix.stack_to_columns(data, regressors)
 
+
     Q = np.kron(np.identity(N), matrix.make_Q(T))
 
     X_dem = Q@X
@@ -67,18 +68,6 @@ def within_group(data: pd.DataFrame, dependent: str,
     tests = {
         test_name: fn(resid_by_n) for (test_name, fn) in tests_fns.items()
     }
-
-
-    if cross_sec:
-        # Add dummy for cross-sectionally dependent data
-        dummy_matrix = transform.make_dummy(data, regressors, N, T)
-        X_with_dummy = np.hstack((X_dem, dummy_matrix))
-
-        dummy_beta, resid = ols_estimate(X_with_dummy, Y, N, T)
-        beta = dummy_beta[:len(regressors)]
-
-        resid_by_n = resid.reshape(T, N, order="F")
-        # FIXME: This gives same estimate, not right.
     
         
     fixed_effects = resid_by_n.mean(axis=0)
@@ -104,7 +93,7 @@ if __name__ == '__main__':
 
 
     beta, fixed_effects, resid_by_n, cov, durbin_watson = within_group(
-        data, "S/Y", ["SG/Y", "INF"], lags=1, het_robust=True)
+        data, "S/Y", ["d(lnY)", "INF"], lags=1, het_robust=False)
 
     
     printing.save_as(
