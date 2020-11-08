@@ -111,49 +111,45 @@ if __name__ == '__main__':
 
     lags = 2
 
-    if False:
 
-        lagged_gmm(
-            data, "S/Y",
-            regressors=["d(lnY)", "INF"], lag_inst=lags, is_lagged_instrumented=True, 
-        )
-
-
-        lagged_gmm(
-            data, "S/Y",
-            regressors=["d(lnY)", "INF"], lag_inst=lags, is_lagged_instrumented=True, 
-            gmm=True
-        )
-
-        _, _, cov, _ = lagged_gmm(
-            data, "S/Y",
-            regressors=["d(lnY)", "INF"], lag_inst=lags, is_lagged_instrumented=True, 
-            het_robust=True
-        )
-
-        with open("data/cov.tex", "w") as file:
-            file.write(printing.np_to_pmatrix(np.diag(cov).reshape(-1, 1), prec=6))
-        
-
-    if True:
-
-        beta, _, cov, _ = lagged_gmm(
-            data, "S/Y",
-            regressors=["SG/Y"], lag_inst=lags, 
-            is_lagged_instrumented=True
-        )
-
-        printing.save_as(beta, "q5-IV-beta")
-        printing.save_as(np.sqrt(np.diag(cov)).reshape(-1, 1), "q5-IV-cov")
+    lagged_gmm(
+        data, "S/Y",
+        regressors=["d(lnY)", "INF"], lag_inst=lags, is_lagged_instrumented=True, 
+    )
 
 
-        beta, _, cov, _ = lagged_gmm(
-            data, "S/Y",
-            regressors=["SG/Y"], lag_inst=lags, 
-            gmm=True,
-            is_lagged_instrumented=True
-        )
+    lagged_gmm(
+        data, "S/Y",
+        regressors=["d(lnY)", "INF"], lag_inst=lags, is_lagged_instrumented=True, 
+        gmm=True
+    )
 
-        printing.save_as(beta, "q5-gmm-beta")
-        printing.save_as(np.sqrt(np.diag(cov)).reshape(-1, 1), "q5-gmm-cov")
+    _, _, cov, _ = lagged_gmm(
+        data, "S/Y",
+        regressors=["d(lnY)", "INF"], lag_inst=lags, is_lagged_instrumented=True, 
+        het_robust=True
+    )
+
+    with open("data/cov.tex", "w") as file:
+        file.write(printing.np_to_pmatrix(np.diag(cov).reshape(-1, 1), prec=6))
+    
+    beta, _, cov, _ = lagged_gmm(
+        data, "S/Y",
+        regressors=["SG/Y"], lag_inst=lags, 
+        is_lagged_instrumented=True
+    )
+
+    printing.save_as(beta, "q5-IV-beta")
+    printing.save_as(np.sqrt(np.diag(cov)).reshape(-1, 1), "q5-IV-cov")
+
+
+    beta, _, cov, _ = lagged_gmm(
+        data, "S/Y",
+        regressors=["SG/Y"], lag_inst=lags, 
+        gmm=True,
+        is_lagged_instrumented=True
+    )
+
+    printing.save_as(beta, "q5-gmm-beta")
+    printing.save_as(np.sqrt(np.diag(cov)).reshape(-1, 1), "q5-gmm-cov")
 

@@ -31,7 +31,7 @@ def make_M(data: pd.DataFrame, dependent: str, regressors: List[str], N: int, T:
 
 def ccep(data: pd.DataFrame, dependent: str,
          regressors: List[str] = [],
-         lags = 1, 
+         M = None, lags = 1, 
          verbose=1, **print_kwargs):
 
     if len(regressors) == 0:
@@ -46,7 +46,7 @@ def ccep(data: pd.DataFrame, dependent: str,
     Y, _, _ = matrix.stack_to_columns(data, dependent)
     W, N, T = matrix.stack_to_columns(data, regressors)
 
-    M = make_M(data, dependent, regressors, N, T)
+    M = M if M is not None else make_M(data, dependent, regressors, N, T)
 
     P = make_projection(M)
 

@@ -3,7 +3,7 @@ import pandas as pd
 
 from utils import transform, matrix, printing
 
-from ccep import ccep
+from ccep import ccep, make_M
 
 # --- Typings
 
@@ -14,7 +14,7 @@ def standard_estimate(
     country_series: pd.Series, 
     dependent: str, 
     regressors: List[str],
-    N: int
+    N: int, *other
     ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Applies standard Within LS estimations
@@ -24,7 +24,7 @@ def standard_estimate(
 
     w = w_unmeaned - np.mean(w_unmeaned, axis=0)
     y = y_unmeaned - np.mean(y_unmeaned, axis=0)
-    coeff = (np.linalg.inv(w.T@w)@w.T@y) / N
+    coeff = np.linalg.inv(w.T@w)@w.T@y
 
     beta, alpha = coeff
 
@@ -35,13 +35,13 @@ def standard_estimate(
 
 def cc_estimate(
     country_series: pd.Series, 
-    dependent: str, 
-    regressors: List[str], N: int
+    dependent: str, regressors: List[str], 
+    N: int, M: pd.DataFrame,
     ) -> Tuple[np.ndarray, np.ndarray]:
 
-    results = ccep(country_series.to_frame(), dependent, regressors, verbose=0, lags=0)
+    results = ccep(country_series.to_frame(), dependent, regressors, verbose=0, lags=0, M=M)
     
-    coeff = results[0].reshape(-1, ) / N
+    coeff = results[0].reshape(-1, )
     beta, alpha = coeff
 
     lambd = alpha / (1-beta)
@@ -72,12 +72,15 @@ def mean_group(data: pd.DataFrame, dependent: str,
     lambda_i = np.zeros(N)
 
     for i, country in enumerate(data.columns):
-        coeff, lambd = estimator(data[country], dependent, regressors, N)
+        coeff, lambd = estimator(
+            data[country], dependent, regressors, 
+            N, make_M(data, dependent, regressors, 1, T)
+        )
 
         delta_is[i] = coeff
         lambda_i[i] = lambd
 
-    delta = delta_is.mean(axis=0)
+    delta = delta_is.mean(axis = 0)
     long_run_lambda = lambda_i.mean(axis = 0)
 
     # --- Compute variance
@@ -105,14 +108,17 @@ if __name__ == '__main__':
 
     data = read_data("data/hw3.xls")
 
+
+
     delta, long_run_lambda, var = mean_group(data, "S/Y", ["U"], lags=1, title="MG Estimator", verbose=1)
 
-    printing.save_as(
-        delta.reshape(-1, 1), "q7-mg-delta"
-    )
-
-    printing.save_as(
-        np.sqrt(np.diag(var)).reshape(-1, 1), "q7-mg-var"
-    )
-
     delta, long_run_lambda, var = mean_group(data, "S/Y", ["U"], lags=1, title="CCEMG Estimator", cc=True, verbose=1)
+
+    printing.save_as(
+        delta.reshape(-1, 1), "q7-ccemg-delta"
+    )
+
+    printing.save_as(
+        np.sqrt(np.diag(var)).reshape(-1, 1), "q7-ccemg-var"
+    )
+
