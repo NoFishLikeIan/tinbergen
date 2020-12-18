@@ -598,4 +598,4 @@ TSWLatexianTemp*
 
 # Project specific
 code/political/synth.py
-papers
+code/macrofinance/*/*.pdf
