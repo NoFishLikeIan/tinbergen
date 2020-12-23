@@ -1,7 +1,4 @@
 \documentclass[american]{scrartcl}
-
-    \newcommand{\lang}{en}
-
     \usepackage{babel}
     \usepackage[utf8]{inputenc} 
     \usepackage{csquotes}
@@ -12,8 +9,9 @@
     \setlength{\parindent}{0em}
     \setlength{\parskip}{0.5em}
 
+    % Bibliography and citations
     \usepackage[bibencoding=utf8, style=apa]{biblatex}
-    \bibliography{../../../../bibliographies/macrofinance}
+    \bibliography{../../../../bibliographies/macrofinance, informal}
     
     \title{Central Bank with negative capital} % FIXME: Think of a better title
 
@@ -21,8 +19,13 @@
 
     \author{Andrea Titton}
     
+% Commands
+
+\newcommand{\citein}[1]{\citeauthor{#1} (\citeyear{#1})}
+    
 \begin{document}
 
+% Title
 \pagenumbering{gobble} % stop page numbering
 \clearpage
 \thispagestyle{empty}
@@ -31,6 +34,12 @@
 
 \pagenumbering{arabic}
 
+% --- Sections idea
+\iffalse
+    History | Theory of CB dividends | Financial stability under deferred assets |
+    Expectations of Inflation | Effects on global banks
+\fi
+% ---
 
 \section{Introduction}
 
