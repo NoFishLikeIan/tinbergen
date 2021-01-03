@@ -84,3 +84,20 @@ Looking at the balance sheet $\delta \approx 0.233$, $\theta \approx 0.461$, $c_
 ### Conclusion
 
 Financial strength $D$.
+
+## Currency wars at the ZLB
+
+### Model idea
+
+At the ZLB and under assets scarcity:
+
+- One country is in a liquidity trap, drags the other in the liquidity trap
+- One monetary authority can influence the exchange rate within a bound to create a Current Account Surplus, hence exporting recension
+- Negative feedback loop between the global recession and inflation
+
+### Models effect
+Government expansion...
+- increase output increases demand for home goods and reduces demand for assets via taxation
+- deteriorates foreign position
+- equivalence of monetary and fiscal authority
+
