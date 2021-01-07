@@ -3,7 +3,8 @@
     \usepackage[utf8]{inputenc} 
     \usepackage{csquotes}
     \usepackage{amsmath}
-    \usepackage{graphicx}    
+    \usepackage{amssymb}
+    \usepackage{graphicx}   
     
     \setlength{\parindent}{0em}
     \setlength{\parskip}{0.5em}
@@ -17,7 +18,10 @@
     
 
 % Commands
-    
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\Real}{\mathbb{R}}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+
 \begin{document}
 
 % Title
@@ -26,5 +30,51 @@
 \newpage
 
 \section*{Exercise 2}
+
+The imputation set is defined as,
+
+\begin{equation}
+    I(N, v) = \set{ x \in \Real^N: \ \sum_{i \in N} x_i = v(N) \land x_i \geq v(i) \ \forall i \in N }.
+\end{equation}
+
+First, notice that, starting from the definition with Harsanyi dividends, we can rewrite the Shapley, for a single player as the $v(i)$ and a residual term.
+
+Let $N(i) = \set{T: T \subseteq N \land \ i \in T}$ and note that $\{i\} \subseteq N(i)$. Then we can write the Shapley value for $i$ as,
+
+\begin{equation}
+    \begin{split}
+        f^S_i &= \sum_{T \in N(i)} \frac{1}{\abs{T}} \cdot \Delta_v(T)\\
+        &=  \sum_{T \in N(i)} \frac{1}{\abs{T}} \cdot \left( v(T) - \sum_{S \subset T} \Delta_v(S) \right) \\
+        &= v(i) + \sum_{T \in N(i) \setminus \set{i} } \frac{1}{\abs{T}} \cdot \left( v(T) - \sum_{S \subset T} \Delta_v(S) \right)
+    \end{split}
+\end{equation}
+
+where $S \subset T$ implies every proper subset $S \in 2^T \setminus T$.
+
+For a given $T \in N(i)\setminus\set{i}$, we can expand recursively the expression above in order to rewrite the expression in terms of $v$ applied to proper subsets of $T$,
+
+\begin{equation}
+    \begin{split}
+        v(T) - \sum_{S \subset T} \Delta_v(S) &= v(T) - \sum_{S \subset T} \left(v(S) - \sum_{G \subset S} \Delta_v(G) \right) \\
+        &= v(T) - \sum_{S \subset T} \left( v(S)- \sum_{G \subset S} \left(v(G) - \ldots\right) \right)
+    \end{split}
+\end{equation}
+
+Given this recursive definition, notice that innermost difference will be constructed with a finite number of singletons sets $P$ of the form,
+
+\begin{equation}
+    v\left(\bigcup P\right) - \sum_{P} v(P) \geq 0 \ \text{by superadditivity}.
+\end{equation}
+
+% TODO: This argument is not the best
+
+By induction then, any difference is positive, which implies that,
+
+\begin{equation}
+    \begin{split}
+        &v(T) - \sum_{S \subset T} \Delta_v(S) \geq 0 \ \forall T \\
+        &\implies v(i) + \sum_{T \in N(i) \setminus \set{i} } \frac{1}{\abs{T}} \cdot \left( v(T) - \sum_{S \subset T} \Delta_v(S) \right) = f_i^S \geq v(i)
+    \end{split}
+\end{equation}
 
 \end{document}
