@@ -27,7 +27,85 @@
 % Title
 
 \maketitle
-\newpage
+
+\section*{Exercise 1}
+
+\subsection*{(a)}
+
+We can compute the Harsanyi dividends recursively as,
+
+\begin{equation}
+    \begin{split}
+        \Delta_v(\set{1}) &= v(1) = 1 \\
+        \Delta_v(\set{2}) &= v(2) = 2 \\
+        \Delta_v(\set{3}) &= v(3) = 0 \\
+        \Delta_v(\set{1, 2}) &= v(\set{1, 2}) - \Delta_v(\set{1}) - \Delta_v(\set{2}) = 0 \\
+        \Delta_v(\set{1, 3}) &= v(\set{1, 3}) - \Delta_v(\set{1}) - \Delta_v(\set{3}) = 3 \\
+        \Delta_v(\set{2, 3}) &= v(\set{1, 3}) - \Delta_v(\set{1}) - \Delta_v(\set{3}) = 2 \\
+        \Delta_v(\set{1, 2, 3}) &= v(\set{1, 2, 3}) - \Delta_v(\set{1, 2}) - \Delta_v(\set{2, 3}) - \Delta_v(\set{1, 3}) = -1  \\
+    \end{split}
+\end{equation}
+
+\subsection*{(b)}
+
+Using the definition of Shapley value with Harsanyi dividends, we can compute,
+
+\begin{equation} \label{shapley}
+    f_i^S = \sum_{T \in N(i)} \frac{1}{\abs{T}} \cdot \Delta_v(T)
+\end{equation}
+
+this yields,
+
+\begin{equation*}
+    f^S = \begin{pmatrix}
+        5/3 & 5/3 & 2/3
+    \end{pmatrix}
+\end{equation*}
+
+\subsection*{(c)}
+
+In order to verify that the core is empty we can use the definition of the core,
+
+\begin{equation*}
+    \begin{split}
+        &x_i \in C(N, v) \implies \sum_{i \in S} x_i \geq v(S) \\
+        &\sum_{i \in N} x_i = v(N)
+    \end{split}
+\end{equation*}
+
+Let $x = \begin{pmatrix}
+        x_1 & x_2 & x_3
+    \end{pmatrix}$ be a candidate allocation. Then the second property requires that,
+
+\begin{equation} \label{sum_req}
+    x_1 + x_2 + x_3 = v(N) = 4
+\end{equation}
+
+The first property, on the other hand, requires
+
+\begin{equation} \label{gr_req}
+    \begin{split}
+        x_1 + x_2 &\geq 3\\
+        x_1 + x_3 &\geq 3\\
+        x_2 + x_3 &\geq 2
+    \end{split}
+\end{equation}
+
+There is no allocation $x$ that satisfies (\ref{sum_req}) and (\ref{gr_req}) hence $C(N, v) = \emptyset$.
+
+\subsection*{(d)}
+
+Convexity fails for $S = \set{1, 3}$ and $T = \set{2}$. Since,
+
+\begin{equation}
+    \begin{split}
+        v\left(S \cup T\right) + v\left(S \cap T\right) &< v(S) + v(T)\\
+        v(\set{1, 2, 3}) + v(\emptyset) &< v(\set{1, 3}) + v(2) \\
+        4 &< 3 + 2
+    \end{split}
+\end{equation}
+
+
 
 \section*{Exercise 2}
 
@@ -51,30 +129,54 @@ Let $N(i) = \set{T: T \subseteq N \land \ i \in T}$ and note that $\{i\} \subset
 
 where $S \subset T$ implies every proper subset $S \in 2^T \setminus T$.
 
-For a given $T \in N(i)\setminus\set{i}$, we can expand recursively the expression above in order to rewrite the expression in terms of $v$ applied to proper subsets of $T$,
+Consider now, for a given $T$, the term,
 
-\begin{equation}
-    \begin{split}
-        v(T) - \sum_{S \subset T} \Delta_v(S) &= v(T) - \sum_{S \subset T} \left(v(S) - \sum_{G \subset S} \Delta_v(G) \right) \\
-        &= v(T) - \sum_{S \subset T} \left( v(S)- \sum_{G \subset S} \left(v(G) - \ldots\right) \right)
-    \end{split}
+\begin{equation} \label{diff}
+    v(T) - \sum_{S \subset T} \Delta_v(S).
 \end{equation}
 
-Given this recursive definition, notice that innermost difference will be constructed with a finite number of singletons sets $P$ of the form,
+In this case $\abs{T} \neq 1$, since the only singleton in $N(i)$ is $\set{i}$ by construction. Now consider a set $T = \set{i, j} \in N(i), \ \abs{T} = 2$, then, by super additivity,
 
 \begin{equation}
-    v\left(\bigcup P\right) - \sum_{P} v(P) \geq 0 \ \text{by superadditivity}.
+    v(T) = v\left( \set{i} \cup \set{j} \right) \geq v(i) + v(j) \implies v(T) - \sum_{S \subset T} \Delta_v(S) \geq 0
 \end{equation}
 
-% TODO: This argument is not the best
-
-By induction then, any difference is positive, which implies that,
+By induction we can construct any bigger set $T$ as union of smaller sets and show that (\ref{diff}) is positive. If $v(T) -\sum_{S \subset T} \Delta_v(S) \geq 0 \ \forall T \in N(i)$, then
 
 \begin{equation}
-    \begin{split}
-        &v(T) - \sum_{S \subset T} \Delta_v(S) \geq 0 \ \forall T \\
-        &\implies v(i) + \sum_{T \in N(i) \setminus \set{i} } \frac{1}{\abs{T}} \cdot \left( v(T) - \sum_{S \subset T} \Delta_v(S) \right) = f_i^S \geq v(i)
-    \end{split}
+    f^S_i = v(i) + \sum_{T \in N(i) \setminus \set{i} } \frac{1}{\abs{T}} \cdot \left( v(T) - \sum_{S \subset T} \Delta_v(S) \right) \geq v(i).
 \end{equation}
+
+\section*{Exercise 3}
+
+\subsection*{(a)}
+
+The function $v$ is the mapping, $v(\emptyset) = 0$,
+$v(\set{1}) = 0$,
+$v(\set{2}) = 5$,
+$v(\set{3}) = 0$,
+$v(\set{1, 2}) = 15$,
+$v(\set{1, 3}) = 5$,
+$v(\set{2, 3}) = 10$,
+$v(\set{1, 2, 3}) = 20$.
+
+\subsection*{(b)}
+
+Using (\ref{shapley}) we obtain,
+
+\begin{equation}
+    f^S = \begin{pmatrix}
+        35/6 & 65/6 & 10/3
+    \end{pmatrix}
+\end{equation}
+
+\subsection*{(d)}
+We can check every combination of $S, T \in 2^N$, for the condition,
+
+\begin{equation}
+    v\left(S \cup T\right) + v\left(S \cap T\right) \geq v(S) + v(T).
+\end{equation}
+
+This is true for all sets hence the $G$ is convex. Furthermore, note that convexity always implies superadditivity.
 
 \end{document}
