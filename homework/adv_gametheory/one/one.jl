@@ -34,4 +34,6 @@ shapey = fₛ(G)
 
 print("Shapey value, $(shapey)\n")
 
-# Part c
+# Part d
+
+isconvex(G; verbose=true)

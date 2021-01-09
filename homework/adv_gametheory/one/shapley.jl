@@ -46,10 +46,12 @@ function fₛ(G::Game)
 end
 
 
-function isconvex(G::Game)
+function isconvex(G::Game; verbose=false)
     v = G.v
     for (T, S) in combinations(collect(powerset(G.N)), 2)
+
         if v(S ∪ T) + v(S ∩ T) < v(S) + v(T)
+            if verbose print("Failed for $S and $T\n") end
             return false
         end
     end
