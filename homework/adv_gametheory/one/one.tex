@@ -85,13 +85,25 @@ The first property, on the other hand, requires
 
 \begin{equation} \label{gr_req}
     \begin{split}
+        x_1 &\geq 1 \\
+        x_2 &\geq 2 \\
+        x_3 &\geq 0
+    \end{split}
+    \ \ \
+    \begin{split}
         x_1 + x_2 &\geq 3\\
         x_1 + x_3 &\geq 3\\
         x_2 + x_3 &\geq 2
     \end{split}
 \end{equation}
 
-There is no allocation $x$ that satisfies (\ref{sum_req}) and (\ref{gr_req}) hence $C(N, v) = \emptyset$.
+Combining (\ref{sum_req}) and (\ref{gr_req}) we know that the core allocation requires
+
+\begin{equation}
+    x_3 = 0 \implies x_1 \geq 3 \implies x_2 = 0 \Rightarrow\Leftarrow x_2 \geq 2,
+\end{equation}
+
+hence there is no allocation $x$ that satisfies (\ref{sum_req}) and (\ref{gr_req}) which implies that $C(N, v) = \emptyset$.
 
 \subsection*{(d)}
 
@@ -105,7 +117,7 @@ Convexity fails for $S = \set{1, 3}$ and $T = \set{2}$. Since,
     \end{split}
 \end{equation}
 
-
+Therefore the game is not convex.
 
 \section*{Exercise 2}
 
@@ -177,6 +189,6 @@ We can check every combination of $S, T \in 2^N$, for the condition,
     v\left(S \cup T\right) + v\left(S \cap T\right) \geq v(S) + v(T).
 \end{equation}
 
-This is true for all sets hence the $G$ is convex. Furthermore, note that convexity always implies superadditivity.
+This is true for all sets hence the $G$ is convex. Furthermore, convexity implies superadditivity, by taking $S, T$ such that $S \cap T = \emptyset$, hence the game is also superadditive.
 
 \end{document}
