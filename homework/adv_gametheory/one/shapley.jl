@@ -1,4 +1,4 @@
-using Combinatorics
+using Combinatorics, LazySets, Polyhedra
 
 subpowerset(a) = powerset(a, 1, length(a) - 1)
 
@@ -57,4 +57,28 @@ function isconvex(G::Game; verbose=false)
     end
 
     return true
+end
+
+# Polyhedra A matrix
+A = -1 * [
+    1 0 0;
+    0 1 0;
+    0 0 1;
+    1 1 0;
+    1 0 1;
+    0 1 1;
+    1 1 1
+]
+
+"""
+Use polyhedra representation of system of inequality to 
+find core of the game  
+"""
+function getcore(G::Game)
+    N, v = G.N, G.v
+    if length(N) != 3 throw("Core implemented only for N = 3!") end
+
+    b = -1. * [v(1), v(2), v(3), v([1, 2]), v([1, 3]), v([2, 3]), v(N)]
+    p = polyhedron(Polyhedra.hrep(A, b))
+
 end
