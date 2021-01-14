@@ -5,6 +5,8 @@
     \usepackage{amsmath}
     \usepackage{amssymb}
     \usepackage{graphicx}   
+    \usepackage{mathtools}
+
     
     \setlength{\parindent}{0em}
     \setlength{\parskip}{0.5em}
@@ -32,7 +34,13 @@
 
 \subsection*{(a)}
 
-We can compute the Harsanyi dividends recursively as,
+We can compute the Harsanyi dividends by using the recursive definition,
+
+\begin{equation}
+    \Delta_v(T) = v(T) - \sum_{S \subset T} \Delta_v(S).
+\end{equation}
+
+This yields,
 
 \begin{equation}
     \begin{split}
@@ -40,21 +48,43 @@ We can compute the Harsanyi dividends recursively as,
         \Delta_v(\set{2}) &= v(2) = 2 \\
         \Delta_v(\set{3}) &= v(3) = 0 \\
         \Delta_v(\set{1, 2}) &= v(\set{1, 2}) - \Delta_v(\set{1}) - \Delta_v(\set{2}) = 0 \\
-        \Delta_v(\set{1, 3}) &= v(\set{1, 3}) - \Delta_v(\set{1}) - \Delta_v(\set{3}) = 3 \\
-        \Delta_v(\set{2, 3}) &= v(\set{1, 3}) - \Delta_v(\set{1}) - \Delta_v(\set{3}) = 2 \\
+        \Delta_v(\set{1, 3}) &= v(\set{1, 3}) - \Delta_v(\set{1}) - \Delta_v(\set{3}) = 2 \\
+        \Delta_v(\set{2, 3}) &= v(\set{1, 3}) - \Delta_v(\set{1}) - \Delta_v(\set{3}) = 0 \\
         \Delta_v(\set{1, 2, 3}) &= v(\set{1, 2, 3}) - \Delta_v(\set{1, 2}) - \Delta_v(\set{2, 3}) - \Delta_v(\set{1, 3}) = -1  \\
     \end{split}
 \end{equation}
 
 \subsection*{(b)}
-
-Using the definition of Shapley value with Harsanyi dividends, we can compute,
+Let $N(i) \coloneqq \set{T: T \subseteq N \land \ i \in T}$. Using the definition of Shapley value with Harsanyi dividends, we can compute,
 
 \begin{equation} \label{shapley}
-    f_i^S = \sum_{T \in N(i)} \frac{1}{\abs{T}} \cdot \Delta_v(T)
+    f_i^S = \sum_{T \in N(i)} \frac{1}{\abs{T}} \cdot \Delta_v(T).
 \end{equation}
 
-this yields,
+This yields,
+
+\begin{equation}
+    \begin{split}
+        f^S_1 &= \frac{1}{3} \cdot\Delta_v(\set{1,2,3}) + \frac{1}{2}\cdot \Delta_v(\set{1,2}) + \frac{1}{2}\cdot \Delta_v(\set{1,3}) + \Delta_v(\set{1}) \\
+        &= - \frac{1}{3} + 0 + \frac{2}{2} + 1 =  \frac{5}{3}
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        f^S_2 &= \frac{1}{3} \cdot\Delta_v(\set{1,2,3}) + \frac{1}{2}\cdot \Delta_v(\set{1,2}) + \frac{1}{2}\cdot \Delta_v(\set{2,3}) + \Delta_v(\set{2}) \\
+        &= - \frac{1}{3} + 0 + 0 + 2 =  \frac{5}{3}
+    \end{split}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        f^S_3 &= \frac{1}{3} \cdot\Delta_v(\set{1,2,3}) + \frac{2}{3}\cdot \Delta_v(\set{1,2}) + \frac{1}{2}\cdot \Delta_v(\set{1,3}) + \Delta_v(\set{3}) \\
+        &= - \frac{1}{3} + 0 + \frac{2}{2} + 0 =  \frac{5}{3} = \frac{2}{3}
+    \end{split}
+\end{equation}
+
+hence,
 
 \begin{equation*}
     f^S = \begin{pmatrix}
@@ -127,33 +157,86 @@ The imputation set is defined as,
     I(N, v) = \set{ x \in \Real^N: \ \sum_{i \in N} x_i = v(N) \land x_i \geq v(i) \ \forall i \in N }.
 \end{equation}
 
-First, notice that, starting from the definition with Harsanyi dividends, we can rewrite the Shapley, for a single player as the $v(i)$ and a residual term.
 
-Let $N(i) = \set{T: T \subseteq N \land \ i \in T}$ and note that $\{i\} \subseteq N(i)$. Then we can write the Shapley value for $i$ as,
+
+First, we want to show that Shapley value has the first property of the elements in the imputation set,
+
+\begin{equation}
+    \sum_{i \in N} f_i^S = v(N).
+\end{equation}
+
+
+Let $N(i) \coloneqq \set{T: T \subseteq N \land \ i \in T}$ and interpret $S \subset T$ to mean every proper subset, $S \in 2^T \setminus T$.
+
+The sum over elements of the Shapley value is then,
+
+\begin{equation} \label{shap_sum_int}
+    \begin{split}
+        \sum_{i \in N} f_i^S &= \sum_{i \in N} \sum_{T \in N(i)} \frac{1}{\abs{T}} \cdot \Delta_v(T)\\
+        &= \sum_{i \in N} \frac{v(N) - \sum_{S \subset N}\Delta_v(S)}{\abs{N}} + \sum_{i \in N} \sum_{T \in N(i) \setminus N} \frac{1}{\abs{T}} \cdot \Delta_v(T) \\
+        &= v(N) - \sum_{S \subset N} \Delta_v(S)+ \sum_{i \in N} \sum_{T \in N(i) \setminus N} \frac{1}{\abs{T}} \cdot \Delta_v(T)
+    \end{split}
+\end{equation}
+
+In the third term, $\sum_{i \in N} \sum_{T \in N(i) \setminus N} \Delta_v(T) / \abs{T}$, each entry $\Delta_v(T)$ appears whenever $i \in T$. There are $\abs{T}$ such terms, hence we can write,
+
+
+\begin{equation}
+    \begin{split}
+        \sum_{i \in N} \sum_{T \in N(i) \setminus N} \frac{1}{\abs{T}} \cdot \Delta_v(T) &= \sum_{T \subset N} \abs{T} \cdot \frac{\Delta_v(T)}{\abs{T}} = \sum_{S \subset N} \Delta_v(S).
+    \end{split}
+\end{equation}
+
+This implies in (\ref{shap_sum_int}) that, $\sum_{i \in N} f_i^S = v(N)$.
+
+
+
+Next we want to show that the Shapley value has the second property,
+
+\begin{equation}
+    f_i^S \geq v(i).
+\end{equation}
+
+The aim is to rewrite the Shapley value for an individual player as $v(i)$ and a positive term. To do so, note that $\{i\} \in N(i)$. Then the Shapley value for $i$ is,
 
 \begin{equation}
     \begin{split}
         f^S_i &= \sum_{T \in N(i)} \frac{1}{\abs{T}} \cdot \Delta_v(T)\\
         &=  \sum_{T \in N(i)} \frac{1}{\abs{T}} \cdot \left( v(T) - \sum_{S \subset T} \Delta_v(S) \right) \\
-        &= v(i) + \sum_{T \in N(i) \setminus \set{i} } \frac{1}{\abs{T}} \cdot \left( v(T) - \sum_{S \subset T} \Delta_v(S) \right)
+        &= v(i) + \sum_{T \in N(i) \setminus \set{i} } \frac{1}{\abs{T}} \cdot \left( v(T) - \sum_{S \subset T} \Delta_v(S) \right).
     \end{split}
 \end{equation}
 
-where $S \subset T$ implies every proper subset $S \in 2^T \setminus T$.
-
-Consider now, for a given $T$, the term,
+We want now to show that
 
 \begin{equation} \label{diff}
-    v(T) - \sum_{S \subset T} \Delta_v(S).
+    v(T) - \sum_{S \subset T} \Delta_v(S),
 \end{equation}
 
-In this case $\abs{T} \neq 1$, since the only singleton in $N(i)$ is $\set{i}$ by construction. Now consider a set $T = \set{i, j} \in N(i), \ \abs{T} = 2$, then, by super additivity,
+is positive for all $T \in N(i) \setminus \set{i}$.
 
-\begin{equation}
-    v(T) = v\left( \set{i} \cup \set{j} \right) \geq v(i) + v(j) \implies v(T) - \sum_{S \subset T} \Delta_v(S) \geq 0
+Consider a set $D = \set{i, j} \in N(i), \ \abs{D} = 2$, then, by super additivity,
+
+\begin{equation} \label{first_step}
+    \begin{split}
+        v(D) = v\left( \set{i} \cup \set{j} \right) &\geq v(i) + v(j) \\
+        v\left( \set{i} \cup \set{j} \right) - \Delta_v(i) - \Delta_v(j) &\geq 0 \\
+        \Delta_v(D) = v(D) - \sum_{S \subset D} \Delta_v(S) &\geq 0
+    \end{split}
 \end{equation}
 
-By induction we can construct any bigger set $T$ as union of smaller sets and show that (\ref{diff}) is positive. If $v(T) -\sum_{S \subset T} \Delta_v(S) \geq 0 \ \forall T \in N(i)$, then
+Next take the extension set $M = D \cup \set{m} \in N(i)$. By super additivity and using (\ref{first_step}),
+
+\begin{equation} \label{second_step}
+    \begin{split}
+        v(M) = v(D \cup \set{m}) \geq v(D) + v(m) &= \Delta_v(D) + \Delta_v(i) + \Delta_v(j) + \Delta_v(m) \\
+        \implies \Delta_v(M) =  v(M) - \sum_{S \subset M} \Delta_v(S) &\geq 0
+    \end{split}
+\end{equation}
+
+By induction, we can construct any bigger set $T \in N(i)$ as done in (\ref{second_step}) for (\ref{first_step}). Hence for every $T \in N(i)$, (\ref{diff}) is positive.
+
+If $v(T) -\sum_{S \subset T} \Delta_v(S) \geq 0$ for every $T \in N(i)$, then
 
 \begin{equation}
     f^S_i = v(i) + \sum_{T \in N(i) \setminus \set{i} } \frac{1}{\abs{T}} \cdot \left( v(T) - \sum_{S \subset T} \Delta_v(S) \right) \geq v(i).
@@ -174,12 +257,55 @@ $v(\set{1, 2, 3}) = 20$.
 
 \subsection*{(b)}
 
-Using (\ref{shapley}) we obtain,
+We first compute the Harsanyi dividends,
+
+\begin{equation}
+    \begin{split}
+        \Delta_v(\set{1}) &= 0, \\
+        \Delta_v(\set{2}) &= 5, \\
+        \Delta_v(\set{3}) &= 0, \\
+        \Delta_v(\set{1, 2}) &= 10, \\
+        \Delta_v(\set{1, 3}) &= 5, \\
+        \Delta_v(\set{2, 3}) &= 5, \\
+        \Delta_v(\set{1, 2, 3}) &= -5
+    \end{split}
+\end{equation}
+
+Using (\ref{shapley}) and the same procedure as Exercise 1.b we obtain,
 
 \begin{equation}
     f^S = \begin{pmatrix}
-        35/6 & 65/6 & 10/3
+        35/6 & 65/6 & 20/6
     \end{pmatrix}
+\end{equation}
+
+\subsection*{(c)}
+
+To find the core of the game we need to find the set such that
+\begin{equation}
+    C(N, v) =
+    \begin{dcases}
+        \begin{rcases}
+            x \in \Real^3: \\
+            x_1 \geq 0, \ x_2 \geq 5, \ x_3 \geq 0\\
+            x_1 + x_2 \geq 15, \ x_1 + x_3 \geq 5, \ x_2 + x_3 \geq 10 \\
+            x_1 + x_2 + x_3 = 20
+        \end{rcases}
+    \end{dcases}\\
+\end{equation}
+
+The condition $x_1 + x_2 = 20 - x_3$ yields $x_3 \in [0, 5]$. By then combining with the other conditions we obtain $x_1 \in [0, 10]$ and $x_2 \in [5, 15]$. Hence the core is,
+
+\begin{equation}
+    C(N, v) =
+    \begin{dcases}
+        \begin{rcases}
+            x \in \Real^3: x_1 + x_2 + x_3 = 20 \\
+            x_1 \in [0, 10] \\
+            x_2 \in [5, 15] \\
+            x_3 \in [0, 5]
+        \end{rcases}
+    \end{dcases}
 \end{equation}
 
 \subsection*{(d)}
@@ -189,6 +315,65 @@ We can check every combination of $S, T \in 2^N$, for the condition,
     v\left(S \cup T\right) + v\left(S \cap T\right) \geq v(S) + v(T).
 \end{equation}
 
-This is true for all sets hence the $G$ is convex. Furthermore, convexity implies superadditivity, by taking $S, T$ such that $S \cap T = \emptyset$, hence the game is also superadditive.
+Every combination of $S$ and $T$ yields,
+
+\begin{equation*}
+    \begin{split}
+        S=\set{1}, T=\emptyset&: \ 0+0 \geq 0+0 \\
+        S=\set{2}, T=\emptyset&: \ 5+0 \geq 5+0 \\
+        S=\set{3}, T=\emptyset&: \ 0+0 \geq 0+0 \\
+        S=\set{1, 2}, T=\emptyset&: \ 15+0 \geq 15+0 \\
+        S=\set{1, 3}, T=\emptyset&: \ 5+0 \geq 5+0 \\
+        S=\set{2, 3}, T=\emptyset&: \ 10+0 \geq 10+0 \\
+        S=\set{1, 2, 3}, T=\emptyset&: \ 20+0 \geq 20+0 \\
+        S=\set{2}, T=\set{1}&: \ 15+0 \geq 5+0 \\
+        S=\set{3}, T=\set{1}&: \ 5+0 \geq 0+0 \\
+        S=\set{1, 2}, T=\set{1}&: \ 15+0 \geq 15+0 \\
+        S=\set{1, 3}, T=\set{1}&: \ 5+0 \geq 5+0 \\
+        S=\set{2, 3}, T=\set{1}&: \ 20+0 \geq 10+0 \\
+        S=\set{1, 2, 3}, T=\set{1}&: \ 20+0 \geq 20+0 \\
+        S=\set{3}, T=\set{2}&: \ 10+0 \geq 0+5 \\
+        S=\set{1, 2}, T=\set{2}&: \ 15+5 \geq 15+5 \\
+        S=\set{1, 3}, T=\set{2}&: \ 20+0 \geq 5+5 \\
+        S=\set{2, 3}, T=\set{2}&: \ 10+5 \geq 10+5 \\
+        S=\set{1, 2, 3}, T=\set{2}&: \ 20+5 \geq 20+5 \\
+        S=\set{1, 2}, T=\set{3}&: \ 20+0 \geq 15+0 \\
+        S=\set{1, 3}, T=\set{3}&: \ 5+0 \geq 5+0 \\
+        S=\set{2, 3}, T=\set{3}&: \ 10+0 \geq 10+0 \\
+        S=\set{1, 2, 3}, T=\set{3}&: \ 20+0 \geq 20+0 \\
+        S=\set{1, 3}, T=\set{1, 2}&: \ 20+0 \geq 5+15 \\
+        S=\set{2, 3}, T=\set{1, 2}&: \ 20+5 \geq 10+15 \\
+        S=\set{1, 2, 3}, T=\set{1, 2}&: \ 20+15 \geq 20+15 \\
+        S=\set{2, 3}, T=\set{1, 3}&: \ 20+0 \geq 10+5 \\
+        S=\set{1, 2, 3}, T=\set{1, 3}&: \ 20+5 \geq 20+5 \\
+        S=\set{1, 2, 3}, T=\set{2, 3}&: \ 20+10 \geq 20+10
+    \end{split}
+\end{equation*}
+
+Since the condition is true for all sets, the game is convex. Furthermore, convexity implies superadditivity, by taking $S, T$ such that $S \cap T = \emptyset$, hence the game is also superadditive.
+
+\section*{Exercise 4}
+
+In order to show that cooperative games are a generalization of hypergraphs, we will provide a construction that maps any cooperative game to an hypergraph and any hypergraph to some cooperative game.
+
+For the former, take the arbitrary cooperative game $(N, v)$ where $N$ is a finite set and $v: 2^N \mapsto \mathbb{R}$ with $v(\emptyset) = 0$. Now define $X \coloneqq N$ and
+
+\begin{equation}
+    E \coloneqq \set{S: S \in 2^N \land v(S) > 0 }.
+\end{equation}
+
+Note that $(X, E)$ is an hypergraph since $E \subseteq 2^N \setminus \emptyset$. Hence any hypergraph can be constructed by a cooperative game.
+
+For the latter, take the arbitrary hypergraph $(X, E)$. Let $N \coloneqq X$ and
+
+\begin{equation}
+    v: 2^N \mapsto \set{0, 1}, \ \
+    v(S) \coloneqq \begin{cases}
+        1 \  & \text{ if } S \in E    \\
+        0 \  & \text{ if } S \notin E
+    \end{cases}. \\
+\end{equation}
+
+Note then that $(N, v)$ is a cooperative game with a value function with image restricted to $0$ or $1$. Hence, not any cooperative game can be constructed from an hypergraph.
 
 \end{document}
