@@ -1,4 +1,6 @@
-using Combinatorics, LazySets, Polyhedra
+using Combinatorics
+
+# using LazySets, Polyhedra
 
 subpowerset(a) = powerset(a, 1, length(a) - 1)
 
@@ -49,7 +51,7 @@ end
 function isconvex(G::Game; verbose=false)
     v = G.v
     for (T, S) in combinations(collect(powerset(G.N)), 2)
-
+        print("S=$S, T=$T:", v(S ∪ T), "+", v(S ∩ T), " > ", v(S), "+", v(T), "\n")
         if v(S ∪ T) + v(S ∩ T) < v(S) + v(T)
             if verbose print("Failed for $S and $T\n") end
             return false
@@ -60,7 +62,7 @@ function isconvex(G::Game; verbose=false)
 end
 
 # Polyhedra A matrix
-A = -1 * [
+A = [
     1 0 0;
     0 1 0;
     0 0 1;
@@ -78,7 +80,7 @@ function getcore(G::Game)
     N, v = G.N, G.v
     if length(N) != 3 throw("Core implemented only for N = 3!") end
 
-    b = -1. * [v(1), v(2), v(3), v([1, 2]), v([1, 3]), v([2, 3]), v(N)]
+    b = [v(1), v(2), v(3), v([1, 2]), v([1, 3]), v([2, 3]), v(N)]
     p = polyhedron(Polyhedra.hrep(A, b))
 
 end
