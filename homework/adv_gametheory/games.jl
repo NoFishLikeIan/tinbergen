@@ -1,3 +1,5 @@
+using LazySets, ModelingToolkit
+
 struct Game
     N::Array{Int}
     v::Function
@@ -23,10 +25,23 @@ end
 
 """
 Use polyhedra representation of system of inequality to 
-find core of the game  
+find core of the game.
 """
 function getcore(G::Game)
     N, v = G.N, G.v
     if length(N) != 3 throw("Core implemented only for N = 3!") end
 
+    vars = @variables x₁ x₂ x₃
+
+    p = HPolyhedron([
+        x₁ ≥ v(1), x₂ ≥ v(2), x₃ ≥ v(3),
+        x₁ + x₂ ≥ v([1, 2]), 
+        x₁ + x₃ ≥ v([1, 3]),  
+        x₂ + x₃ ≥ v([2, 3]),
+        x₁ + x₂ + x₃ == v(N)
+    ])
+
+    remove_redundant_constraints!(p)
+
+    return p
 end

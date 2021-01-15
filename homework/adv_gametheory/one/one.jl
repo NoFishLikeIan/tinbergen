@@ -1,5 +1,3 @@
-include("../shapley.jl")
-
 one, two, three = [1], [2], [3] # Players
 N = one ∪ two ∪ three
 
@@ -33,7 +31,3 @@ shapey_div = (i -> fₛⁱ(G, i)).(G.N)
 shapey = fₛ(G)
 
 print("Shapey value, $(shapey)\n")
-
-# Part d
-
-isconvex(G; verbose=true)
