@@ -1,4 +1,4 @@
-include("shapley.jl")
+include("../shapley.jl")
 
 one, two, three = [1], [2], [3] # Players
 N = one ∪ two ∪ three
