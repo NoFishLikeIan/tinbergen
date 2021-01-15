@@ -2,7 +2,7 @@ include("games.jl")
 include("shapley.jl")
 include("utils.jl")
 
-week = 1
+week = 0
 
 if week == 1
     include("one/one.jl")
