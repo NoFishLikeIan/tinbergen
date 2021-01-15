@@ -4,6 +4,16 @@ struct Graph
     L::Array{Tuple{Int,Int}}
 end
 
+function getdineigh(G::Graph)
+    neigh = [[] for i in G.N]
+
+    for (from, to) in G.L
+        push!(neigh[from], to)
+    end
+
+    return neigh
+end
+
 function getneigh(G::Graph)
     neigh = [[] for i in G.N]
 
@@ -14,7 +24,6 @@ function getneigh(G::Graph)
 
     return neigh
 end
-
 function getneigh(G::Graph, S::Array{Int})
     neigh = [[] for i in G.N]
 
@@ -29,19 +38,6 @@ function getneigh(G::Graph, S::Array{Int})
 end
 
 
-function isvalidpath(G::Graph, path::Array{Int})
-    neigh = getneigh(G)
-
-    for (j, from) in enumerate(path[1:end - 1])
-        to = path[j + 1]
-        if to ∉ neigh[from]
-            return false
-        end
-    end      
-    
-    return true
-end
-
 function traversefrom!(search::Array{Int}, neighbours, node::Int)
     if node ∉ search push!(search, node) end
 
@@ -51,7 +47,6 @@ function traversefrom!(search::Array{Int}, neighbours, node::Int)
         traversefrom!(search, neighbours, neigh)
     end
 end
-
 function traversefrom(neighbours, node::Int)
     search = Int[]
     traversefrom!(search, neighbours, node)
@@ -81,3 +76,5 @@ function graphtoMyerson(G::Graph)::Game
 end
 
 μ(G::Graph) = fₛ(graphtoMyerson(G))
+
+
