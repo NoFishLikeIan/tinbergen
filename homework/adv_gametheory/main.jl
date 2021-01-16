@@ -3,6 +3,7 @@ include("shapley.jl")
 include("utils.jl")
 include("graphgames.jl")
 include("cyclefree.jl")
+include("linkgames.jl")
 
 week = 2
 
