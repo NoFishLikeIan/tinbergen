@@ -57,7 +57,7 @@ end
 
 function subordinate(G::Graph)
 
-    F(j) = unique([k for (k, _) in Lⁱ(G, i) if !isempty(finddipath(G, k, j))])
+    F(j) = [j, [k for (_, k) in Lⁱ(G, i) if !isempty(finddipath(G, j, k))]...]
     
     return F
 end

@@ -1,6 +1,7 @@
 N = collect(1:6)
 L = [(1, 2), (1, 3), (2, 4), (3, 5), (4, 5), (5, 6)]
 
+v(n::Array{Any,1}) = isempty(n) ? 0 : v(S)
 v(n::Int) = v([n])
 v(S::Array{Int}) = (1 ∈ S && 6 ∈ S) ? 1 : 0
 
@@ -12,20 +13,20 @@ myers = graphtoMyerson(supply)
 
 for S in powerset(N)
     value = myers.v(S)
-    if value > 0 print("v($S) = $(value)\n") end
+    if value != 0 print("v($S) = $(value)\n") end
 end
 
 # Part b
 
 μ_s = μ(supply)
-print("μ = ", μ_s)
+print("μ = ", μ_s, "\n")
 
 L′ = filter(!=((1, 2)), L)
 
 brokensupply = Graph(N, v, L′)
 μ_b = μ(brokensupply)
-print("μ′ = ", μ_b)
+print("μ′ = ", μ_b, "\n")
  
 print(
     "Is fair? $(μ_s[1]) - $(μ_b[1]) = $(μ_s[2]) - $(μ_b[2]) -> ",
-    μ_s[1] - μ_b[1] == μ_s[2] - μ_b[2])
+    μ_s[1] - μ_b[1] == μ_s[2] - μ_b[2], "\n")

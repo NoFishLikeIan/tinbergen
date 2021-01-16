@@ -20,7 +20,7 @@ G = Game(N, v)
 
 # Part a
 
-for S in powerset(N, 1)
+for S in powerset(G.N, 1)
     dividend = Δ(G, S)
     print("Δ($S) = $(dividend)\n")
 end
