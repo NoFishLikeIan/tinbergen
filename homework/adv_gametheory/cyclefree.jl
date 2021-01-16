@@ -4,36 +4,34 @@ function findpath!(
     from::Int, to::Int)
 
     push!(path, from)
-    neighbours = neighs[from]
 
-    if isempty(neighbours) return 
-    elseif to ∈ neighbours
+    if isempty(neighs[from]) return 
+    elseif to ∈ neighs[from]
         push!(path, to)
         return path
     end
 
-    for n in filter(n -> n ∉ path, neighbours)
+    for n in filter(n -> n ∉ path, neighs[from])
         res = findpath!(path, neighs, n, to)
         if !isnothing(res) return res end
     end
 
     pop!(path) 
+    return
 end
 
 function findpath(G::Graph, from::Int, to::Int)
     neighs = getneigh(G)
     path = Int[]
     res = findpath!(path, neighs, from, to)
-    if isnothing(res) return [] 
-    else return path end
+    return isnothing(res) ? [] : path
 end
 
 function finddipath(G::Graph, from::Int, to::Int)
     neighs = getdineigh(G)
     path = Int[]
     res = findpath!(path, neighs, from, to)
-    if isnothing(res) return []
-    else return path end
+    return isnothing(res) ? [] : path
 end
 
 function Lⁱ(G, i)  
@@ -59,7 +57,7 @@ end
 
 function subordinate(G::Graph)
 
-    F(j) = [h for (_, h) in Lⁱ(G, i) if !isempty(finddipath(G, h, j))]
+    F(j) = unique([k for (k, _) in Lⁱ(G, i) if !isempty(finddipath(G, k, j))])
     
     return F
 end
@@ -72,3 +70,4 @@ function hⁱ(mG::Graph, i::Int)
 
     return [G.v(F̂(j)) - ∑(G.v(F̂(h)) for h in F̅(j)) for j in G.N]
 end 
+
