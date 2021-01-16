@@ -203,4 +203,101 @@ In a similar manner,
     \end{pmatrix}
 \end{equation}
 
+\subsection*{(e)}
+
+The link game $(L^\prime, r^{L^\prime})$ is given by the characteristic function,
+
+\begin{equation} \label{value_r}
+    \begin{split}
+        \bar{E} &=
+        \begin{dcases}
+            \begin{rcases}
+                \set{(1, 3), (3, 5), (5, 6)} \\
+                \set{(1, 3), (4, 2), (3, 5), (5, 6)} \\
+                \set{(1, 3), (3, 5), (5, 4), (5, 6)} \\
+                \set{(1, 3), (4, 2), (3, 5), (5, 4), (5, 6)}
+            \end{rcases}
+        \end{dcases}\\
+        r^{L^\prime}(E) &= \begin{cases}
+            1 & \text{ if } E \in \bar{E} \\
+            0 & \text{ otherwise }
+        \end{cases}
+    \end{split}
+\end{equation}
+
+
+The Shapley value of the link game is,
+
+\begin{equation}
+    f^{S}(L^\prime, r^{L^\prime}) = \begin{pmatrix}
+        1/3 &
+        0   &
+        1/3 &
+        0   &
+        1/3
+    \end{pmatrix}
+\end{equation}
+
+
+The associated position value is.
+
+\begin{equation}
+    \pi(v, L^\prime) = \begin{pmatrix}
+        1/6 &
+        0   &
+        1/3 &
+        0   &
+        1/3 &
+        1/6
+    \end{pmatrix}
+\end{equation}
+
+\section*{Exercise 2}
+
+A hierarchical outcome $h^i$ is in the $Core(N, v_L)$ if and only if,
+
+\begin{equation*}
+    \sum_{j \in S} h^i_j \geq v(S) \ \text{  and  } \
+    \sum_{j \in N} h^i_j = v(N).
+\end{equation*}
+
+First let the subordinates of $j$ be
+
+\begin{equation}
+    S^i_{j} \coloneqq \set{h: \ \exists (i_1, \dots, i_t) \ s.t. i_1 = j \land i_t = h \land (i_k, i_{k+1}) \in L^i \ \forall  \ k \in \set{1, \dots, t}}
+\end{equation}
+
+Entry $j$ in the hierarchical outcome can be written as,
+
+\begin{equation} \label{hier_def}
+    h^i_{j} = v(\hat{F}^i_j) - \sum_{h \in F^i_j}  v(\hat{F}^i_h).
+\end{equation}
+
+By superadditivity,
+
+\begin{equation}
+    \hat{F}^i_j = \set{j} \cup S^i_{j} \implies v(\hat{F}^i_j ) \geq v(j) + v(S^i_{j}).
+\end{equation}
+
+Furthermore,
+
+\begin{equation}
+    \hat{F}^i_h \subseteq S^i_{j} \ \forall h \in F^i_j \implies \bigcup_{h \in F^i_j} \hat{F}^i_h \subseteq S^i_{j} \implies \sum_{h \in F^i_j}  v(\hat{F}^i_h) \leq v(S^i_{j}).
+\end{equation}
+
+Combining these results, we can use (\ref{hier_def}), and show that,
+
+\begin{equation}
+    h^i_{j} = v(\hat{F}^i_j) - \sum_{h \in F^i_j}  v(\hat{F}^i_h) \geq v(j) + v(S^i_{j}) - \sum_{h \in F^i_j}  v(\hat{F}^i_h) \geq v(j).
+\end{equation}
+
+Given that $h^i_{j} \geq v(j)$, by superadditivity we can show that,
+
+\begin{equation}
+    \sum_{j \in S} h^i_{j} \geq \sum_{j \in S} v(j). % TODO: Need to show v(S) \geq \sum v(j)
+\end{equation}
+
+
+
+
 \end{document}
