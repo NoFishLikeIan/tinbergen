@@ -12,4 +12,5 @@ if week == 1
     include("one/three.jl")
 else week == 2
     include("two/supply.jl")
+    include("two/soc.jl")
 end
