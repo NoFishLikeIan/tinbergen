@@ -12,8 +12,12 @@
     \setlength{\parindent}{0em}
     \setlength{\parskip}{0.5em}
 
+    % Bibliography and citations
+    \usepackage[bibencoding=utf8, style=apa]{biblatex}
+    \bibliography{ref}
+
     
-    \title{Homework I - Advanced Game Theory }
+    \title{Homework II - Advanced Game Theory }
 
     % \subtitle{A critical essay on the existing literature}
 
@@ -36,6 +40,8 @@
 \maketitle
 
 \section*{Exercise 1}
+
+\subsection*{(a)}
 
 The graph representation of $(N, L)$ is,
 
@@ -60,7 +66,6 @@ The graph representation of $(N, L)$ is,
     \end{tikzpicture}
 \end{center}
 
-\subsection*{(a)}
 
 The function $v^L$ of the Myerson restricted game is,
 
@@ -290,59 +295,93 @@ Combining these results, we can use (\ref{hier_def}), and show that,
 \begin{equation}
     h^i_{j} = v(\hat{F}^i_j) - \sum_{h \in F^i_j}  v(\hat{F}^i_h) \geq v(j) + v(S^i_{j}) - \sum_{h \in F^i_j}  v(\hat{F}^i_h) \geq v(j).
 \end{equation}
-r
+
 Given that $h^i_{j} \geq v(j)$, by superadditivity we can show that,
 
 \begin{equation}
     \sum_{j \in S} h^i_{j} \geq \sum_{j \in S} v(j). % TODO: Need to show v(S) \geq \sum v(j)
 \end{equation}
 
+\section*{Exercise 3}
+
+Using the degree centrality as the Harsanyi degree solution allows for the dividends to be distributed proportionally to an agent weights within the graph. By computing the solution for the game $(N, L)$ from Exercise 1.a, we obtain,
+
+\begin{equation}
+    \phi^d(v, L) =
+    \frac{1}{24} \cdot \begin{pmatrix}
+        3 &
+        2 &
+        4 &
+        2 &
+        8 &
+        5
+    \end{pmatrix}.
+\end{equation}
+
+Such a result clearly highlights the usefulness of the measure since player $5$ is heavily rewarded for being necessary to connect $1$ and $6$. Another good property is that node $3$ is rewarded as much as $2$ and $4$ since it serves the same purpose within the graph. This property was not obtained with the Myerson value, in equation (\ref{myerson_complete}).
 
 \section*{Exercise 4}
 
 \subsection*{(a)}
 
-\iffalse
-    Let $A, B \in \mathcal{F}$ and $A \cap B = \emptyset$. Both sets are such that,
+Let $A, B \in \mathcal{F}$ and $A \cap B \neq \emptyset$. We need to show that $A \cup B \in \mathcal{F}$. Note that $B \in \mathcal{F}$ if and only if $B \subseteq M$ or $B \subseteq H$ or $B = (B \cap H) \cup M$.
 
-    \begin{equation}
-        \begin{split}
-            &(A \subseteq H) \ \lor \ (A \subseteq M) \ \lor \ (A = M \cup E \text{ where } E \subseteq H) \\
-            &(B \subseteq H) \ \lor \ (B \subseteq M) \ \lor \ (B = M \cup E \text{ where } E \subseteq H)
-        \end{split}
-    \end{equation}
-
-    Now consider $A \cup B$ and, without loss of generality, $A \subseteq H$. Then,
-
-    \begin{equation}
-        \begin{split}
-            A \cup B = \begin{cases}
-                \in H & \text{ if } B \subseteq H \\
-            \end{cases}
-        \end{split}
-    \end{equation}
-
-\fi
-
-Union stability requires that,
+The simple case where both sets are contained in either $H$ or $M$ is straight forward. Let $A, B \subseteq E \in \set{H, M}$, then
 
 \begin{equation}
-    A, B \in \mathcal{F} \ \land \ A \cap B = \emptyset \implies A \cup B \in \mathcal{F}
+    A \cup B \subseteq E \in \mathcal{F}.
 \end{equation}
 
-Let $B \subset M$ and $A \subseteq H$. Then,
+% Next
 
-\begin{equation}
+Consider now the case in which, without loss of generality, $B = (B \cap H) \cup M$. Using set algebra we can rewrite,
+
+\begin{equation} \label{gen_set}
     \begin{split}
-        &A, B \in \mathcal{F} \ \land \ A \cap B, \\
-        &A \cup B \not\subset H \ \land \ A \cup B \not\subset M \ \land \ M \not\subset A \cup B \implies A \cup B \notin \mathcal{F}.
+        A \cup B &= A \cup ((B \cap H) \cup M) \ \text{ by commutativity } \\
+        &= A \cup (B \cap H) \cup M \text{ by distributivity } \\
+        &= (A \cup B) \cap (A \cup H) \cup M
     \end{split}
 \end{equation}
 
-Hence $\mathcal{F}$ does not satisfy union stability.
+Now if $A \subseteq M$, then $A \cup B = B \in \mathcal{F}$. If $A \subseteq H$, we can rewrite (\ref{gen_set}) as,
 
-% Consider {1} in H and {3} in M in the example. {1, 3} is not in F
+\begin{equation}
+    \begin{split}
+        A \cup B &= ((A \cup B) \cap H) \cup M \in \mathcal{F}.
+    \end{split}
+\end{equation}
+
+Lastly, if $A = (A \cap H) \cup M$, then,
+
+\begin{equation}
+    \begin{split}
+        A \cup B &= ((A \cap H) \cup \underbrace{M \cup B}_{B}) \cap \underbrace{((A \cap H) \cup M \cup H)}_{N}) \cup M \\
+        &= ((A \cap H) \cup B) \cup M \\
+        &= ((A \cup B) \cap H) \cup M \in \mathcal{F}
+    \end{split}
+\end{equation}
+
+Hence, we have shown that,
+
+\begin{equation}
+    A, B \in \mathcal{F} \land A \cap B \neq \emptyset \implies A \cup B \in \mathcal{F}
+\end{equation}
 
 \subsection*{(b)}
+
+By \citeauthor{brink} (\citeyear{brink}), a set of feasible coalition $\mathcal{F} \subseteq 2^N$ is the set of of connected coalitions in some (undirected) communication graph if and only if it contains the empty set, it satisfies union stability, 2-accessibility, and normality. In our case the set contains the empty set and satisfies union stability (as proven in \textbf{(a)}).
+
+In our particular case $\mathcal{F}$ fails to satisfy 2-accessibility. Take $E = \set{1, 3, 4, 5}$. Clearly $\abs{E} \geq 2$. But,
+
+\begin{equation}
+    \begin{split}
+        E \setminus \set{i} \in \mathcal{F} &\iff i = 1  \\
+        &\implies \not\exists \ i, j \in E \land i \neq j: \ E \setminus \set{i}, E \setminus \set{j} \in \mathcal{F}.w
+    \end{split}
+\end{equation}
+
+\newpage
+\printbibliography
 
 \end{document}
