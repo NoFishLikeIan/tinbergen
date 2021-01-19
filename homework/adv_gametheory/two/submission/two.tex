@@ -290,7 +290,7 @@ Combining these results, we can use (\ref{hier_def}), and show that,
 \begin{equation}
     h^i_{j} = v(\hat{F}^i_j) - \sum_{h \in F^i_j}  v(\hat{F}^i_h) \geq v(j) + v(S^i_{j}) - \sum_{h \in F^i_j}  v(\hat{F}^i_h) \geq v(j).
 \end{equation}
-
+r
 Given that $h^i_{j} \geq v(j)$, by superadditivity we can show that,
 
 \begin{equation}
@@ -298,6 +298,51 @@ Given that $h^i_{j} \geq v(j)$, by superadditivity we can show that,
 \end{equation}
 
 
+\section*{Exercise 4}
 
+\subsection*{(a)}
+
+\iffalse
+    Let $A, B \in \mathcal{F}$ and $A \cap B = \emptyset$. Both sets are such that,
+
+    \begin{equation}
+        \begin{split}
+            &(A \subseteq H) \ \lor \ (A \subseteq M) \ \lor \ (A = M \cup E \text{ where } E \subseteq H) \\
+            &(B \subseteq H) \ \lor \ (B \subseteq M) \ \lor \ (B = M \cup E \text{ where } E \subseteq H)
+        \end{split}
+    \end{equation}
+
+    Now consider $A \cup B$ and, without loss of generality, $A \subseteq H$. Then,
+
+    \begin{equation}
+        \begin{split}
+            A \cup B = \begin{cases}
+                \in H & \text{ if } B \subseteq H \\
+            \end{cases}
+        \end{split}
+    \end{equation}
+
+\fi
+
+Union stability requires that,
+
+\begin{equation}
+    A, B \in \mathcal{F} \ \land \ A \cap B = \emptyset \implies A \cup B \in \mathcal{F}
+\end{equation}
+
+Let $B \subset M$ and $A \subseteq H$. Then,
+
+\begin{equation}
+    \begin{split}
+        &A, B \in \mathcal{F} \ \land \ A \cap B, \\
+        &A \cup B \not\subset H \ \land \ A \cup B \not\subset M \ \land \ M \not\subset A \cup B \implies A \cup B \notin \mathcal{F}.
+    \end{split}
+\end{equation}
+
+Hence $\mathcal{F}$ does not satisfy union stability.
+
+% Consider {1} in H and {3} in M in the example. {1, 3} is not in F
+
+\subsection*{(b)}
 
 \end{document}
