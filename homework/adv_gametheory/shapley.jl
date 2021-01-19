@@ -9,7 +9,7 @@ end
 Shapey value using Harsanyi dividends
 """
 function fₛⁱ(G::Game, i::Int)
-    ∑(Δ(G, T) / length(T) for T in powerset(N) if i ∈ T)
+    ∑(Δ(G, T) / length(T) for T in powerset(G.N) if i ∈ T)
 end
 
 """

@@ -37,6 +37,9 @@ function getneigh(G::Graph, S::Array{Int})
     return neigh
 end
 
+function degree(args...)
+    length.(getneigh(args...))
+end
 
 function traversefrom!(search::Array{Int}, neighbours, node::Int)
     if node ∉ search push!(search, node) end
@@ -77,4 +80,23 @@ end
 
 μ(G::Graph) = fₛ(graphtoMyerson(G))
 
+function harsanyidegree(G::Graph)
+    game = graphtoMyerson(G)
+    ϕ = zeros(Rational, length(G.N))
 
+    for S in powerset(G.N)
+        ds = degree(G, S)
+        dsum = sum(ds)
+        if dsum == 0 continue end
+
+        Δ_S = Δ(game, S)
+
+        for i in S
+            ϕ[i] += (Δ_S * ds[i]) // dsum
+        end
+
+    end
+
+
+    return ϕ
+end
