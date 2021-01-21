@@ -131,7 +131,7 @@ The new supply chain is represented by the graph,
 
 We can hence define
 
-\begin{equation}
+\begin{equation} \label{restr_v}
     v^{L^\prime}(S) = \begin{cases}
         0   & \text{ if } S = \set{1, 2, 4, 5, 6} \\
         v^L & \text{ otherwise }
@@ -159,7 +159,7 @@ In order to determine fairness we can check that,
 
 \subsection*{(d)}
 
-In order to compute the hierarchical outcome of node $1$ we need to set $1$ as root. The resulting directed graph $(N, L^1)$ can be represented as,
+In order to compute the hierarchical outcome of node $1$ we need to set $1$ as root. The resulting directed graph $(N, L^\prime)$ can be represented as,
 
 
 \vspace{1cm}
@@ -206,6 +206,30 @@ In a similar manner,
     h^6(v, L^\prime) = \begin{pmatrix}
         0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 1
     \end{pmatrix}
+\end{equation}
+
+In order for the outcomes to belong to the $Core(v_{L^\prime})$ they need to satisfy, $\sum_{j \in N} h_j^i = v(N) = 1$ and $\sum_{j \in S}  h_j^i \geq v(S)$. The first condition is trivially satisfied since all three outcomes have one entry $1$ and all other entries $0$. The second one can be shown by using the value function (\ref{restr_v}).
+
+First note that,
+
+\begin{equation}
+    v(S) = 1 \implies \set{1, 5, 6} \subset S.
+\end{equation}
+
+Furthermore,
+
+\begin{equation}
+    \begin{split}
+        \sum_{j \in S} h_j^1 &= 1 \iff 1 \in S \\
+        \sum_{j \in S} h_j^4 &= 1 \iff 5 \in S \\
+        \sum_{j \in S} h_j^6 &= 1 \iff 6 \in S
+    \end{split}
+\end{equation}
+
+Hence whenever $v(S) = 1$, the sum of the hierarchical outcomes needs to be one. Namely,
+
+\begin{equation}
+    \left(v(S) = 1 \implies \sum_{j \in S} h_j^i = 1\right) \implies \sum_{j \in S} h_j^i \geq v(S).
 \end{equation}
 
 \subsection*{(e)}
@@ -262,15 +286,9 @@ The associated position value is.
 A hierarchical outcome $h^i$ is in the $Core(N, v_L)$ if and only if,
 
 \begin{equation*}
-    \sum_{j \in S} h^i_j \geq v(S) \ \text{  and  } \
+    \sum_{j \in E} h^i_j \geq v(E) \ \text{  and  } \
     \sum_{j \in N} h^i_j = v(N).
 \end{equation*}
-
-First let the subordinates of $j$ be
-
-\begin{equation}
-    S^i_{j} \coloneqq \set{h: \ \exists (i_1, \dots, i_t) \ s.t. i_1 = j \land i_t = h \land (i_k, i_{k+1}) \in L^i \ \forall  \ k \in \set{1, \dots, t}}
-\end{equation}
 
 Entry $j$ in the hierarchical outcome can be written as,
 
@@ -278,33 +296,84 @@ Entry $j$ in the hierarchical outcome can be written as,
     h^i_{j} = v(\hat{F}^i_j) - \sum_{h \in F^i_j}  v(\hat{F}^i_h).
 \end{equation}
 
-By superadditivity,
+Pick a component of the graph $S \subseteq N$. Let the entry points of the component, that is, those nodes that are not followers of a node in the component, be
 
 \begin{equation}
-    \hat{F}^i_j = \set{j} \cup S^i_{j} \implies v(\hat{F}^i_j ) \geq v(j) + v(S^i_{j}).
+    I(S) = \set{h: h \notin F_j^i \ \ \forall j \in S }.
 \end{equation}
 
-Furthermore,
+Analogously, let the exit points of the component be,
 
 \begin{equation}
-    \hat{F}^i_h \subseteq S^i_{j} \ \forall h \in F^i_j \implies \bigcup_{h \in F^i_j} \hat{F}^i_h \subseteq S^i_{j} \implies \sum_{h \in F^i_j}  v(\hat{F}^i_h) \leq v(S^i_{j}).
+    O(S) = \set{j: h \notin S \ \ \forall h \in F_j^i }.
 \end{equation}
 
-Combining these results, we can use (\ref{hier_def}), and show that,
+Finally let the set of middle nodes be, $M(S) = \set{j: j \in S \land j \notin I(S)\land j \notin O(S)}$. The sum of the hierarchical outcomes within a component are,
 
 \begin{equation}
-    h^i_{j} = v(\hat{F}^i_j) - \sum_{h \in F^i_j}  v(\hat{F}^i_h) \geq v(j) + v(S^i_{j}) - \sum_{h \in F^i_j}  v(\hat{F}^i_h) \geq v(j).
+    \begin{split}
+        \sum_{j \in S} h_j^i &= \sum_{j \in I(S)} h_j^i + \sum_{m \in M(S)} h_m^i + \sum_{o \in O(S)} h_o^i
+    \end{split}
 \end{equation}
 
-Given that $h^i_{j} \geq v(j)$, by superadditivity we can show that,
+Now notice that in the middle term in the only relevant nodes are the ones on the ``boundaries'', that is,
+
+\begin{equation} \label{inner_simpl}
+    \begin{split}
+        \sum_{m \in M(S)} h_m^i &= \sum_{m \in M(S)} \left( v(\hat{F}^i_m) - \sum_{h \in F^i_m}  v(\hat{F}^i_h) \right) \\
+        &= \sum_{m \in \cup_{j \in I(S)} F^i_j} v(\hat{F}^i_m) - \sum_{m: j \in O(S) \land j \in F^i_m} v(\hat{F}^i_m)
+    \end{split}
+\end{equation}
+
+All terms that are not a follower of an entry node, $\cup_{j \in I(S)} F_j^i$, or are not followed by a exit node, $\set{m: j \in I(S) \land j \in F^i_m}$, are simplified since they come in first negatively in the hierarchical value entry for node $m$ and subsequently positively for the hierarchical value entry for the nodes following $m$. To illustrate this, for an $m \in M(S)$, equation (\ref{inner_simpl}) yields,
 
 \begin{equation}
-    \sum_{j \in S} h^i_{j} \geq \sum_{j \in S} v(j). % TODO: Need to show v(S) \geq \sum v(j)
+    v(\hat{F}_m^i) - \sum_{h \in F^i_m} v(\hat{F}_h^i) + \sum_{h \in F^i_m} v(\hat{F}_h^i) - \sum_{h \in F^i_m} \sum_{k \in F^i_k} v(\hat{F}_k^i) \ldots
 \end{equation}
+
+Using equation (\ref{inner_simpl}), we can rewrite,
+
+\begin{equation} \label{component_breakup}
+    \begin{split}
+        \sum_{j \in S} h_j^i &= \sum_{j \in I(S)} v(\hat{F}_j^i) \underbrace{- \sum_{j \in I(S)} \sum_{h \in F_h^i}  v(\hat{F}_h^i)+
+            \sum_{m \in \cup_{j \in I(S)} F^i_j} v(\hat{F}^i_m)}_{= 0} - \\ & \underbrace{- \sum_{m: j \in O(S) \land j \in F^i_m} v(\hat{F}^i_m)
+            + \sum_{o \in O(S)} v(\hat{F}^i_o)}_{=0} - \sum_{h: h \in F_j^i \land h \in O(S)} v(F^i_h) \\
+        &= \sum_{j \in I(S)} v(\hat{F}_j^i) - \sum_{h: h \in F_j^i \land j \in O(S)} v(F^i_h)
+    \end{split}
+\end{equation}
+
+Where $\set{h: h \in F_j^i \land j \in O(S)}$ is the set of subordinates of an exit node.
+
+We can now rewrite the union of all subordinates of an entry node as,
+
+\begin{equation}
+    \begin{split}
+        \bigcup_{j \in I(S)} \hat{F}^i_j &= \bigcup_{h \in F_j^i \land j \in O(S)} \hat{F}^i_j \cup S \text{ by superadditivity } \\
+        v\left( \bigcup_{j \in I(S)} \hat{F}^i_j \right) &\geq v\left( \bigcup_{h \in F_j^i \land j \in O(S)} \hat{F}^i_h \right) + v(S)
+    \end{split}
+\end{equation}
+
+This implies that,
+
+\begin{equation} \label{cond_one}
+    \sum_{j \in S} h_j^i \geq v(S),
+\end{equation}
+
+for all connected components $S$.
+
+Take now the full graph $N$. Trivially $O(N) = \emptyset$ and $I(S) = \set{i}$. Using equation (\ref{component_breakup}) and the fact that $O(N) = \emptyset \implies \set{h: h \in F_j^i \land j \in O(N)} = \emptyset$,
+
+\begin{equation} \label{cond_two}
+    \sum_{j \in N} h^i_j = \sum_{j \in I(N)} v(\hat{F}_j^i) - \sum_{h: h \in F_j^i \land j \in O(N)} v(F^i_h) = v(\hat{F}_i^i) = v(N)
+\end{equation}
+
+Results (\ref{cond_one}) and (\ref{cond_two}) show that the hierarchical outcomes of a superadditive game on a cycle-free graph are in the core.
 
 \section*{Exercise 3}
 
-Using the degree centrality as the Harsanyi degree solution allows for the dividends to be distributed proportionally to an agent weights within the graph. By computing the solution for the game $(N, L)$ from Exercise 1.a, we obtain,
+The Harsanyi degree solution solution seems to have an advantage, as opposed to other solution like the hierarchical outcomes or the position value, in encoding the local structure of the graph. Namely, using the degree of nodes as weights to allocate the Harsanyi dividends rewards nodes that not only have large marginal contributions but also increase the number of components that are connected.
+
+For illustration purposes consider the Harsanyi degree solution of game $(N, L)$ from Exercise 1.a,
 
 \begin{equation}
     \phi^d(v, L) =
@@ -377,7 +446,7 @@ In our particular case $\mathcal{F}$ fails to satisfy 2-accessibility. Take $E =
 \begin{equation}
     \begin{split}
         E \setminus \set{i} \in \mathcal{F} &\iff i = 1  \\
-        &\implies \not\exists \ i, j \in E \land i \neq j: \ E \setminus \set{i}, E \setminus \set{j} \in \mathcal{F}.w
+        &\implies \not\exists \ i, j \in E \land i \neq j: \ E \setminus \set{i}, E \setminus \set{j} \in \mathcal{F}.
     \end{split}
 \end{equation}
 
