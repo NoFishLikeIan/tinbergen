@@ -316,7 +316,7 @@ Finally let the set of middle nodes be, $M(S) = \set{j: j \in S \land j \notin I
     \end{split}
 \end{equation}
 
-Now notice that in the middle term in the only relevant nodes are the ones on the ``boundaries'', that is,
+Now notice that in the middle term the only relevant nodes are the ones on the ``boundaries'', that is,
 
 \begin{equation} \label{inner_simpl}
     \begin{split}
@@ -344,12 +344,13 @@ Using equation (\ref{inner_simpl}), we can rewrite,
 
 Where $\set{h: h \in F_j^i \land j \in O(S)}$ is the set of subordinates of an exit node.
 
-We can now rewrite the union of all subordinates of an entry node as,
+We can now rewrite the subordinates of an entry node $j \in I(S)$ as the union of the set and all the corresponding exit nodes.
 
 \begin{equation}
     \begin{split}
-        \bigcup_{j \in I(S)} \hat{F}^i_j &= \bigcup_{h \in F_j^i \land j \in O(S)} \hat{F}^i_j \cup S \text{ by superadditivity } \\
-        v\left( \bigcup_{j \in I(S)} \hat{F}^i_j \right) &\geq v\left( \bigcup_{h \in F_j^i \land j \in O(S)} \hat{F}^i_h \right) + v(S)
+        \hat{F}^i_j &= \bigcup_{h \in F_j^i \land j \in O(S)} \hat{F}^i_h \cup S \text{ by superadditivity } \\
+        v\left( \hat{F}^i_j \right) &\geq \sum_{h \in F_j^i \land j \in O(S)} v( \hat{F}^i_h) + v(S) \\
+        \sum_{j \in I(S)} v(\hat{F}_j^i) - \sum_{h \in F_j^i \land j \in O(S)} v( \hat{F}^i_h) &\geq v(S)
     \end{split}
 \end{equation}
 
@@ -359,7 +360,7 @@ This implies that,
     \sum_{j \in S} h_j^i \geq v(S),
 \end{equation}
 
-for all connected components $S$.
+for all components $S$.
 
 Take now the full graph $N$. Trivially $O(N) = \emptyset$ and $I(S) = \set{i}$. Using equation (\ref{component_breakup}) and the fact that $O(N) = \emptyset \implies \set{h: h \in F_j^i \land j \in O(N)} = \emptyset$,
 
