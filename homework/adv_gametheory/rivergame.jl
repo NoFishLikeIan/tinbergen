@@ -41,3 +41,12 @@ function makeriver(c::Vector{Float64}, e::Vector{Float64})
 
     return Graph(N, v, L)
 end
+
+function marginalvector(R::Graph)
+
+    mᵘ = [ R.v(1:i) - R.v(1:(i - 1)) for i in R.N ]
+    mˡ = [ R.v(1:i) - R.v(1:(i - 1)) for i in reverse(R.N) ]
+    fᵉ = @. (mᵘ + mˡ) / 2
+
+    return mᵘ, mˡ, fᵉ
+end
