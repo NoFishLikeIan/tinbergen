@@ -7,10 +7,16 @@
     \usepackage{graphicx}   
     \usepackage{mathtools}
     \usepackage{tikz}
+    \usepackage{graphicx}
 
     
     \setlength{\parindent}{0em}
     \setlength{\parskip}{0.5em}
+
+    
+    % Bibliography and citations
+    \usepackage[bibencoding=utf8, style=apa]{biblatex}
+    \bibliography{ref}
 
     
     \title{Homework II - Advanced Game Theory }
@@ -34,6 +40,176 @@
 \maketitle
 
 \section*{Exercise 1}
+
+\subsection*{(a)}
+
+The benefit function of an allocation can be written as,
+
+\begin{equation}
+    b(x) = b^T x, \text{ where } x = \begin{pmatrix}
+        x_1 & x_2 & x_3
+    \end{pmatrix}^T \text{ and }b^T = \begin{pmatrix}
+        2 & 4 & 7
+    \end{pmatrix}
+\end{equation}
+
+The water distribution problem, constraint by the water allocation vector $e = \begin{pmatrix} 1 & 0 & 0 \end{pmatrix}^T$ is,
+
+\begin{equation}
+    x^* = \arg\max_{x}  b^T x, \ \text{ s.t. } A x \leq e,
+\end{equation}
+
+where $A = \begin{pmatrix}
+        1 & 0 & 0 \\
+        1 & 1 & 0 \\
+        1 & 1 & 1
+    \end{pmatrix}$.
+
+Given the linearity of the problem it is easy to see that the optimal water allocation problem, restricted to a coalition $S$, yields,
+
+\begin{equation} \label{opt_all_river}
+    x^*_i = \begin{cases}
+        \sum_{i \in S} e_i & \text{ if } i = \max_{j \in S} j \\
+        0                  & \text{ otherwise}
+    \end{cases}
+\end{equation}
+
+So that all the resources available to a coalition goes to the furthest downstream node. Such that for example, $S = N \implies x = \begin{pmatrix} 0 & 0 & 1 \end{pmatrix}^T$.
+
+Using this optimal allocation we obtain the value function,
+
+\begin{equation}
+    v(S) = \begin{cases}
+        2 & \text{ if } S = \set{1}    \\
+        4 & \text{ if } S = \set{1, 2} \\
+        7 & \text{ if } S = N          \\
+        0 & \text{ otherwise }
+    \end{cases}
+\end{equation}
+
+\subsection*{(b)}
+
+First we can compute the marginal vector $m^u(v)$, by looking at the permutation $u = (1, 2, 3)$. Then,
+
+\begin{equation}
+    m^u(v) = \begin{pmatrix}
+        v(1)                 \\
+        v(\set{1, 2}) - v(1) \\
+        v(N) - v(\set{1, 2})
+    \end{pmatrix} = \begin{pmatrix}
+        2 &
+        2 &
+        3
+    \end{pmatrix}^T
+\end{equation}
+
+Doing the same for $m^l(v)$, with permutation $l = (3, 2, 1)$, we obtain,
+
+\begin{equation}
+    m^l(v) =  \begin{pmatrix}
+        7 &
+        0 &
+        0
+    \end{pmatrix}^T
+\end{equation}
+
+Then, \begin{equation}
+    f^e(v) = \frac{1}{2} \cdot (m^l(v) + m^u(v)) = \begin{pmatrix}
+        4.5 & 1 & 1.5
+    \end{pmatrix}^T
+\end{equation}
+
+Finally to compute the Shapley value of the game we can compute the Harsanyi dividends, which are trivially,
+
+\begin{equation}
+    \Delta(S)  = \begin{cases}
+        2 & \text{ if } S = \set{1}    \\
+        2 & \text{ if } S = \set{1, 2} \\
+        3 & \text{ if } S = N          \\
+        0 & \text{ otherwise }
+    \end{cases}
+\end{equation}
+
+which yield a Shapley value of,
+
+\begin{equation}
+    f^{Sh}(v) = \begin{pmatrix}
+        4 & 2 & 1
+    \end{pmatrix}^T.
+\end{equation}
+
+\subsection*{(c)}
+
+If $e_3 > 1$, then the optimal allocation remains the one described in (\ref{opt_all_river}) since the constraint changes and $\nabla b$ remains constant.
+
+Given this result, in case of the marginal vector $m^l$ or $m^u$, the final node in the permutation would capture all the extra benefit of increased water supply in $e_3$. So that in $m^u$ the allocation for $1$ and $2$ would not change. Likewise in $m^l$ the allocation for $1$ would be,
+
+\begin{equation}
+    m^l_1 = b^T \left(\begin{pmatrix}
+            0 \\ 0 \\ e_1 + e_3
+        \end{pmatrix} - \begin{pmatrix}
+            0 \\ 0 \\ e_3
+        \end{pmatrix} \right) = b_3 \cdot e_1
+\end{equation}
+
+so that 1's payoff does not change, since he only capture his contribution to the added benefit of the coalition. This implies that allocation of 1 and 2 in $f^e$ does not change as well.
+
+In a similar manner the Shapley value does not yield a higher allocation for 1 and 2, since their dividends Harsanyi dividends remain unchanged.
+
+\subsection*{(d)}
+
+
+In a line graph $[1, n]$, the hierarchical outcomes associated with roots $1$ and $n$ are,
+
+\begin{equation}
+    \begin{split}
+        h^n_k &= v[1, k] - v[1, k - 1] = m^u_k \\
+        h^1_k &= v[k, n] - v[k+1, n] = m^l_k
+    \end{split}
+\end{equation}
+
+since $F^1_k = \set{k + 1}$ and $F^n_{k + 1} = \set{k}$. In our case, with $n = 3$, this allows use the values of part (b),
+
+\begin{equation}
+    \begin{split}
+        h^3 = m^u = \begin{pmatrix}
+            2 &
+            2 &
+            3
+        \end{pmatrix}^T \\
+        h^1 = m^l = \begin{pmatrix}
+            7 &
+            0 &
+            0
+        \end{pmatrix}^T.
+    \end{split}
+\end{equation}
+
+In order to compute $h^2$, using the directed graph $L^2 = \set{(2, 1), (2, 3)}$, yields,
+
+\begin{equation}
+    h^2 = \begin{pmatrix}
+        v(1) \\ v(\set{1,2,3}) - v(1) - v(2) \\ v(3)
+    \end{pmatrix} = \begin{pmatrix}
+        2 \\ 5 \\ 0
+    \end{pmatrix}
+\end{equation}
+
+\subsection*{(e)}
+
+In order for the outcomes to belong to the $Core(v)$ they need to satisfy, $\sum_{j \in N} h_j^i = v(N) = 1$ and $\sum_{j \in S}  h_j^i \geq v(S)$.
+
+The first condition is satisfied since $v(N) = 7 = \sum_{j \in N} h_j^i \ \forall i$. Let's check the second condition for every $S \subset N$. Note that it is sufficient to only check the connected coalitions with $1$ in them, since $1$ has the only source of water. If this is not the case for a coalition $S$, then $v(S) = 0 \leq \sum_{j} h_j^i$. The remaining coalitions are then $\set{1, 2}$ and $\set{1}$. Then,
+
+\begin{equation}
+    \begin{split}
+        S = \set{1}&, \ (h^1_1, h^2_1, h^3_1) = (7, 2, 2) \geq v(S) = 2 \\
+        S = \set{1, 2}&, \ \sum_{j \in S} (h^1_j, h^3_j, h^3_j) = (7, 7, 4) \geq v(S) = 4 \\
+    \end{split}
+\end{equation}
+
+
+Hence the second condition is also satisfied and $h^i \in Core(v) \ \forall i$.
 
 \section*{Exercise 2}
 
@@ -117,5 +293,66 @@ I believe modelling \textit{Absolute Territorial Sovereignty} via \textit{core-s
 
 $\alpha$\textit{-TIBS fairness} is satisfied if the gains of cooperating between to coalitions are divided among all members proportionally to a weight vector $\alpha$. This notion is a correct formalization of the notion of \textit{Territorial Integration of all Basin States}. In particular, the latter requires that the ownership over the watercourse is shared among all basin states independently of the entry of the water course. This implies that an allocation which satisfies $\alpha$\textit{-TIBS fairness} and where the weight vector $\alpha$ is independent of the water course entry vector $e$ respects the \textit{TIBS} principle.
 
+
+
+\section*{Exercise 4}
+
+\subsection*{(a)}
+
+First notice that $2 \abs{N} \over 3 = 6$. Hence,
+
+\begin{equation}
+    v^L(S) = \begin{cases}
+        1  \text{ if $S$ is connected and } \abs{S} \geq 6 \\
+        0 \text{ otherwise }
+    \end{cases}
+\end{equation}
+
+
+This implies that the in the marginal vector $m^u$ the only marginal contribution is given by the sixth node, which is the first in the $u$ permutation to yield $\abs{\set{1, \dots i}} \geq 6$. Hence the $m^u_i = 1 \text{ if } i = 6 \text{ and } 0$ otherwise. Likewise, $m^l_i$ is 1 if $n - i = 6, i = 4$ and $0$ otherwise since, $\abs{\set{4, \dots n}} = 6$. Then $f^e$ is simply the average of the two vectors, namely,
+
+\begin{equation}
+    \begin{split}
+        m^u &= \begin{pmatrix} 0 &0 &0 &0 &0 &1 &0 &0 &0 \end{pmatrix} \\
+        m^l &= \begin{pmatrix} 0 &0 &0 &1 &0 &0 &0 &0 &0 \end{pmatrix} \\
+        f^e &= \begin{pmatrix} 0 &0 &0 &0.5 &0 &0.5 &0 &0 &0 \end{pmatrix}
+    \end{split}.
+\end{equation}
+
+As before, we need to check that $\sum_{i \in N} m^u = \sum_{i \in N} m^l = \sum_{i \in N} f^e = v(N) $. This is satisfied since all allocations sum to $1$. It is also necessary that,
+
+\begin{equation}
+    \sum_{i \in S} x_i \geq v(S), \ x \in \set{m^u, m^l, f^e}.
+\end{equation}
+
+First note that for any $S$ such that $V(S) = 0$, the condition is trivially satisfied since $x_i \geq 0 \ \forall i$. Let the coalitions that are connected and have order 6 be $M = \set{[1, 6], [2, 7], [3, 8], [4, 9]}$. All of the coalitions in $M$ have value of 1, and a coalition has value of 1 if and only if it is a superset of a coalition in $M$.
+
+Given that $x_i = 1 \implies i \in \set{4, 6} \implies i \in I \  \forall \ I \in M$, it holds that,
+
+\begin{equation}
+    \sum_{j \in S} x_j = 1 \implies v(S) = 1 \implies \sum_{j \in S} x_j \geq v(S).
+\end{equation}
+
+Therefore the three allocations $m^u, m^l, f^e$ are in the $Core(v^L)$.
+
+\subsection*{(b)}
+
+As proven by \citeauthor{borm} (\citeyear{borm}), if $v$ is convex and $L$ is cycle-complete, $f^{Sh}(v^L) = \mu(v, L) \in Core(v^L)$.
+
+In our case $L$ has no cycles since it is a line-game, hence $L$ is trivially cycle-complete.
+
+Now we want to prove that $v$ is convex, namely, $v(S \cup T) + v(S \cap T) \geq v(S) + v(T)$. Take $S$ and $T$, arbitrary coalitions in $N$.
+% FIXME: This is not an if and only if
+This is not convex, $S = [1, 6], T = [4, 9]$
+
+\begin{equation}
+    \begin{split}
+        v[1, 9] + v[4, 6] &< v[1, 6] + v[4, 9] \\
+        1 &< 1+ 1
+    \end{split}
+\end{equation}
+
+\newpage
+\printbibliography
 
 \end{document}
