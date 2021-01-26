@@ -35,5 +35,77 @@
 
 \section*{Exercise 1}
 
+\section*{Exercise 2}
+
+The $Core(v^L)$ of the Myerson restricted game $(N, v^L)$ where $L$ is a line graph, is defined as,
+
+\begin{equation}
+    Core(v^L) \coloneqq \set{x \in \Real^N: \ \sum_{i \in S} x_i \geq v^L(S) \land \sum_{i \in N} x_i = v^L(N)}.
+\end{equation}
+
+The upper equivalent marginal vector $m^u(v^L)$ is the marginal vector associated with the permutation of $N$, $u = (1, 2, \ldots, n)$. Hence we can write,
+
+\begin{equation} \label{mu_def}
+    m^u_i(v^L) = v^L[1, i] - v^L[1, i-1].
+\end{equation}
+
+Hereafter we will denote the vector $m^u_i$ and the value function $v$ for simplicity.
+
+Let $S$ be a connected coalition, hence it can be represented as $S=[l, r]$. We can then rewrite,
+
+\begin{equation} \label{conn_res}
+    \begin{split}
+        \cup_{i \in S} [1, i] &= [1, \max_{k \in S} k] = [1, \min_{j \in S}j] \cup \underbrace{[\min_{j \in S}j, \max_{k \in S}k]}_{S}\\
+        \implies & [1, r] = [1, l - 1] \cup S \\
+        \implies & v[1, r] - v[1, l - 1]  \geq  v(S) \text{ by superadditivity of } v \\
+    \end{split}
+\end{equation}
+
+Using now equation (\ref{mu_def}).
+
+\begin{equation} \label{incore}
+    \begin{split}
+        \sum_{i \in S} m^u_i &= \sum_{i \in S = [l, r]} \left(v[1, i] - v[1, i-1]\right) \\
+        &= v[1, r] - v[1, r - 1] + v[1, r -1] - v[1,  r - 2] \ldots + v[1, l] - v[1, l-1] \\
+        &= v[1, r] - v[1, l - 1] \geq v(S) \text{ by (\ref{conn_res}).}
+    \end{split}
+\end{equation}
+
+This result can easily be extended to a not connected coalition, since we can rewrite the coalition as a union of disjoint connected sets, namely, $S = [l, i_1] \cup [i_2, i_3] \cup \dots \cup [i_n, r] = \cup_i I_i$ where $I_i \in \mathcal{I}$.This allow us to derive again equation (\ref{conn_res}) as,
+
+\begin{equation}
+    \begin{split}
+        [1, r] = [1, l - 1] \cup \underbrace{\left(\bigcup_i I_i\right)}_{S} \cup \left([1, r] \cap S\right)^c \\
+        v[1, r] - v[1, l - 1] - v\left([1, r] \cap S\right)^c \geq v(S)
+    \end{split}
+\end{equation}
+
+Then (\ref{incore}) yields,
+
+\begin{equation} \label{greater}
+    \begin{split}
+        \sum_{i \in S} m^u_i &= \sum_{i \in \cup_i I_i} \left(v[1, i] - v[1, i-1]\right) \\
+        &= v[1, r] - v[1, i_n - 1] + v[1, i_{n-1}] - v[1, i_n - 2] \ldots + v[1, i_1] - v[1, l-1] \\
+        &\geq v\left(\bigcup_i I_i\right) = v(S),
+    \end{split}
+\end{equation}
+
+by noting that, via superadditivity,
+
+\begin{equation}
+    v\left([1, r] \cap S\right)^c \geq v[1, i_n - 1] - v[1, i_{n-1}] + v[1, i_n - 2] \ldots - v[1, i_1].
+\end{equation}
+
+Now consider the case where $S = N$. Trivially $N \in \mathcal{I}$. Furthermore, using equation (\ref{incore}), and $[l, r] = [0, n]$, we obtain,
+
+\begin{equation} \label{Nincore}
+    \begin{split}
+        \sum_{i \in N} m^u_i &= \sum_{i \in N} \left(v[1, i] - v[1, i-1]\right) \\
+        &= v[1, n] - v(\emptyset) = v(N).
+    \end{split}
+\end{equation}
+
+The equations \ref{greater} and \ref{Nincore} imply that $m^u$ is in the core of the Myerson restricted game.
+
 
 \end{document}
