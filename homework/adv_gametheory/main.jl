@@ -16,4 +16,6 @@ elseif week == 2
     include("two/soc.jl")
 elseif week == 3
     include("three/river.jl")
+    include("three/election.jl")
 end
+

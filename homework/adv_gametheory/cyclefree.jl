@@ -21,6 +21,8 @@ function findpath!(
 end
 
 function findpath(G::Graph, from::Int, to::Int)
+    if from == to return [] end
+
     neighs = getneigh(G)
     path = Int[]
     res = findpath!(path, neighs, from, to)
@@ -28,6 +30,8 @@ function findpath(G::Graph, from::Int, to::Int)
 end
 
 function finddipath(G::Graph, from::Int, to::Int)
+    if from == to return [] end
+
     neighs = getdineigh(G)
     path = Int[]
     res = findpath!(path, neighs, from, to)
@@ -39,7 +43,7 @@ function Lⁱ(G, i)
     for (j, h) in G.L
         if j ∈ findpath(G, i, h)
             push!(subset, (j, h))
-        elseif h ∈ findpath(G, i, h)
+        elseif h == i || h ∈ findpath(G, i, h)
             push!(subset, (h, j))
         end
     end
@@ -55,7 +59,7 @@ function followers(G::Graph)
     return F
 end
 
-function subordinate(G::Graph)
+function subordinate(G::Graph, i::Int)
 
     F(j) = [j, [k for (_, k) in Lⁱ(G, i) if !isempty(finddipath(G, j, k))]...]
     
@@ -65,7 +69,7 @@ end
 function hⁱ(mG::Graph, i::Int)
     G = Graph(mG.N, mG.v, Lⁱ(mG, i))
 
-    F̂ = subordinate(G)
+    F̂ = subordinate(G, i)
     F̅ = followers(G)
 
     return [G.v(F̂(j)) - ∑(G.v(F̂(h)) for h in F̅(j)) for j in G.N]
