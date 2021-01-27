@@ -337,22 +337,24 @@ Therefore the three allocations $m^u, m^l, f^e$ are in the $Core(v^L)$.
 
 \subsection*{(b)}
 
-As proven by \citeauthor{borm} (\citeyear{borm}), if $v$ is convex and $L$ is cycle-complete, $f^{Sh}(v^L) = \mu(v, L) \in Core(v^L)$.
+First note that, for any $i \in N$, one can always construct a coalition $S$ with $v(S) = 0$, such that, $v(S \cup \set{i}) = 1$. For example, $S = \set{3, 4, 6, 7, 8}$ and $i = 5$. This implies that the Myerson value needs to be positive in all its components, namely,
 
-In our case $L$ has no cycles since it is a line-game, hence $L$ is trivially cycle-complete.
-
-Now we want to prove that $v$ is convex, namely, $v(S \cup T) + v(S \cap T) \geq v(S) + v(T)$. Take $S$ and $T$, arbitrary coalitions in $N$.
-% FIXME: This is not an if and only if
-This is not convex, $S = [1, 6], T = [4, 9]$
-
-\begin{equation}
-    \begin{split}
-        v[1, 9] + v[4, 6] &< v[1, 6] + v[4, 9] \\
-        1 &< 1+ 1
-    \end{split}
+\begin{equation} \label{positive}
+    \mu_i > 0 \ \forall i
 \end{equation}
 
-\newpage
-\printbibliography
+Assume that the Myerson value satisfies the first property of the $Core(v^L)$, namely,
+
+\begin{equation}
+    \sum_{i \in N} \mu_i = v(N) = 1.
+\end{equation}
+
+Now take $S = [1, 6]$ and $S^c = [7, 9]$. Assume that $\mu$ satisfies the second property. This implies,
+
+\begin{equation}
+    \sum_{i \in S}\mu_i \geq V(S) = V(N) = 1.
+\end{equation}
+
+But $\sum_{i \in S}\mu_i \geq 1$ and $\sum_{i \in N}\mu_i = 1$, imply that $\sum_{i \in S^c}\mu_i = 0$, which contradicts equation (\ref{positive}). Hence $\mu$ cannot satisfy the second property of the $Core(v, L)$ if it satisfies the first, hence $\mu \notin Core(v, L)$
 
 \end{document}
