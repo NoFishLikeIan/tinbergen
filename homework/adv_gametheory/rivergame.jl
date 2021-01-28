@@ -1,7 +1,7 @@
 using JuMP, GLPK
 using LinearAlgebra
 
-isconnected(S) = S == collect(minimum(S):maximum(S))
+isconnected(S) = sort(S) == collect(minimum(S):maximum(S))
 
 function getsubconnected(S::Array{Int})::Array{Array{Int,1},1}
     S′ = [[]]
