@@ -3,6 +3,21 @@ using LinearAlgebra
 
 isconnected(S) = S == collect(minimum(S):maximum(S))
 
+function getsubconnected(S::Array{Int})::Array{Array{Int,1},1}
+    S′ = [[]]
+
+    for (j, i) in enumerate(S)
+        if j == 1 
+            push!(S′[end], i) 
+        else
+            if (i != last(S′[end]) + 1) push!(S′, []) end
+            push!(S′[end], i)
+        end
+    end
+    
+    return S′
+end
+
 function findoptx(c::Vector{Float64}, e::Vector{Float64})
     n = length(c)
     model = Model(GLPK.Optimizer)
@@ -32,7 +47,11 @@ function makeriver(c::Vector{Float64}, e::Vector{Float64})
         # Normalized via c'x - c'e?
         S = sort(S)
         if S == N return c'x̄ end
-        if isempty(S) || !isconnected(S) return 0. end
+        if isempty(S) return 0. end
+
+        if !isconnected(S)
+            return sum(v(E) for E in getsubconnected(S))
+        end
 
         x̄ₛ = findoptx(c[S], e[S])
 
