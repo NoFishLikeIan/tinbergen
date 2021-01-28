@@ -10,16 +10,12 @@ end
 
 E = Graph(N, v, L)
 
-# Part a
 
 mᵘ, mˡ, fᵉ = marginalvector(E)
 
 print("
+μ = $(μ(E))
 mᵘ = $mᵘ, 
 mˡ = $mˡ,
 fᵉ = $fᵉ
 ")
-
-# Part b
-
-M = graphtoMyerson(E)
