@@ -45,3 +45,14 @@ function getcore(G::Game)
 
     return p
 end
+
+isincore(x::Vector{Float64}, G::Graph) = isincore(x, graphtoMyerson(G))
+function isincore(x::Vector{Float64}, G::Game)
+    if sum(x) != G.v(G.N) return false end
+
+    for S in powerset(G.N)
+        if sum(x[S]) < G.v(S) return false end
+    end
+
+    return true
+end
