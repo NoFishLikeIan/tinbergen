@@ -1,0 +1,45 @@
+\documentclass[american]{scrartcl}
+    \usepackage{babel}
+    \usepackage[utf8]{inputenc} 
+    \usepackage{csquotes}
+    \usepackage{amsmath}
+    \usepackage{graphicx}    
+    
+    \setlength{\parindent}{0em}
+    \setlength{\parskip}{0.5em}
+
+    % Bibliography and citations
+    \usepackage[bibencoding=utf8, style=apa]{biblatex}
+    \bibliography{}
+    
+    \title{A research proposal}
+
+    % \subtitle{A critical essay on the existing literature}
+
+    \author{Andrea Titton}
+    
+
+% Commands
+
+\newcommand{\citein}[1]{\citeauthor{#1} (\citeyear{#1})}
+\newcommand{\comment}[1]{\iffalse#1\fi}
+    
+\begin{document}
+
+% Title
+\pagenumbering{gobble} % stop page numbering
+\clearpage
+\thispagestyle{empty}
+\maketitle
+\clearpage
+
+\pagenumbering{arabic}
+
+% Main
+
+\newpage
+% Bibliography
+\pagenumbering{gobble} % stop page numbering
+
+
+\end{document}
