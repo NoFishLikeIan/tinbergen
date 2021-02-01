@@ -1,0 +1,104 @@
+\documentclass[american]{scrartcl}
+    \usepackage{babel}
+    \usepackage[utf8]{inputenc} 
+    \usepackage{csquotes}
+    \usepackage{amsmath}
+    \usepackage{amssymb}
+    \usepackage{graphicx}   
+    \usepackage{mathtools}
+
+    
+    \setlength{\parindent}{0em}
+    \setlength{\parskip}{0.5em}
+
+    
+    \title{Homework I - Advanced Game Theory }
+
+    % \subtitle{A critical essay on the existing literature}
+
+    \author{Andrea Titton}
+    
+
+% Commands
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\Real}{\mathbb{R}}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+
+\begin{document}
+
+% Title
+
+\maketitle
+
+\section*{(1) Directed Search}
+
+\subsection*{(a)}
+
+Given pairwise matching, within a submarket the number of firms matching with a worker needs to be equal to the number of workers matching with a firm. Using this we can rewrite,
+
+\begin{equation}
+    \begin{split}
+        \alpha_w \cdot n_w &= \alpha_v \cdot n_v \\
+        \alpha_w &= \alpha_v \cdot \frac{n_v}{n_w} \\
+        &= \alpha(n) \cdot \frac{1}{n}
+    \end{split}
+\end{equation}
+
+\subsection*{(b)}
+
+First notice that the expected value that a worker receives by matching is the extra value, on top of their outside option, they obtain by accepting a job, weighted by the matching probability, namely
+
+\begin{equation}
+    V_w = \alpha_w \cdot (w - b) = \frac{\alpha(n)}{n} \cdot (w - b).
+\end{equation}
+
+When offering a wage, $w$, thereby attracting a certain amount of workers that generate a queue, $n$, the firm needs to take the workers expected value from matching in account as a participation constraint. On the other hand, the firm picks a wage and queue that maximizes its own expected value from matching, namely,
+
+\begin{equation} \label{firm_opt}
+    V_v = \max_{n, w} \left\{ \underbrace{\alpha(n)}_{\text{match probability}} \cdot \underbrace{(y- w)}_{\text{surplus of match}} \right\}
+\end{equation}
+
+\subsection*{(c)}
+
+Using $V_w$ we can rewrite the wage as,
+
+\begin{equation}
+    w = \frac{n \cdot V_w}{\alpha(n)} + b.
+\end{equation}
+
+By plugging in the wage in Equation (\ref{firm_opt}), te optimization problem of the firm reduces to,
+
+\begin{equation}
+    V_v = \max_{n} \{ \alpha(n) \cdot (y - b) - n \cdot V_w \}
+\end{equation}
+
+Taking the first order condition with respect to $n$ to solve the maximization problem yields,
+
+\begin{equation} \label{firm_opt_condition}
+    \alpha^\prime(n) \cdot(y-b) - V_w = 0
+\end{equation}
+
+\subsection*{(d)}
+
+Using (\ref{firm_opt_condition}) in the wage definition we can rewrite,
+
+\begin{equation}
+    \begin{split}
+        w &= \frac{n \cdot \alpha^\prime(n) \cdot(y-b)}{\alpha_n} + b \\
+    \end{split}
+\end{equation}
+
+Now let $\varepsilon \coloneqq \frac{n \cdot \alpha\prime(n)}{\alpha(n)}$ be the elasticity of $\alpha(n)$ with respect to tightness. Then the wage can be written as,
+
+\begin{equation}
+    \begin{split}
+        w &= \varepsilon \cdot (y - b) + b \\
+        &= \varepsilon \cdot y - (1 - \varepsilon) \cdot b
+    \end{split}
+\end{equation}
+
+\section*{(2) Albrecht Gautier and Vroman (2016 RED)}
+
+
+
+\end{document}
