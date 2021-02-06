@@ -625,3 +625,18 @@ docs/site/
 # environment.
 Manifest.toml
 homework/climate_change/two/proposal.pdf
+
+# reveal.js
+
+.idea/
+*.iml
+*.iws
+*.eml
+out/
+.DS_Store
+.svn
+log/*.log
+tmp/**
+node_modules/
+.sass-cache
+dist/*.map
