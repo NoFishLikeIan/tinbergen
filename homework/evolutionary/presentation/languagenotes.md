@@ -1,4 +1,4 @@
-# Quantifying the evolutionary dynamics of language
+# Does the chimpanzee have a theory of mind? 30 years later
 
 **Rules**:
 
