@@ -640,3 +640,4 @@ tmp/**
 node_modules/
 .sass-cache
 dist/*.map
+homework/adv_gametheory/five/plots/
