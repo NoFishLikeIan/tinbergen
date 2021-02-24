@@ -16,7 +16,7 @@
     \setlength{\parindent}{0em}
     \setlength{\parskip}{0.5em}
 
-    \title{Exercises recipe}
+    \title{Weibull exercises}
     \subtitle{Evolutionary Game Theory}
 
     \author{A. Fisherman}
@@ -41,13 +41,11 @@
 % Title
 \maketitle
 
-\section{Weibull dynamics}
-
-\subsection{Steps to solve}
+\section{Steps to solve}
 
 You are given a matrix $\bm{P} \in \Real^{n\times n}$ which represents the payoffs.
 
-\subsubsection{Utilities}
+\subsection{Utilities}
 
 Given a vector $\bm{x} = \begin{pmatrix}
         x_1 & x_2 & \ldots & x_3
@@ -59,7 +57,7 @@ Given a vector $\bm{x} = \begin{pmatrix}
 
 Note that you can just set $\bm{x} \mapsto \bm{y}$ or vice-versa to get all of the utilities combinations.
 
-\subsubsection{Nash equilibria}
+\subsection{Nash equilibria}
 
 Compute the Nash Equilibria of the symmetric game $(\bm{P}, \bm{P^T})$. Remember the mixed strategy. To find the mixed strategy you have to look at every combination of
 \begin{equation}
@@ -83,7 +81,7 @@ You can also use \href{https://cgi.csc.liv.ac.uk/~rahul/bimatrix_solver/}{the on
     \item Only pick the symmetric Nash equilibria
 \end{enumerate}
 
-\subsubsection{ESS and NSS}
+\subsection{ESS and NSS}
 
 Once you found the Nash equilibrium, for each one do,
 \begin{center}
@@ -102,16 +100,19 @@ Once you found the Nash equilibrium, for each one do,
         \node [decision]        {$u(\bm{x}, \bm{x}) \geq u(\bm{y}, \bm{x}) \ \forall \bm{y}$ ? }; % A-3
         \node [process]         {Find $\bm{y} \neq \bm{x}$ s.t. $u(\bm{y}, \bm{x}) = u(\bm{x}, \bm{x})$}; % A-4
         \node [process]         {Compute $u(\bm{y}, \bm{y})$ for those}; % A-5
-        \node [decision]        {$u(x, y) \geq u(y, y)$ ?}; % A-6
-        \node [decision]        {$u(x, y) > u(y, y)$ ?}; % A-7
+        \node [decision]        {$u(\bm{x}, \bm{y}) = u(\bm{y}, \bm{y})$}; % A-6
+        \node [decision]        {$u(\bm{x}, \bm{y}) > u(\bm{y}, \bm{y})$ ?}; % A-7
 
         % Out
         \node [startstop,
             right =of A-3]      {Neither ESS nor NSS}; % A-8
         \node [startstop,
-            left =of A-6]      {NSS and ESS}; % A-9
+            left =of A-6]      {NSS}; % A-9
         \node [startstop,
             left =of A-7]      {ESS}; % A-10
+
+        \node [startstop,
+            right =of A-6]      {ESS and NSS}; % A-11
         %%
         \draw [arrows=-Stealth]
         (A-1) edge  (A-2)
@@ -121,14 +122,16 @@ Once you found the Nash equilibrium, for each one do,
         (A-4) edge (A-5)
         (A-5) edge (A-6)
         (A-6) edge["yes"] (A-9)
-        (A-6) edge["no"] (A-7)
+        (A-6) edge (A-7)
         (A-7) edge["yes"] (A-10)
+        (A-6) edge["$\land$"] (A-11)
+        (A-7) edge (A-11)
         (A-7) |- ($(A-7.east)!0.!(A-8.south)$)
-        -|([xshift=7mm] A-8.south);
+        -|([xshift=15mm] A-8.south);
     \end{tikzpicture}
 \end{center}
 
-\subsubsection{Replicator dynamics}
+\subsection{Replicator dynamics}
 
 Let $\bm{e}^1 = \begin{pmatrix}
         1 & 0 & 0
@@ -148,7 +151,7 @@ The main steps to find the dynamics are,
               \end{pmatrix}$ with $\alpha < 1 / 2$
 \end{enumerate}
 
-\subsection{Example, ex. 14}
+\section{Example, ex. 14}
 
 Given
 
@@ -160,7 +163,7 @@ Given
     \end{pmatrix}
 \end{equation}
 
-\subsubsection{Utilities}
+\subsection{Utilities}
 
 \begin{equation}
     \begin{split}
@@ -169,7 +172,7 @@ Given
     \end{split}
 \end{equation}
 
-\subsubsection{Nash equilibria}
+\subsection{Nash equilibria}
 
 We get
 
@@ -181,7 +184,7 @@ We only want the symmetric ones so rows 1, 3, and 5, namely,
     NE = \set{ (1, 0, 0), (0, 1, 0), (1 / 2, 1/2, 0) }
 \end{equation}
 
-\subsubsection{ESS and NSS}
+\subsection{ESS and NSS}
 
 The third one,
 
@@ -225,7 +228,7 @@ The third one,
     \end{tikzpicture}
 \end{center}
 
-\subsubsection{Replicator dynamics}
+\subsection{Replicator dynamics}
 
 Corner utilities are,
 
