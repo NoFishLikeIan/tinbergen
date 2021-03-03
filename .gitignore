@@ -300,8 +300,8 @@ code/thesis_ideas/.vscode
 
 quick_dirty/
 homework/spatial/plot_all.py
-homework/adv-macroeconometrics/week-one/plots/
-homework/adv-macroeconometrics/week-two/fred-database_code
+homework/app_macro/week-one/plots/
+homework/app_macro/week-two/fred-database_code
 
 *.csv
 rename.sh
