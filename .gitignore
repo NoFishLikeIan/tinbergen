@@ -641,3 +641,4 @@ node_modules/
 .sass-cache
 dist/*.map
 homework/adv_gametheory/five/plots/
+homework/macro_topics/guideline.pdf
