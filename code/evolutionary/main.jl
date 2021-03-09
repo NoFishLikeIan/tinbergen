@@ -1,4 +1,5 @@
-using LinearAlgebra, Kronecker, Einsum
+using LinearAlgebra
+using Einsum, Tensors
 
 include("utils/matrix.jl")
 include("utils/automata.jl")

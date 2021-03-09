@@ -1,0 +1,56 @@
+\documentclass[american]{scrartcl}
+    \usepackage{babel}
+    \usepackage[utf8]{inputenc} 
+    \usepackage{csquotes}
+    \usepackage{amsmath}
+    \usepackage{amssymb}
+    \usepackage{graphicx}   
+    \usepackage{mathtools}
+
+    
+    \setlength{\parindent}{0em}
+    \setlength{\parskip}{0.5em}
+
+    
+    \title{Automata notes - Evolutionary game theory}
+
+
+    \author{Andrea Titton}
+    
+
+% Commands
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\Real}{\mathbb{R}}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\Two}{\mathbf{2}}
+
+\begin{document}
+
+% Title
+
+\maketitle
+
+\section{Notes}
+
+We can represent a strategy over $m$ states and $n$ actions as a pair $(\Sigma, X)$ where,
+
+\begin{equation}
+    \Sigma \in \Two^{m \times n}, \ X \in \Two^{m \times n \times m}
+\end{equation}
+
+A game can be played between two strategies as long as the number of actions in the same.
+
+Assume two strategies $(\Sigma_g, X_g)$ and $(\Sigma_y, X_y)$, with a different number of states, $m_g$ and $m_y$. A state can be represented with a binary vector $g \in \Two^{m_g}$. We can define a state evolution tensor as a map from an action to a state, $\mathbf{T}_g : \Two^n \mapsto \Two^{m_g}$ as,
+
+\begin{equation}
+    \mathbf{T}_g \coloneqq (T_g)_{j, k} = g_i \ (X_g)^i_{\; j, k}
+\end{equation}
+
+The response of the other player is then $\Sigma^T y$. This yields the evolution,
+
+\begin{equation}
+    g^\prime = \mathbf{T}_g (\Sigma^T y)
+\end{equation}
+
+
+\end{document}
