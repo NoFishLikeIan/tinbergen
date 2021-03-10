@@ -1,12 +1,13 @@
 using LinearAlgebra
 using Einsum, Tensors
 
-include("utils/matrix.jl")
-include("utils/automata.jl")
-
 Space = AbstractMatrix{Int64}
 State = AbstractVector{Int64}
 Play = AbstractArray{Int64,3}
+
+
+include("utils/matrix.jl")
+include("utils/automata.jl")
 
 G = Strategy(
     [1 0; 0 1], # (C, D)
