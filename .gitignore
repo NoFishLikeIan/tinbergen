@@ -642,3 +642,5 @@ node_modules/
 dist/*.map
 homework/adv_gametheory/five/plots/
 homework/macro_topics/guideline.pdf
+
+code/evolutionary/plots
