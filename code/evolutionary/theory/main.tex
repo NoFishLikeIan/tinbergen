@@ -1,0 +1,110 @@
+\documentclass[american]{scrartcl}
+    \usepackage{babel}
+    \usepackage[utf8]{inputenc} 
+    \usepackage{csquotes}
+    \usepackage{amsmath}
+    \usepackage{amssymb}
+    \usepackage{graphicx}   
+    \usepackage{subfigure}
+    \usepackage{mathtools}
+
+    
+    \setlength{\parindent}{0em}
+    \setlength{\parskip}{0.5em}
+
+    % Bibliography and citations
+    \usepackage[bibencoding=utf8, style=apa]{biblatex}
+    \bibliography{ref}
+
+    
+    \title{A model of Cournot Competition with group selection}
+
+
+    \author{Andrea Titton}
+    
+
+% Commands
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\Real}{\mathbb{R}}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\Two}{\mathbf{2}}
+
+\begin{document}
+
+% Title
+
+\maketitle
+
+\section{Introduction}
+
+In 1838, Antoine Augustin Cournot introduced his famous model of competition over quantities. Since then, the model served as a theoretical benchmark for pure oligopolistic models in economic theory. In Cournot oligopolies, a discrete number of firms compete by setting quantities of a perfectly substitutable good. In equilibrium, due to symmetry, all firms produce the same quantity and any deviations my producers reduces their own profit.
+
+In proposing the model, Cournot does not address the formation mechanisms of the firms' strategies. Modern economics relies on rational expectations to justify the symmetric equilibrium solution. More contemporary approaches have derived the model dynamics under limited knowledge (\cite{Bischi2015}) or naive expectations (\cite{Cnovas2008}). Furthermore the model is known to lead to unstable equilibria as the number of firms increases (this is known as the Cournot–Theocharis problem).
+
+In this short paper I propose to study the dynamics of equilibrium formation via an evolutionary lens. The aim is to focus on the tacit collusion effect that leads to oligopolistic equilibria in concentrated markets and the competition effect that arises in fragmented markets. Based on the framework by \citeauthor{Akdeniz2020} (\citeyear{Akdeniz2020}), I develop a model with local markets competing à la Cournot % TODO: Finish introduction
+
+\iffalse
+    \newpage
+    \section{Literature review}
+\fi
+
+\newpage
+\section{Theoretical formulation}
+
+\subsection{Local markets}
+
+Local markets are composed by $N$ firms, indexed by $i$, that can pick a production quantity from a discrete set $q^{(i)} \in \Sigma$. Firm's face linear demand,
+
+\begin{equation}
+    p(q^{(1)}, \ldots, q^{(N)}) = p(Q)= a - b \cdot \sum^{N}_{i=1} q^{(i)}
+\end{equation}
+
+where $a$ and $b$ are picked for normalization purposes. Furthermore firm face no fixed nor marginal costs. All of these assumptions can be easily relaxed to allow for non-linear demand, entry costs, and marginal costs. The symmetric Nash equilibrium of the game is,
+
+\begin{equation}
+    \bar{q}= \frac{a}{b \cdot (N+1)}
+\end{equation}
+
+
+
+The model evolves over discrete time $t \in \set{0, 1, \ldots T}$ and firms are assumed to enter the market playing a random draw from the strategy set,  $q^{(i)}_0 \sim U(\Sigma)$. In every period each company realizes a payoff, $\pi^{(i)}_t = p(Q_t) \cdot q^{(i)}_t$. I assume that each period a firm is picked at random, with probability proportional to its payoff, to reproduce in a birth-death process.
+
+Such a modelling choice is justified in the context of oligopolies were firms copy other firms' production quantities in case the competitor is experiencing better profits. This arises for example in the airline industry, were capacity (number of flights) has to be planned ex-ante.
+
+\iffalse
+    Assume only one player is playing the equilibrium strategy $\bar{q}$. Such that,
+
+    \begin{equation}
+        Q_t = \set{q^{(1)}, q^{(2)}, \ldots, \bar{q}, \ldots, q^{(N)}}.
+    \end{equation}
+
+    The probability of that strategy being picked for reproduction is then,
+
+    \begin{equation}
+        \frac{\exp(P(Q_t) \cdot \bar{q})}{\sum_{i} \exp(P(Q_t) \cdot q_i)}
+    \end{equation}
+
+\fi
+
+\section{Simulation}
+
+\subsection{Local market}
+
+First we can focus on a simulation of a local market, without group effects,
+
+\begin{figure}[h!]
+    \hfill
+    \subfigure{\includegraphics[width=0.45\textwidth]{../plots/q_group_heat_5.png}}
+    \hfill
+    \subfigure{\includegraphics[width=0.45\textwidth]{../plots/q_group_heat_20.png}}
+    \hfill
+    \caption{Evolution of strategies for different number of firms}
+\end{figure}
+
+\newpage
+% Bibliography
+\nocite{*}
+\pagenumbering{gobble} % stop page numbering
+\printbibliography
+
+\end{document}
