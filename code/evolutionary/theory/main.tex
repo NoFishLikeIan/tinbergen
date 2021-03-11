@@ -4,7 +4,7 @@
     \usepackage{csquotes}
     \usepackage{amsmath}
     \usepackage{amssymb}
-    \usepackage{graphicx}   
+    \usepackage[draft]{graphicx} % TODO: Change back   
     \usepackage{subfigure}
     \usepackage{mathtools}
 
@@ -67,39 +67,80 @@ where $a$ and $b$ are picked for normalization purposes. Furthermore firm face n
 
 
 
-The model evolves over discrete time $t \in \set{0, 1, \ldots T}$ and firms are assumed to enter the market playing a random draw from the strategy set,  $q^{(i)}_0 \sim U(\Sigma)$. In every period each company realizes a payoff, $\pi^{(i)}_t = p(Q_t) \cdot q^{(i)}_t$. I assume that each period a firm is picked at random, with probability proportional to its payoff, to reproduce in a birth-death process.
+The model evolves over discrete time $t \in \set{0, 1, \ldots T}$ and firms are assumed to enter the market playing a random draw from the strategy set,  $q^{(i)}_0 \sim U(\Sigma)$. In every period each company realizes a payoff, $\pi^{(i)}_t = p(Q_t) \cdot q^{(i)}_t$. I assume that each period a firm is picked at random, with probability proportional to its payoff, to reproduce in a birth-death process. In particular, the probability of a strategy, say $\sigma \in \Sigma$ played by $n$ firms, being picked for reproduction is,
 
-Such a modelling choice is justified in the context of oligopolies were firms copy other firms' production quantities in case the competitor is experiencing better profits. This arises for example in the airline industry, were capacity (number of flights) has to be planned ex-ante.
+\begin{equation}
+    \frac{n \cdot \exp(P(Q_t) \cdot \sigma)}{\sum_{i} \exp(P(Q_t) \cdot q^{(i)})}.
+\end{equation}
 
-\iffalse
-    Assume only one player is playing the equilibrium strategy $\bar{q}$. Such that,
 
-    \begin{equation}
-        Q_t = \set{q^{(1)}, q^{(2)}, \ldots, \bar{q}, \ldots, q^{(N)}}.
-    \end{equation}
 
-    The probability of that strategy being picked for reproduction is then,
+This modelling choice is justified in the context of oligopolies were firms copy other firms' production quantities in case the competitor is experiencing better profits. This arises for example in the airline industry, were capacity (number of flights) has to be planned \textit{ex-ante} to comply with regulations. Furthermore, these are markets with high barriers to entry (fixed $N$), long-term investment commitments (randomness in the birth-death process), and common tacit collusion.
 
-    \begin{equation}
-        \frac{\exp(P(Q_t) \cdot \bar{q})}{\sum_{i} \exp(P(Q_t) \cdot q_i)}
-    \end{equation}
+\subsection{Global markets}
 
-\fi
+Local markets might interact with neighboring markets. Namely, each local market is linked to two other neighboring markets, thus forming a cycle. Each turn, with probability $\rho$, a market is picked at random, with probability $1 / N$, and is merged with its best performing neighbor. This choice arises assuming that highly profitable local markets will be invaded by neighboring firms. In this way tacit collusion, on the one hand, pushes up payoffs and, on the other hand, it increases the likelihood of a neighboring entry.
 
+
+
+\newpage
 \section{Simulation}
+
+In the simulations I pick $\Sigma = \set{1, 2, \ldots, 10}$, $a = (N + 1) \cdot 5$, and $b = 1$, such that,
+
+\begin{equation}
+    \bar{q} = 5
+\end{equation}
 
 \subsection{Local market}
 
-First we can focus on a simulation of a local market, without group effects,
+First we can focus on a simulation of a local market, without group effects. In particular here we look at the evolution of quantities and prices when $N = 5$ and $N = 20$.
 
-\begin{figure}[h!]
-    \hfill
-    \subfigure{\includegraphics[width=0.45\textwidth]{../plots/q_group_heat_5.png}}
-    \hfill
-    \subfigure{\includegraphics[width=0.45\textwidth]{../plots/q_group_heat_20.png}}
-    \hfill
-    \caption{Evolution of strategies for different number of firms}
-\end{figure}
+Figure \ref{fig:small_local} shows one of the runs, for $T = 200$, in the case of a concentrated market. As expected, tacit collusion occurs vary quickly as all firms synchronize to a low quantity.
+
+\begin{center}
+    \begin{figure}[h!]
+        \includegraphics[width=0.8\textwidth]{../plots/local/q_group_heat_5.png}
+        \caption{Quantity evolution in a concentrated market}
+        \label{fig:small_local}
+    \end{figure}
+\end{center}
+
+Figure \ref{fig:price_small_local} displays the price evolution $p(Q_t)$ of a number ($150$) of simulations with concentrated markets. All simulations display tacit collusion but this highlights the path dependency of the equilibrium price. This is expected as, for example, if enough firms start off producing a quantity above $\bar{q}$ which yields $p(Q_0) \approx 0$, firm's who produce the highest quantity have higher fitness and hence the price will be driven further down.
+
+\begin{center}
+    \begin{figure}[h!]
+        \includegraphics[width=0.8\textwidth]{../plots/local/p_group_5.png}
+        \caption{Price evolution in a concentrated market}
+        \label{fig:price_small_local}
+    \end{figure}
+\end{center}
+
+If we turn our attention to a highly competitive markets and we repeat the exercise, the dynamics change drastically. In particular, Figure \ref{fig:large_local} shows the evolution of strategies of a single run. Here firms fail to collude and prices tend towards the equilibrium (in this case, $\bar{q} = 5$).
+
+\begin{center}
+    \begin{figure}[h!]
+        \includegraphics[width=0.8\textwidth]{../plots/local/q_group_heat_20.png}
+        \caption{Quantity evolution in a competitive market}
+        \label{fig:large_local}
+    \end{figure}
+\end{center}
+
+The lack of collusion can be seen more clearly in the 150 simulations run of price in Figure \ref{fig:price_large_local}.
+
+\begin{center}
+    \begin{figure}[h!]
+        \includegraphics[width=0.8\textwidth]{../plots/local/p_group_20.png}
+        \caption{Price evolution in a competitive market}
+        \label{fig:price_large_local}
+    \end{figure}
+\end{center}
+
+\subsection{Global markets}
+
+In order to study the effect of groups on the equilibria of the game.
+
+
 
 \newpage
 % Bibliography

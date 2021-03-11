@@ -30,7 +30,7 @@ function plotquantities(evolutions, coalitions, title; filename="q_heat")
 
     for (t, coal) in allcoals
 
-        vline!([t], c="red", alpha=0.3)
+        vline!([t], c="red", alpha=0.3, label=false)
         txt = join(["{$(join(s, ", "))}" for s in coal], ", ")
 
         if length(allcoals) < 3
@@ -70,7 +70,7 @@ function plotgroupprices(groups, p, title; filename="p_group")
         prices[i, :] = price
     end
 
-    plot!(1:T, mean(prices, dims=1)', c="red", label="mean(p(Q))")
+    plot!(1:T, mean(prices, dims=1)', c="red", label="mean(p(Q))", dpi=200)
 
     savefig("plots/local/$filename.png")
 end

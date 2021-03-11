@@ -100,10 +100,13 @@ end
 
 
 # localstability([5, 20], 100; iter=20)
-# globaldynamics([3, 10], [5, 20], 100)
+globaldynamics([4, 20], [5, 20], 100)
 
-Ms, Ns = range(3, 103, step=1), range(3, 103, step=1)
 
-convergence = globalstability(Ms, Ns; iter=150, swapgroup=0.01, filename="convergence_low")
+if false
+    Ms, Ns = range(3, 103, step=1), range(3, 103, step=1)
 
-convergence = globalstability(Ms, Ns; iter=150, swapgroup=.1, filename="convergence_high")
+    convergence = globalstability(Ms, Ns; iter=150, swapgroup=0.01, filename="convergence_low")
+
+    convergence = globalstability(Ms, Ns; iter=150, swapgroup=.1, filename="convergence_high")
+end

@@ -32,10 +32,10 @@ function globaldynamics(Ms, Ns, T)
             evolutions, coalitions = evolve(M, N, T=T; swapgroup=0.1)
         
             plotpayoffs(
-                evolutions, computepayoffs, "Mean π, M=$M, N=$N"; filename="pi_group_$M-$N")
+                evolutions, computepayoffs, "Mean π, M=$M, N=$N, ρ = 0.1"; filename="pi_group_$M-$N")
 
             plotquantities(
-                evolutions, coalitions,  "Mean q, M=$M, N=$N"; filename="q_group_$M-$N")
+                evolutions, coalitions,  "Mean q, M=$M, N=$N, ρ = 0.1"; filename="q_group_$M-$N")
         end
     end
 
