@@ -13,8 +13,8 @@
     \bibliography{refs}
 
     
-    \title{Participation and Duration of Environmental Agreements - Battaglini \& Harstad}
-    \subtitle{Critical Essay}
+    \title{Participation and Duration of Environmental Agreements \\ Battaglini \& Harstad}
+    \subtitle{Critical Essay - Climate Change}
 
     % \subtitle{A critical essay on the existing literature}
 
@@ -27,11 +27,23 @@
 \newcommand{\comment}[1]{\iffalse#1\fi}
 
 \iffalse
-    What (the research question is)? Does uncertainty in climate collaboration exacerbate the run on oil? A cooperative game theory perspective
+    What (the research question is)? 
+    
+    Why, then, do we nevertheless observe a large number of countries that participate in IEAs? What are the consequences of the fact that such agreements are often “incomplete contracts” that specify emissions but not investments in green technology?
 
-    Why (is it an important question)? So far we only looked at climate policy uncertainty. But there might be further uncertainty deriving from a asynchronous implementation of climate policy 
+    Why (is it an important question)? 
+    
+    Economic theory implies free riders problem. How should environmental agreements be designed to be more effective?
 
-    How (do we get to the answer)? Cooperative transferable utility games can model the issue. Use same model as van der Ploeg. Simulation in Julia. Estimation using Trump shock.
+    How (do we get to the answer)? 
+
+    - Country pick emissions and green investments
+    - Decide to free ride or participate
+    - Endogenous length and depth of agreement
+
+    Key insight: endogenise the contractual environment
+
+    
 \fi
     
 \begin{document}
@@ -41,7 +53,39 @@
 
 % Main
 
-\section{Introduction}
+\section{Summary}
+
+In this paper, \citein{Battaglini2016} develop a game theoretical dynamic framework to analyse participation in international environmental agreements (IEAs). The analysis stems from the fact that, since the 1950s, there has been a proliferation of IEAs, with many participants and encompassing mostly abatement levels rather than investment in green technology. This stands in contrast to some predictions of political economic theory since it seems to defy two fundamental frictions of public good contribution agreements: free-riding and holdup problems. The former arises since benefits of abatement are enjoyed by all countries globally, hence free riding on others' abatement levels dominates voluntarily restricting economic activity (\cite{EspnolaArredondo2011}). The latter arises as a disincentive of investing in green technology, since higher ex-ante stocks of green technology usually come with a requirement of high abatement levels within the IEA (\cite{Harstad2012}).
+
+The model evolves over infinitely many periods. Each period, each country plays in this order. First, it decides whether to join or not a coalition. Second, the coalition members negotiate the length (periods of validity) and depth (emission levels) of the agreement. Third, non-participants emit independently and participants emit according to the negotiation outcome. Lastly, countries invest; coalition participants do so according to the negotiation outcome, under complete contracts, or independently, under incomplete contracts. Production can be generated either via emission or green technology. Furthermore, production can either be consumed today for immediate benefits or invested for future green technology. Emissions have a negative permanent global externality. Given this setup, a country faces a tradeoff when deciding whether to join or not the coalition at the beginning of the period. On the one hand, staying outside allows it to emit and reap the benefits of production. On the other hand, joining the coalition makes other countries take account of its externalities, hence it can induce a reduction of global emissions and increase investments. At first glance, this setup is fertile ground for free riders. The marginal benefit of joining decreases rapidly with the total number of countries hence there is no equilibrium in which large and/or long coalitions are sustained. On paper, the ``dismal'' in ``dismal science'' is inescapable. % FIXME: Too much
+
+Yet, as pointed out above, in real policy we observe large and long IEAs. To explain this inconsistency, \citeauthor{Battaglini2016} turn their attention to the inability of IEAs to contract over investment levels. Namely, under incomplete contracts, short-term agreements discourage investments due to holdup problems. On the contrary, the holdup problem is mitigated in the case of long-term agreements and long-term agreements become increasingly beneficial for large coalitions. In this way the model shows how contractual incompleteness can sustain equilibria with long-term agreements and significant participation (i.e. mitigated free-riding), using the holdup problem as a credible ``threat''. Such a result is robust to endogenous completeness of contracts. That is, if you allow coalitions to decide whether agreements encompass investments, in equilibrium they will not and generate long-term and large IEAs.
+
+\section{Strengths}
+
+The authors' model gives a significant contribution to the environmental economic literature by proposing a reasonable solution to a conundrum: why do a large number of countries participate in IEAs despite free-rider and holdup problems? The solution is elegant, given the simplicity and tractability of the theoretical setup, and stems from a factual assumption, that of incompleteness of contracts in the IEAs. Furthermore, the results are robust to almost all discount factors and to endogenous contractual features, such as the depth and length of the agreement, which gives further ``external validity'' to the policy implications.
+
+A compelling aspect of the paper is the thoroughness of the robustness checks. In particular, the authors show that the equilibria can be derived under noncooperative bargaining, which represents a limit case in terms of instability forces applied to the equilibria. The robustness to such a protocol gives further validity to the result. Another strong feature of the model is the fact that the equilibria are (weakly) renegotiation proof, that is, they can be sustained without a ``threat'' that punishes all players. As prescribed by \citein{Barrett2005}, this is a fundamental feature for the ``real life'' stability of climate agreement since it entails that it is better for coalition members to carry out punishment in response to a member deviating as opposed to ignore the deviation, thereby making the threat credible and the equilibrium stable.
+
+Finally, the paper has very meaningful and far-reaching implications. First, that contract incompleteness might be a necessary feature and not a flaw of IEAs. Second, that depth, length, and size should not be seen as necessary tradeoffs in climate agreements but are rather complementary.
+
+\section{Weaknesses}
+
+The paper addresses thoroughly robustness over parameters but only superficially over functional forms. Of particular concern is the fact that the stock of greenhouse gases and green technology enter linearly in the countries' objective function. This implies that the stocks do not affect policies, hence players' decision, at the margin. I believe this assumptions should be relaxed given the non-linear nature of both climate damages and (hopefully) green technology adoption. Prima facie, I believe relaxing the assumption would make the model's equilibria more stable, nevertheless showing this explicitly, aside from presenting a non-trivial analytical challenge, can add confidence in the model.
+
+Another of the model's assumptions that should be more carefully justified is that of the choice of Markov Perfect Equilibria. \citeauthor{Battaglini2016} claim that,
+
+\begin{displayquote}[p. 169][]
+    There is an emerging experimental literature showing that MPEs provide a good description of behavior in dynamic free-rider problems
+\end{displayquote}
+
+but in their seminal paper \citein{Maskin1988} show how this equilibrium concept can be sensitive to the game specification. The authors check robustness using the notion of Sub-game Perfect Equilibria which is a weaker assumption (a superset) of MPE. I believe a more careful treatment of the robustness with respect to the equilibrium concept is to perturbate the game's payoffs and check the evolution of specific equilibria.
+
+\section{Conclusion}
+
+Overall the paper not only sheds light on the proliferation of IEAs but does so in a tractable, extensible, and robust manner. Furthermore, it provides deep economic insight on the features that make such agreements sustainable.
+
+The framing of the problem serves as a strong stepping stone to analyse IEAs and leaves room to a wealth of extensions that can help design more resilient and deeper climate agreements.
 
 \newpage
 % Bibliography
