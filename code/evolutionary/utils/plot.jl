@@ -10,7 +10,7 @@ function plotpayoffs(evolutions, computepayoffs, title; filename="payoff_heat")
 
     groups = ["G$m" for m in 1:M]
 
-    heatmap(1:T, groups, pay, title=title, xaxis="time", dpi=200, c=:thermal)
+    heatmap(1:T, groups, pay, title=title, xaxis="time", dpi=200)
 
     savefig("plots/group/$filename.png")
     
