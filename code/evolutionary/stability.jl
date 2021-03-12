@@ -29,7 +29,7 @@ function globaldynamics(Ms, Ns, T)
 
         for N in Ns
             print("Global dynamics for M=$M and N=$N \n")
-            evolutions, coalitions = evolve(M, N, T=T; swapgroup=0.1)
+            evolutions, coalitions = evolve(M, N, T=T; swapgroup=0.05)
         
             plotpayoffs(
                 evolutions, computepayoffs, "Mean π, M=$M, N=$N, ρ = 0.1"; filename="pi_group_$M-$N")

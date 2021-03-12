@@ -1,5 +1,3 @@
-using Plots
-
 function plotpayoffs(evolutions, computepayoffs, title; filename="payoff_heat")
     M, N, T = size(evolutions)
     pay = zeros(Float64, M, T)
@@ -10,7 +8,12 @@ function plotpayoffs(evolutions, computepayoffs, title; filename="payoff_heat")
 
     groups = ["G$m" for m in 1:M]
 
-    heatmap(1:T, groups, pay, title=title, xaxis="time", dpi=200)
+    limit = maximum(abs.(pay))
+
+    heatmap(
+        1:T, groups, pay, 
+        clim=(-limit, limit),
+        title=title, xaxis="time", dpi=200)
 
     savefig("plots/group/$filename.png")
     
@@ -18,27 +21,36 @@ end
 
 function plotquantities(evolutions, coalitions, title; filename="q_heat")
     M, N, T = size(evolutions)
+
+    uniquecoals = unique(x -> Set(x[2]), coalitions)
+    windows = [
+        ((1, uniquecoals[1][1]), [[m] for m in 1:M])
+    ]
+
+    for i in 1:(length(uniquecoals) - 1)
+        l, coals = uniquecoals[i]
+        r = uniquecoals[i + 1][1]
+
+        push!(windows, ((l, r), coals))
+    end
+
+    push!(windows, ((uniquecoals[end][1], T), uniquecoals[end][2]))
+
     qs = reshape(mean(evolutions, dims=2), (M, T))
 
-    plot(title=title, xaxis="time", dpi=200)
+    plot(title=title, xaxis="time", dpi=200, yaxs="mean q within group")
 
-    for m in 1:M
-        plot!(1:T, qs[m, :], label="G$m")
-    end
-    
-    allcoals = unique(x -> x[2], coalitions)
+    for (window, coal) in windows
+        from, to = window
 
-    for (t, coal) in allcoals
-
-        vline!([t], c="red", alpha=0.3, label=false)
-        txt = join(["{$(join(s, ", "))}" for s in coal], ", ")
-
-        if length(allcoals) < 3
-            annotate!(t + 2, minimum(qs),  text(txt, :red, 4))
+        for (i, c) in enumerate(coal)
+            plot!(
+                from:to, qs[c, from:to]', label=false,
+                linewidth=2, 
+                c=palette(:tab20)[((i * 2) % 20) + 1]
+            )
         end
-
     end
-
 
     savefig("plots/group/$filename.png")
 
