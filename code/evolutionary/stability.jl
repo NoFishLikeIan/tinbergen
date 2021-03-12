@@ -42,24 +42,24 @@ function globaldynamics(Ms, Ns, T)
 end
 
 function globalstability(
-    Ms, Ns; T=100, iter=20,
-    swapgroup=0.,
+    Ns; T=100, iter=20, M=20,
+    ρs=range(0., 1., length=50),
     filename="convergence")
 
-    X, Y = length(Ms), length(Ns)
+    X, Y = length(ρs), length(Ns)
     
     convergence = zeros(Float64, X, Y)
-    tup = collect(product(Ms, Ns))
+    tup = collect(product(ρs, Ns))
 
     for (i, j) in product(1:X, 1:Y)
         print("Tuple ($i, $j) / ($X, $Y) \r")
 
-        M, N = tup[i, j]
+        ρ, N = tup[i, j]
 
         mnvar = 0.
 
         for i in iter
-            history, _ = evolve(M, N, T=T; swapgroup=0.1)
+            history, _ = evolve(M, N, T=T; swapgroup=ρ)
             mnvar += mean(var(history[:, :, end], dims=2))
         end
 
@@ -70,9 +70,9 @@ function globalstability(
 
     heatmap(
         convergence, 
-        title="Divergence of tacit collusion with ρ = $swapgroup", 
+        title="Divergence of tacit collusion with M = $M", 
         xticks=false, yticks=false,
-        xaxis="N", yaxis="M")
+        xaxis="N", yaxis="ρ")
 
     savefig("plots/global/$filename.png")
 

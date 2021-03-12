@@ -4,7 +4,7 @@
     \usepackage{csquotes}
     \usepackage{amsmath}
     \usepackage{amssymb}
-    \usepackage[draft]{graphicx} % TODO: Change back   
+    \usepackage{graphicx} 
     \usepackage{subfigure}
     \usepackage{mathtools}
 
@@ -77,10 +77,20 @@ The model evolves over discrete time $t \in \set{0, 1, \ldots T}$ and firms are 
 
 This modelling choice is justified in the context of oligopolies were firms copy other firms' production quantities in case the competitor is experiencing better profits. This arises for example in the airline industry, were capacity (number of flights) has to be planned \textit{ex-ante} to comply with regulations. Furthermore, these are markets with high barriers to entry (fixed $N$), long-term investment commitments (randomness in the birth-death process), and common tacit collusion.
 
-\subsection{Global markets}
+\subsection{Global market}
 
-Local markets might interact with neighboring markets. Namely, each local market is linked to two other neighboring markets, thus forming a cycle. Each turn, with probability $\rho$, a market is picked at random, with probability $1 / N$, and is merged with its best performing neighbor. This choice arises assuming that highly profitable local markets will be invaded by neighboring firms. In this way tacit collusion, on the one hand, pushes up payoffs and, on the other hand, it increases the likelihood of a neighboring entry.
+In the model, there are $M$ local markets and each local market is linked to two other neighboring markets, thus forming a cycle. Each turn, with probability $\rho$, a market is picked at random, with probability $1 / N$, and is merged with its best performing neighbor. This choice arises assuming that highly profitable local markets will be invaded by neighboring firms. In this way tacit collusion, on the one hand, pushes up payoffs and, on the other hand, it increases the likelihood of a neighboring entry.
 
+
+
+\begin{center}
+    \begin{figure}[h!]
+        \center
+        \includegraphics[width=0.8\textwidth]{../plots/step_group.png}
+        \caption{Diagram illustrating the takeover in the global market}
+        \label{fig:diagram}
+    \end{figure}
+\end{center}
 
 
 \newpage
@@ -100,6 +110,7 @@ Figure \ref{fig:small_local} shows one of the runs, for $T = 200$, in the case o
 
 \begin{center}
     \begin{figure}[h!]
+        \center
         \includegraphics[width=0.8\textwidth]{../plots/local/q_group_heat_5.png}
         \caption{Quantity evolution in a concentrated market}
         \label{fig:small_local}
@@ -110,6 +121,7 @@ Figure \ref{fig:price_small_local} displays the price evolution $p(Q_t)$ of a nu
 
 \begin{center}
     \begin{figure}[h!]
+        \center
         \includegraphics[width=0.8\textwidth]{../plots/local/p_group_5.png}
         \caption{Price evolution in a concentrated market}
         \label{fig:price_small_local}
@@ -120,6 +132,7 @@ If we turn our attention to a highly competitive markets and we repeat the exerc
 
 \begin{center}
     \begin{figure}[h!]
+        \center
         \includegraphics[width=0.8\textwidth]{../plots/local/q_group_heat_20.png}
         \caption{Quantity evolution in a competitive market}
         \label{fig:large_local}
@@ -130,6 +143,7 @@ The lack of collusion can be seen more clearly in the 150 simulations run of pri
 
 \begin{center}
     \begin{figure}[h!]
+        \center
         \includegraphics[width=0.8\textwidth]{../plots/local/p_group_20.png}
         \caption{Price evolution in a competitive market}
         \label{fig:price_large_local}
@@ -138,8 +152,33 @@ The lack of collusion can be seen more clearly in the 150 simulations run of pri
 
 \subsection{Global markets}
 
-In order to study the effect of groups on the equilibria of the game.
+In order to study the effect of groups on the equilibria of the game we first look at a simple simulation run with, as before, $N = 5$ and $M = 4$ (Figure \ref{fig:small_avg}). In particular here at $t = 5$, the local market $1$ and $2$ merge. This induces tacit collusion with high quantities, hence low prices. The other two markets settle on a tacit collusion equilibrium with low quantities. At $t = 73$ and t = $88$, $\set{1, 2}$, $3$, and $4$ are merged. This increases competition and brings the market out of collusion.
 
+\begin{figure}[h!]
+    \center
+    \includegraphics[width=0.8\textwidth]{../plots/group/q_group_4-5.png}
+    \caption{Average quantities with $4$ markets of size $5$}
+    \label{fig:small_avg}
+\end{figure}
+
+The same dynamics can be seen by plotting the profits over this run (Figure \ref{fig:small_avg_profit})
+
+\begin{figure}[h!]
+    \center
+    \includegraphics[width=0.8\textwidth]{../plots/group/pi_group_4-5.png}
+    \caption{Profits with $4$ markets of size $5$}
+    \label{fig:small_avg_profit}
+\end{figure}
+
+
+Now that we got the intuition for a single run we can do multiple runs for various combinations of $N$ and $M$ to determine the effectiveness of group structure in hindering tacit collusion. Figure \ref{fig:frontier} illustrates this procedure. For each $N \in \set{3, \ldots, 50}$ and $M \in \set{3, \ldots, 20}$, I compute $200$ simulations of the model. I then look at the variance of the long run quantity
+
+\begin{figure}[h!]
+    \center
+    \includegraphics[width=0.8\textwidth]{../plots/global/small_convergence_low.png}
+    \caption{Collusion frontier of $N \in \set{3, \ldots, 50}$ and $M \in \set{3, \ldots, 20}$ }
+    \label{fig:frontier}
+\end{figure}
 
 
 \newpage

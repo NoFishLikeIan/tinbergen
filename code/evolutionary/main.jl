@@ -1,5 +1,6 @@
 using Base.Threads, Random
 using StatsBase
+using Statistics
 using IterTools
 
 Random.seed!(1122)
@@ -100,13 +101,19 @@ end
 
 
 # localstability([5, 20], 100; iter=20)
-globaldynamics([4, 20], [5, 20], 100)
+# globaldynamics([4, 20], [5, 20], 100)
 
 
-if false
-    Ms, Ns = range(3, 103, step=1), range(3, 103, step=1)
+Ns = range(3, 102, step=1)
+ρs = range(0, 1, length=100)
 
-    convergence = globalstability(Ms, Ns; iter=150, swapgroup=0.01, filename="convergence_low")
+convergence = globalstability(
+    Ns; ρs=ρs,
+    iter=300, T=100, M=2, 
+    filename="small_convergence_low")
 
-    convergence = globalstability(Ms, Ns; iter=150, swapgroup=.1, filename="convergence_high")
-end
+
+convergence = globalstability(
+    Ns; ρs=ρs,
+    iter=300, T=100, M=20,
+    filename="small_convergence_high")
