@@ -7,6 +7,7 @@
     \usepackage{graphicx} 
     \usepackage{subfigure}
     \usepackage{mathtools}
+    \usepackage{float}
 
     
     \setlength{\parindent}{0em}
@@ -28,6 +29,7 @@
 \newcommand{\Real}{\mathbb{R}}
 \newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
 \newcommand{\Two}{\mathbf{2}}
+\newcommand{\E}{\mathbb{E}}
 
 \begin{document}
 
@@ -39,16 +41,11 @@
 
 In 1838, Antoine Augustin Cournot introduced his famous model of competition over quantities. Since then, the model served as a theoretical benchmark for pure oligopolistic models in economic theory. In Cournot oligopolies, a discrete number of firms compete by setting quantities of a perfectly substitutable good. In equilibrium, due to symmetry, all firms produce the same quantity and any deviations my producers reduces their own profit.
 
-In proposing the model, Cournot does not address the formation mechanisms of the firms' strategies. Modern economics relies on rational expectations to justify the symmetric equilibrium solution. More contemporary approaches have derived the model dynamics under limited knowledge (\cite{Bischi2015}) or naive expectations (\cite{Cnovas2008}). Furthermore the model is known to lead to unstable equilibria as the number of firms increases (this is known as the Cournot–Theocharis problem).
+In proposing the model, Cournot does not address the formation mechanisms of the firms' strategies. Modern economics relies on rational expectations to justify the symmetric equilibrium solution. More contemporary approaches have derived the model dynamics under limited knowledge (\cite{Bischi2015}) or naive expectations (\cite{Cnovas2008}). Furthermore the model is known to lead to unstable equilibria as the number of firms increases (Cournot–Theocharis problem).
 
-In this short paper I propose to study the dynamics of equilibrium formation via an evolutionary lens. The aim is to focus on the tacit collusion effect that leads to oligopolistic equilibria in concentrated markets and the competition effect that arises in fragmented markets. Based on the framework by \citeauthor{Akdeniz2020} (\citeyear{Akdeniz2020}), I develop a model with local markets competing à la Cournot % TODO: Finish introduction
+In this short paper I propose to study the dynamics of equilibrium formation via an evolutionary lens. The aim is to focus on the tacit collusion effect that leads to oligopolistic equilibria in concentrated markets and the competition effect that arises in fragmented markets. I develop a model with local markets competing à la Cournot. Firms evolve in a birth-death process, which can be thought of as firms being able to adapt production technology based on the best performing firm within their market after a certain amount of periods. Here the standard results applies, that is, tacit collusion being stable with only few firms. The model is then extended to encompass group effects, based on the framework by \citeauthor{Akdeniz2020} (\citeyear{Akdeniz2020}). In particular, I show how tacit collusion can be sustained for larger oligopolies, as long as competition at a group level (i.e. between local markets) emerges slowly.
 
-\iffalse
-    \newpage
-    \section{Literature review}
-\fi
 
-\newpage
 \section{Theoretical formulation}
 
 \subsection{Local markets}
@@ -84,7 +81,7 @@ In the model, there are $M$ local markets and each local market is linked to two
 
 
 \begin{center}
-    \begin{figure}[h!]
+    \begin{figure}[H]
         \center
         \includegraphics[width=0.8\textwidth]{../plots/step_group.png}
         \caption{Diagram illustrating the takeover in the global market}
@@ -93,7 +90,6 @@ In the model, there are $M$ local markets and each local market is linked to two
 \end{center}
 
 
-\newpage
 \section{Simulation}
 
 In the simulations I pick $\Sigma = \set{1, 2, \ldots, 10}$, $a = (N + 1) \cdot 5$, and $b = 1$, such that,
@@ -109,7 +105,7 @@ First we can focus on a simulation of a local market, without group effects. In 
 Figure \ref{fig:small_local} shows one of the runs, for $T = 200$, in the case of a concentrated market. As expected, tacit collusion occurs vary quickly as all firms synchronize to a low quantity.
 
 \begin{center}
-    \begin{figure}[h!]
+    \begin{figure}[H]
         \center
         \includegraphics[width=0.8\textwidth]{../plots/local/q_group_heat_5.png}
         \caption{Quantity evolution in a concentrated market}
@@ -120,7 +116,7 @@ Figure \ref{fig:small_local} shows one of the runs, for $T = 200$, in the case o
 Figure \ref{fig:price_small_local} displays the price evolution $p(Q_t)$ of a number ($150$) of simulations with concentrated markets. All simulations display tacit collusion but this highlights the path dependency of the equilibrium price. This is expected as, for example, if enough firms start off producing a quantity above $\bar{q}$ which yields $p(Q_0) \approx 0$, firm's who produce the highest quantity have higher fitness and hence the price will be driven further down.
 
 \begin{center}
-    \begin{figure}[h!]
+    \begin{figure}[H]
         \center
         \includegraphics[width=0.8\textwidth]{../plots/local/p_group_5.png}
         \caption{Price evolution in a concentrated market}
@@ -128,10 +124,10 @@ Figure \ref{fig:price_small_local} displays the price evolution $p(Q_t)$ of a nu
     \end{figure}
 \end{center}
 
-If we turn our attention to a highly competitive markets and we repeat the exercise, the dynamics change drastically. In particular, Figure \ref{fig:large_local} shows the evolution of strategies of a single run. Here firms fail to collude and prices tend towards the equilibrium (in this case, $\bar{q} = 5$).
+If we turn our attention to a highly competitive markets and we repeat the exercise, the dynamics change drastically. In particular, Figure \ref{fig:large_local} shows the evolution of strategies of a single run. Here firms fail to collude and prices tend towards the equilibrium.
 
 \begin{center}
-    \begin{figure}[h!]
+    \begin{figure}[H]
         \center
         \includegraphics[width=0.8\textwidth]{../plots/local/q_group_heat_20.png}
         \caption{Quantity evolution in a competitive market}
@@ -142,7 +138,7 @@ If we turn our attention to a highly competitive markets and we repeat the exerc
 The lack of collusion can be seen more clearly in the 150 simulations run of price in Figure \ref{fig:price_large_local}.
 
 \begin{center}
-    \begin{figure}[h!]
+    \begin{figure}[H]
         \center
         \includegraphics[width=0.8\textwidth]{../plots/local/p_group_20.png}
         \caption{Price evolution in a competitive market}
@@ -152,9 +148,9 @@ The lack of collusion can be seen more clearly in the 150 simulations run of pri
 
 \subsection{Global markets}
 
-In order to study the effect of groups on the equilibria of the game we first look at a simple simulation run with, as before, $N = 5$ and $M = 4$ (Figure \ref{fig:small_avg}). In the figure, two lines (average quantity per group), get colored the same 
+In order to study the effect of groups on the equilibria of the game we first look at a simple simulation run with, as before, $N = 5$ and $M = 4$ (Figure \ref{fig:small_avg}). In the figure, two lines (average quantity per group), are plotted with the same color if in that period the local markets are merged.
 
-\begin{figure}[h!]
+\begin{figure}[H]
     \center
     \includegraphics[width=0.8\textwidth]{../plots/group/q_group_4-5.png}
     \caption{Average quantities with $4$ markets of size $5$}
@@ -163,7 +159,7 @@ In order to study the effect of groups on the equilibria of the game we first lo
 
 The same dynamics can be seen by plotting the profits over this run (Figure \ref{fig:small_avg_profit}).
 
-\begin{figure}[h!]
+\begin{figure}[H]
     \center
     \includegraphics[width=0.8\textwidth]{../plots/group/pi_group_4-5.png}
     \caption{Profits with $4$ markets of size $5$}
@@ -171,20 +167,34 @@ The same dynamics can be seen by plotting the profits over this run (Figure \ref
 \end{figure}
 
 
-Now that we got the intuition for a single run we can do multiple runs for various combinations of $N$ and $M$ to determine the effectiveness of group structure in hindering tacit collusion. Figure \ref{fig:frontier} illustrates this procedure. For each $N \in \set{3, \ldots, 50}$ and $M \in \set{3, \ldots, 20}$, I compute $200$ simulations of the model. I then look at the variance of the long run quantity
+Already from a simple run we can see how tacit collusion can be sustained in larger groups, if these arise from smaller prior groups which were in a tacit collusive equilibrium. In fact in our simulation $N = 20$ does not sustain collusion but $M = 4$ and $N = 5$ does (note that $M\cdot N = 20$ is the long run size of the group). A natural step is now to see how the frequency of takeovers, $\rho$, affects the sustainability of tacit collusion. This influences the expected size of the local markets as follows,
 
-\begin{figure}[h!]
+\begin{equation}
+    \E[N_t] = N \cdot \min\left\{M, (1 + \rho)^t \right\}
+\end{equation}
+
+To study this, given $M = 20$, for each $N \in \set{3, 4, \ldots, 102}$ and $\rho \in \set{0, \frac{1}{100},\frac{2}{100}, \ldots, 1}$, I compute $200$ simulations of length $T = 200$ of the model. I then look at the variance of the quantity in each group at the end of the 200 periods. If the variance is 0 we have evidence of tacit collusion since each firm is playing the same quantity. Finally I compute the average variance across groups and simulations. The result of the simulation is presented in Figure \ref{fig:frontier}.
+
+\begin{figure}[H]
     \center
-    \includegraphics[width=0.8\textwidth]{../plots/global/small_convergence_low.png}
-    \caption{Collusion frontier of $N \in \set{3, \ldots, 50}$ and $M \in \set{3, \ldots, 20}$ }
+    \includegraphics[width=0.95\textwidth]{../plots/global/small_convergence_high.png}
+    \caption{Collusion frontier of $N \in \set{3, 4, \ldots, 102}$ and $\rho \in [0, 1]$ }
     \label{fig:frontier}
 \end{figure}
 
+The simulation clearly shows that low frequencies of mergers renders tacit collusion sustainable with larger groups. This is particularly true for low values of $\rho$
 
 \newpage
 % Bibliography
 \nocite{*}
 \pagenumbering{gobble} % stop page numbering
 \printbibliography
+
+\newpage
+\appendix
+
+\section{Expected size of global markets}
+
+
 
 \end{document}

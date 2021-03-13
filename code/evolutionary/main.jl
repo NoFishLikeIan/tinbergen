@@ -99,24 +99,27 @@ function evolve(M, N; T=100, swapgroup=0.0)
 
 end
 
+Ns = range(3, 25, step=1)
+ρs = range(0, 1, length=100)
+convergence = globalstability(
+    Ns; ρs=ρs,
+    iter=500, T=100, M=40, 
+    filename="small_convergence_restr")
 
 
 # localstability([5, 20], 100; iter=20)
-globaldynamics([4, 20], [5, 20], 200)
+# globaldynamics([4, 20], [5, 20], 200)
 
 
 Ns = range(3, 102, step=1)
 ρs = range(0, 1, length=100)
-
-if false
-    convergence = globalstability(
-        Ns; ρs=ρs,
-        iter=300, T=100, M=2, 
-        filename="small_convergence_low")
+convergence = globalstability(
+    Ns; ρs=ρs,
+    iter=300, T=100, M=5, 
+    filename="small_convergence_low")
 
 
-    convergence = globalstability(
-        Ns; ρs=ρs,
-        iter=300, T=100, M=20,
-        filename="small_convergence_high")
-end
+convergence = globalstability(
+Ns; ρs=ρs,
+    iter=300, T=100, M=40,
+    filename="small_convergence_high")
