@@ -173,16 +173,16 @@ Already from a simple run we can see how tacit collusion can be sustained in lar
     \E[N_t] = N \cdot \min\left\{M, (1 + \rho)^t \right\}
 \end{equation}
 
-To study this, given $M = 20$, for each $N \in \set{3, 4, \ldots, 102}$ and $\rho \in \set{0, \frac{1}{100},\frac{2}{100}, \ldots, 1}$, I compute $200$ simulations of length $T = 200$ of the model. I then look at the variance of the quantity in each group at the end of the 200 periods. If the variance is 0 we have evidence of tacit collusion since each firm is playing the same quantity. Finally I compute the average variance across groups and simulations. The result of the simulation is presented in Figure \ref{fig:frontier}.
+To study this, given $M = 40$, for each $N \in \set{3, 4, \ldots, 40}$ and $\rho \in \set{0, \frac{1}{100},\frac{2}{100}, \ldots, 1}$, I compute $200$ simulations of length $T = 200$ of the model. I then look at the variance of the quantity in each group at the end of the 200 periods. If the variance is 0 we have evidence of tacit collusion since each firm is playing the same quantity. Finally I compute the average variance across groups and simulations. The result of the simulation is presented in Figure \ref{fig:frontier}.
 
 \begin{figure}[H]
     \center
-    \includegraphics[width=0.95\textwidth]{../plots/global/small_convergence_high.png}
-    \caption{Collusion frontier of $N \in \set{3, 4, \ldots, 102}$ and $\rho \in [0, 1]$ }
+    \includegraphics[width=0.95\textwidth]{../plots/global/small_convergence_restr.png}
+    \caption{Collusion frontier of $N \in \set{3, 4, \ldots, 40}$ and $\rho \in [0, 1]$ }
     \label{fig:frontier}
 \end{figure}
 
-The simulation clearly shows that low frequencies of mergers renders tacit collusion sustainable with larger groups. This is particularly true for low values of $\rho$
+The simulation clearly shows that low frequencies of mergers renders tacit collusion sustainable with larger groups.
 
 \newpage
 % Bibliography
