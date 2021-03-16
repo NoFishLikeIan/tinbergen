@@ -43,13 +43,13 @@
 \section{Introduction}
 
 
-In this short paper I propose to study the dynamics of equilibrium formation in Cournot competition through an evolutionary lens. The aim is to focus on the tacit collusion effect that leads to oligopolistic equilibria in concentrated markets and the competition effect that arises in fragmented markets. I develop a model with local markets competing à la Cournot. Firms evolve in a birth-death process. This can be thought of as firms copying a production technology from the best performing competitor in their own local market, after a certain amount of periods. Here the standard result applies: tacit collusion is stable only for a small number of firms (\cite{Lampart2012}). The model is then extended to encompass group effects, based on the framework by \citein{Akdeniz2020}. In particular, I show how tacit collusion can be sustained for larger oligopolies, as long as competition at a group level (i.e. between local markets) emerges slowly.
+In this short paper I propose to study the dynamics of equilibrium formation in Cournot competition through an evolutionary lens. The aim is to study the formation and sustainability of tacit collusion among firm. I develop a model with local markets competing à la Cournot. Firms evolve in a birth-death process. This can be thought of as firms copying a production technology from the best performing competitor in their own local market, after a certain amount of periods. Here the standard result applies: tacit collusion is stable only for a small number of firms (\cite{Lampart2012}). The model is then extended to encompass group effects, based on the framework by \citein{Akdeniz2020}. In particular, I show how tacit collusion can be sustained for larger oligopolies, as long as competition at a group level (i.e. between local markets) emerges slowly.
 
 \section{Literature review}
 
 In 1838, Antoine Augustin Cournot introduced his famous model of competition over quantities. Since then, the model has served as a theoretical benchmark for pure oligopolistic models in economic theory. In Cournot oligopolies, a discrete number of firms compete by setting quantities of a perfectly substitutable good. In equilibrium, due to symmetry, all firms produce the same quantity and any deviations by producers reduces their own profit.
 
-In proposing the model, Cournot does not address the formation mechanisms of the firms' equilibrium strategies. Modern economics relies on rational expectations to justify the symmetric equilibrium solution. More contemporary approaches have derived the model dynamics under limited knowledge (\cite{Bischi2015}) or naive expectations (\cite{Cnovas2008}). All of these approaches lead to equilibria that are unstable as the number of firms increases (Cournot–Theocharis problem).
+In proposing the model, Cournot does not address the way in which firms form their strategies. Modern economics relies on rational expectations to justify the symmetric equilibrium solution. More contemporary approaches have derived the model dynamics under limited knowledge (\cite{Bischi2015}) or naive expectations (\cite{Cnovas2008}). All of these approaches lead to equilibria that are unstable as the number of firms increases (Cournot–Theocharis problem).
 
 In order to better model and understand the emergence of such instability I will rely on an evolutionary framework developed by \citein{Akdeniz2020}. The authors analyse the role of group selection in the emergence of cooperation. As in previous models, defection gives a fitness advantage at an individual level (within groups) but a disadvantage at a group level (across groups). Furthermore, groups do not compete globally but only with neighboring groups. The authors show how local competition among groups has strong implications for the emergence of cooperation.
 
@@ -115,7 +115,7 @@ In the simulations I set $\Sigma = \set{1, 2, \ldots, 10}$, $a = (N + 1) \cdot 5
 
 \subsection{Local market}
 
-First we can focus on a simulation of a local market, without group effects (i.e. no global markets). In particular here we look at the evolution of quantities and prices, first with a concentrated market ($N = 5$) and then with a competitive market ($N = 20$). The values of $N$ are derived heuristically based on the simulation results.
+First we can focus on a simulation of a local market, without group effects (i.e. no global markets). In particular here we look at the evolution of quantities and prices, first with a concentrated market ($N = 5$) and then with a competitive market ($N = 20$). The values of $N$ are set to these values heuristically based on the simulation results.
 
 Figure \ref{fig:small_local} shows a quantity heat map for one of the runs, with $T = 200$, in the case of a concentrated market. Each row represents a firm in the market and each column a time step. Darker colors are associated with smaller quantities. As expected, tacit collusion occurs very quickly as all firms synchronize to a low quantity.
 
@@ -181,7 +181,7 @@ The same dynamics can be seen by plotting the profits over this run (Figure \ref
     \label{fig:small_avg_profit}
 \end{figure}
 
-Given this result it is clear that the frequency of takeovers, $\rho$, affects the sustainability of tacit collusion. In particular, the expected local market size (Equation \ref{market_size}, derived in Appendix \ref{A:exp_size}) at each time step, $\E[N_t]$, depends on both the takeover frequency and the number of groups $M$,
+Given this result it is clear that group effects have implications for the sustainability of tacit collusion. In particular, the expected local market size (Equation \ref{market_size}, derived in Appendix \ref{A:exp_size}) at each time step, $\E[N_t]$, depends on both the takeover frequency and the number of groups $M$,
 
 \begin{equation} \label{market_size}
     \E[N_t] = (1 - \rho)^t \cdot N + \rho \cdot \sum^{t-1}_{i = 0} (1 - \rho)^{i} \cdot \frac{N \cdot M}{M - (t - i)}.
