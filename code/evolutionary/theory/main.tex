@@ -8,6 +8,7 @@
     \usepackage{subfigure}
     \usepackage{mathtools}
     \usepackage{float}
+    \usepackage{fancyvrb} % for "\Verb" macro
 
     
     \setlength{\parindent}{0em}
@@ -103,6 +104,8 @@ This choice arises assuming that highly profitable local markets will be invaded
 
 
 \section{Simulation}
+
+To reproduce the simulation see Appendix \ref{A:code}.
 
 In the simulations I set $\Sigma = \set{1, 2, \ldots, 10}$, $a = (N + 1) \cdot 5$, and $b = 1$, such that equation (\ref{equilib}) yields,
 
@@ -270,6 +273,29 @@ This result can intuitively be derived by noticing that the total number of firm
         &= (1 - \rho)^t \cdot \underbrace{\E[N_0]}_{N} + \rho \cdot \sum^{t-1}_{i = 0} (1 - \rho)^{i} \cdot \frac{N \cdot M}{M - (t - i)}
     \end{split}
 \end{equation*}
+
+
+\section{Simulation code} \label{A:code}
+
+The code can be found at,
+
+\begin{verbatim}
+    github.com/NoFishLikeIan/tinbergen/tree/master/code/evolutionary
+\end{verbatim}
+
+The simulation requires \verb+Julia v.1.5.x > +. A simulation to produce all graphs is available as,
+
+\begin{verbatim}
+    julia main.jl
+\end{verbatim}
+
+and to run the coalition size simulation as,
+
+\begin{verbatim}
+    julia coalitionsize.jl
+\end{verbatim}
+
+
 
 
 \end{document}
