@@ -70,7 +70,10 @@ function radius(n::Int, p::Int)
 end
 
 # ╔═╡ e139a024-9246-11eb-15d1-1f871b20a933
-distance(r) = sqrt(1 + r^2)
+outerdistance(r) = sqrt(1 + r^2)
+
+# ╔═╡ e567d83c-92be-11eb-096f-55b392cde606
+
 
 # ╔═╡ bfcb77fa-9241-11eb-1148-612a1efebc6c
 md"""
@@ -81,7 +84,7 @@ md"""
 n = 6; lower = pconstraint(n)
 
 # ╔═╡ e32b45da-9247-11eb-32dd-4fb653b2e09b
-md"Adjacent, p: $(@bind p MySlider(7:100, 4))"
+md"Adjacent, p: $(@bind p MySlider((lower + 1):100, 4))"
 
 # ╔═╡ 441f58aa-9242-11eb-0575-4564ab7cefd7
 begin
@@ -103,11 +106,10 @@ begin
 	
 	# --- Outer circle
 	r = radius(n, p)
-	len = distance(r)
+	len = outerdistance(r)
 	
 	scaledr = r * diskr
 	scaledlen = len * diskr
-	Luxor.rotate(π * .12)
 
 	for _ in 0:(n-1)
 		sethue("white")
@@ -115,16 +117,14 @@ begin
 		Luxor.rotate(angle) # Rotate coordinate system
 		center = disk + (scaledlen, 0.) # Center of the outer circle
 		
-		α = π * (1/2 + 1/n + 1/p)
+		α = 3 * π * (1/2 + 1/n + 1/p)
 		compα = 2π - α
-		if false
-			from = Point(scaledr * cos(α) + center.x, scaledr * sin(α) + center.y)
-			to = Point(scaledr * cos(compα) + center.x, scaledr * sin(compα) + center.y)
 
-			arc2r(center, from, to, :stroke)
-		end
-		
-		circle(center, scaledr, :stroke)
+		from = Point(scaledr * cos(α) + center.x, scaledr * sin(α) + center.y)
+		to = Point(scaledr * cos(compα) + center.x, scaledr * sin(compα) + center.y)
+
+		arc2r(center, from, to, :stroke)
+
 
 		
 	end
@@ -142,6 +142,7 @@ end
 # ╠═1fbc28d6-9241-11eb-1a15-4b942c72996b
 # ╠═607e0694-9245-11eb-2779-0faea629e012
 # ╠═e139a024-9246-11eb-15d1-1f871b20a933
+# ╠═e567d83c-92be-11eb-096f-55b392cde606
 # ╟─bfcb77fa-9241-11eb-1148-612a1efebc6c
 # ╠═dd6019bc-9247-11eb-3bcf-e3f769a0e367
 # ╠═e32b45da-9247-11eb-32dd-4fb653b2e09b
