@@ -1,6 +1,0 @@
-[deps]
-Einsum = "b7d42ee7-0b51-5a75-98ca-779d3107e4c0"
-IterTools = "c8e1da08-722c-5040-9ed9-7db0dc04731e"
-Kronecker = "2c470bb0-bcc8-11e8-3dad-c9649493f05e"
-StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
-Tensors = "48a634ad-e948-5137-8d70-aa71f2a747f4"
