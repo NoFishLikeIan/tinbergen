@@ -58,7 +58,7 @@ terminado==0.9.1
 testpath==0.4.4
 tornado==6.0.4
 traitlets==5.0.2
-urllib3==1.25.10
+urllib3==1.26.5
 wcwidth==0.2.5
 webencodings==0.5.1
 xlrd==1.2.0
