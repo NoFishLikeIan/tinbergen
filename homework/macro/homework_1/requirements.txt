@@ -6,7 +6,7 @@ kiwisolver==1.1.0
 lazy-object-proxy==1.4.3
 matplotlib==3.1.1
 mccabe==0.6.1
-numpy==1.17.4
+numpy==1.22.0
 pandas==0.25.3
 pathspec==0.6.0
 pycodestyle==2.5.0
